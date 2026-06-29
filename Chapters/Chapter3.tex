@@ -1,8 +1,9 @@
-\chapter[Achieving Max-min Fairness in Distributed Job Execution with Task Transmissions]{Achieving Max-min Fairness in Distributed Job Execution with Task Transmissions}\label{chap-sample-2}
+\chapter[Achieving Max-min Fairness in Distributed Job Execution with Task Transmissions]{Achieving Max-min Fairness in Distributed Job Execution with Task Transmissions}
+\label{chap-sample-2}
 
 %%%%%%%%%%%%%%%%%
 \section{System Model}
-\label{sec:model}
+\label{sec:model_1}
 Consider a geo-distributed system composed of $m$ separate sites: $S_1, S_2, ..., S_m$. Each site $S_j$ holds compute resources with a capacity $u_j$. The capacity can be interpreted as the volume of computing slots that are available.
 
 We would like to conduct fair resource allocations among jobs in an online environment where jobs arrive dynamically for execution. To do so, we start by studying a static problem of defining and deriving a fair instantaneous resource allocation among active jobs at a certain snapshot of the system. Suppose $n$ jobs $J_1, J_2, ..., J_n$ are running in the system. Each job $J_i$ consists of tasks that process distinct data partitions and could run in parallel. Due to the data locality consideration, initially each task is restricted to be served at a certain site where the input data is available. Therefore, a job's resource demand on a site $S_j$ can be defined as the total demand of its tasks that can only run on $S_j$. For instance, if each task needs one computing slot for execution, the resource demand on site $S_j$ is given by the number of tasks to run on $S_j$. We model the resource demands of all jobs as an $n*m$ demand matrix $D_{n*m}$, where each element $d_{ij}$ denotes job $J_i$'s demand on site $S_j$. Similarly, the instantaneous resource allocations to all jobs on all sites can be represented by an $n*m$ allocation matrix $A_{n*m}$, where each element $a_{ij}$ denotes how much resource job $J_i$ is allocated on site $S_j$. Throughout this paper, we shall use capital letters to stand for matrices and corresponding small letters to stand for the elements therein. For simplicity, we use $[x]$ to represent the set $\{1, 2, \dots, x\}$ for a positive integer $x$. 
@@ -44,7 +45,7 @@ Upon the transmissions, each job $J_i$'s demand on site $S_j$ becomes $d_{ij} + 
 \label{eq:new_rational}
 \end{equation}
 
-We shall start with defining and deriving a fair resource allocation $A_{n*m}$ among jobs satisfying constraints (\ref{eq:allocfeas}), (\ref{eq:trx1}), (\ref{eq:trx2}), (\ref{eq:trx3}) and (\ref{eq:new_rational}), given the demands $D_{n*m}$, site capacities $u_j$'s and transfer limits $c_j$'s. Later, we shall discuss how to apply the solution to this static problem to online scenarios where jobs arrive dynamically. The key notations used in this paper are summarized in Table \ref{tab:Notation}.
+We shall start with defining and deriving a fair resource allocation $A_{n*m}$ among jobs satisfying constraints (\ref{eq:allocfeas}), (\ref{eq:trx1}), (\ref{eq:trx2}), (\ref{eq:trx3}) and (\ref{eq:new_rational}), given the demands $D_{n*m}$, site capacities $u_j$'s and transfer limits $c_j$'s. Later, we shall discuss how to apply the solution to this static problem to online scenarios where jobs arrive dynamically. The key notations used in this paper are summarized in Table \ref{tab:Notation_1}.
 
 \begin{figure}[htbp]
   \centering
@@ -73,7 +74,7 @@ Figure \ref{fig:Motivation_eg} provides an example of the static problem to illu
 \begin{table}[htb]
 \centering 
 \caption{Notation Table}
-\label{tab:Notation}
+\label{tab:Notation_1}
 \begin{tabular}{l l} 
  \hline
  Notation & Definition \\
@@ -118,7 +119,7 @@ AMF does not consider utilizing network resources to transfer job demands betwee
 
 \section{Dynamic Aggregate Max-min Fairness}
 \label{sec:DAMF}
-We propose a new resource allocation policy called Dynamic Aggregate Max-min Fairness (DAMF) to improve the fairness of resource allocation by making use of network resources. Given the demand matrix, site capacities and transfer limits, there are a variety of possible transmission matrices and each would give rise to a large number of feasible and rational allocations. Under this circumstance, DAMF requires the aggregate allocation vector to be max-min fair among all the vectors derived from the allocation matrices resulting from all possible transmission matrices. Let $\mathcal{X}$ be the set of all feasible and rational allocation matrices under all possible transmission matrices, and $X$ be the set of all aggregate allocation vectors drawn from $\mathcal{X}$. DAMF can be formally defined as follows:
+We propose a new resource allocation policy called Dynamic Aggregate Max-min Fairness (DAMF) to improve the fairness of resource allocation by making use of network resources. Given the demand matrix, site capacities and transfer limits, there are a variety of possible transmission matrices and each would give rise to a number of feasible and rational allocations. Under this circumstance, DAMF requires the aggregate allocation vector to be max-min fair among all the vectors derived from the allocation matrices resulting from all possible transmission matrices. Let $\mathcal{X}$ be the set of all feasible and rational allocation matrices under all possible transmission matrices, and $X$ be the set of all aggregate allocation vectors drawn from $\mathcal{X}$. DAMF can be formally defined as follows:
 
 \begin{definition}
     An allocation $A_{n*m}$ satisfies Dynamic Aggregate Max-min Fairness, if and only if its aggregate allocation vector $\vec A$ is max-min fair over the set $X$.
@@ -131,7 +132,7 @@ We prove that DAMF exists by showing the compactness and convexity of set $X$.
 \end{lemma}
 
 \begin{proof}
-Consider any aggregate allocation vector $\vec{A} = \langle\sum_{j=1}^m a_{1j},$ $\sum_{j=1}^m a_{2j}, ..., \sum_{j=1}^m a_{nj}\rangle$ derived from some allocation matrix $A$ under some demand matrix $D + \Delta D$ after transmission. According to constraints (\ref{eq:allocfeas}), (\ref{eq:new_rational}) and (\ref{eq:trx2}), for the \textit{i}-th component $\sum_{j=1}^m a_{ij}$, we have $0 \leq \sum_{j=1}^m a_{ij} \leq \sum_{j=1}^m \min\{u_j, d_{ij} +\Delta d_{ij}\} \leq \sum_{j=1}^m \min\{u_j, d_{ij} +c_j\}$. Thus, the set $X$ is closed and bounded. Hence, it is compact.
+Consider any aggregate allocation vector $\vec{A} = \langle\sum_{j=1}^m a_{1j},$ $\sum_{j=1}^m a_{2j}, \dots, \sum_{j=1}^m a_{nj}\rangle$ derived from some allocation matrix $A$ under some demand matrix $D + \Delta D$ after transmission. According to constraints (\ref{eq:allocfeas}), (\ref{eq:new_rational}) and (\ref{eq:trx2}), for the \textit{i}-th component $\sum_{j=1}^m a_{ij}$, we have $0 \leq \sum_{j=1}^m a_{ij} \leq \sum_{j=1}^m \min\{u_j, d_{ij} +\Delta d_{ij}\} \leq \sum_{j=1}^m \min\{u_j, d_{ij} +c_j\}$. Thus, the set $X$ is closed and bounded. Hence, it is compact.
 \end{proof}
 
 \begin{lemma}
@@ -340,58 +341,118 @@ $$
 By repeating the above process continuously, we can obtain an infinite sequence of jobs $J_{i_1}, J_{i_2}, J_{i_3}, J_{i_4}, J_{i_5}, J_{i_6}, \dots$ with non-increasing aggregate allocations in $A'$ like (\ref{eq:strategy9}), which contradicts that there are a finite number of jobs. Hence, the theorem is proven.
 \end{proof}
 
-\section{Achieving DAMF}
-\label{sec:algo}
-\subsection{Algorithm for Computing DAMF Allocation}
+% 请确保在 LaTeX 文件的导言区（Preamble）引入了该宏包：
+% \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 
 \begin{algorithm}[htbp]
 \caption{Computing DAMF Allocation}\label{alg:basic}
-\begin{algorithmic}[1]
 
-\STATE \textbf{Input}: A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities and transfer limits $\{c_1, c_2, \dots, c_j\}$; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$; 
-\STATE \textbf{Output}: A DAMF allocation matrix $A$; a transmission matrix $\Delta D$;
-\STATE \textbf{Initialization}: $A \leftarrow \textbf{0}$; $\Delta D \leftarrow \textbf{0}$; $\mathcal{J} \leftarrow \{J_1, J_2, ..., J_n\}$;
-
-\WHILE{$\mathcal{J} \neq \emptyset$}
-    \STATE Solve the following linear program:
-    \STATE \quad Maximize $T$, subject to: 
-    \STATE \quad $\forall J_i \in \mathcal{J} : \sum^m_{j=1}a_{ij} \geq T$;
-    \STATE \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij} = t_i$;
-    \STATE \quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;
-    \STATE \quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;
-    \STATE \quad $\forall j \in [m]: \sum_{i=1}^n |\Delta d_{ij}| \leq c_j$;
-    \STATE \quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;
-    \STATE Let $T_{max}$ be the outcome of the above linear program;
+    % 1. 输入输出与初始化 (不再使用 \STATE)
+    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities and transfer limits $\{c_1, c_2, \dots, c_j\}$; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$;}
+    \KwOut{A DAMF allocation matrix $A$; a transmission matrix $\Delta D$;}
     
-    \FOR{each $J_l \in \mathcal{J} $}
-        \IF{$\sum^m_{j=1} d_{lj} = T_{max}$}
-            \STATE $t_l \leftarrow T_{max}$;
-            \STATE $\mathcal{J} \leftarrow \mathcal{J} \setminus\{J_l\}$; 
-        \ELSIF{$\sum^m_{j=1} a_{lj}= T_{max} \text{ and } (\forall j \in [m], a_{lj} = d_{lj} \lor \sum^n_{i=1}a_{ij}=u_j)$}
-            \STATE Check the feasibility of the following program:
-            \STATE \quad $\sum_{j=1}^n a_{lj} > T_{max}$;
-            \STATE \quad $\forall J_i \in \mathcal{J} \land i \neq l: \sum^m_{j=1}a_{ij}=T_{max}$;
-            \STATE \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij}=t_i$;
-            \STATE \quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;
-            \STATE \quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;
-            \STATE \quad $\forall j \in [m]: \sum_{i=1}^n |\Delta d_{ij}| \leq c_j$;
-            \STATE \quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;
-            
-            \IF{the above program is infeasible}
-                \STATE $t_l \leftarrow T_{max}$;
-                \STATE $\mathcal{J} \leftarrow \mathcal{J} \setminus\{J_l\}$;
-            \ENDIF
-        \ENDIF
-    \ENDFOR
-\ENDWHILE
+    \BlankLine % 插入一个空行隔开初始化
+    $A \leftarrow \textbf{0}$\;
+    $\Delta D \leftarrow \textbf{0}$\;
+    $\mathcal{J} \leftarrow \{J_1, J_2, ..., J_n\}$\;
+    \BlankLine
 
-\STATE \textbf{return} $A_{n \times m}, \Delta D_{n \times m}$;
-\end{algorithmic}
+    % 2. 主循环结构 (花括号包裹，删除了 \ENDWHILE)
+    \While{$\mathcal{J} \neq \emptyset$}{
+        Solve the following linear program:\;
+        \quad Maximize $T$, subject to:\;
+        \quad\quad $\forall J_i \in \mathcal{J} : \sum^m_{j=1}a_{ij} \geq T$;\;
+        \quad\quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij} = t_i$;\;
+        \quad\quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;\;
+        \quad\quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;\;
+        \quad\quad $\forall j \in [m]: \sum_{i=1}^n |\Delta d_{ij}| \leq c_j$;\;
+        \quad\quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;\;
+        
+        Let $T_{max}$ be the outcome of the above linear program;\;
+        \BlankLine
+        
+        % For 循环 (删除了 \ENDFOR)
+        \For{each $J_l \in \mathcal{J}$}{
+            % If - Else If 结构 (\Eclif) 
+            \eIf{$\sum^m_{j=1} d_{lj} = T_{max}$}{
+                $t_l \leftarrow T_{max}$\;
+                $\mathcal{J} \leftarrow \mathcal{J} \setminus\{J_l\}$\;
+            }{
+                \If{$\sum^m_{j=1} a_{lj}= T_{max} \text{ and } (\forall j \in [m], a_{lj} = d_{lj} \lor \sum^n_{i=1}a_{ij}=u_j)$}{
+                    Check the feasibility of the following program:\;
+                    \quad $\sum_{j=1}^n a_{lj} > T_{max}$;\;
+                    \quad $\forall J_i \in \mathcal{J} \land i \neq l: \sum^m_{j=1}a_{ij}=T_{max}$;\;
+                    \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij}=t_i$;\;
+                    \quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;\;
+                    \quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;\;
+                    \quad $\forall j \in [m]: \sum_{i=1}^n |\Delta d_{ij}| \leq c_j$;\;
+                    \quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;\;
+                    \BlankLine
+                    
+                    \If{the above program is infeasible}{
+                        $t_l \leftarrow T_{max}$\;
+                        $\mathcal{J} \leftarrow \mathcal{J} \setminus\{J_l\}$\;
+                    }
+                }
+            }
+        }
+    }
+    \BlankLine
+    \Return $A_{n \times m}, \Delta D_{n \times m}$\;
 \end{algorithm}
+
+% \section{Achieving DAMF}
+% \label{sec:algo}
+% \subsection{Algorithm for Computing DAMF Allocation}
+
+% \begin{algorithm}[htbp]
+% \caption{Computing DAMF Allocation}\label{alg:basic}
+% \begin{algorithmic}[1]
+
+% \STATE \textbf{Input}: A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities and transfer limits $\{c_1, c_2, \dots, c_j\}$; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$; 
+% \STATE \textbf{Output}: A DAMF allocation matrix $A$; a transmission matrix $\Delta D$;
+% \STATE \textbf{Initialization}: $A \leftarrow \textbf{0}$; $\Delta D \leftarrow \textbf{0}$; $\mathcal{J} \leftarrow \{J_1, J_2, ..., J_n\}$;
+
+% \WHILE{$\mathcal{J} \neq \emptyset$}
+%     \STATE Solve the following linear program:
+%     \STATE \quad Maximize $T$, subject to: 
+%     \STATE \quad $\forall J_i \in \mathcal{J} : \sum^m_{j=1}a_{ij} \geq T$;
+%     \STATE \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij} = t_i$;
+%     \STATE \quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;
+%     \STATE \quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;
+%     \STATE \quad $\forall j \in [m]: \sum_{i=1}^n |\Delta d_{ij}| \leq c_j$;
+%     \STATE \quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;
+%     \STATE Let $T_{max}$ be the outcome of the above linear program;
+    
+%     \FOR{each $J_l \in \mathcal{J} $}
+%         \IF{$\sum^m_{j=1} d_{lj} = T_{max}$}
+%             \STATE $t_l \leftarrow T_{max}$;
+%             \STATE $\mathcal{J} \leftarrow \mathcal{J} \setminus\{J_l\}$; 
+%         \ELSIF{$\sum^m_{j=1} a_{lj}= T_{max} \text{ and } (\forall j \in [m], a_{lj} = d_{lj} \lor \sum^n_{i=1}a_{ij}=u_j)$}
+%             \STATE Check the feasibility of the following program:
+%             \STATE \quad $\sum_{j=1}^n a_{lj} > T_{max}$;
+%             \STATE \quad $\forall J_i \in \mathcal{J} \land i \neq l: \sum^m_{j=1}a_{ij}=T_{max}$;
+%             \STATE \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij}=t_i$;
+%             \STATE \quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;
+%             \STATE \quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;
+%             \STATE \quad $\forall j \in [m]: \sum_{i=1}^n |\Delta d_{ij}| \leq c_j$;
+%             \STATE \quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;
+            
+%             \IF{the above program is infeasible}
+%                 \STATE $t_l \leftarrow T_{max}$;
+%                 \STATE $\mathcal{J} \leftarrow \mathcal{J} \setminus\{J_l\}$;
+%             \ENDIF
+%         \ENDIF
+%     \ENDFOR
+% \ENDWHILE
+
+% \STATE \textbf{return} $A_{n \times m}, \Delta D_{n \times m}$;
+% \end{algorithmic}
+% \end{algorithm}
 
 We now design an iterative algorithm (Algorithm \ref{alg:basic}) to compute the DAMF allocation, inspired by the max-min programming method from \cite{radunovic2007unified} which can find the max-min fair allocation vector for any max-min achievable set. The basic idea is to simultaneously increase the allocations of all jobs. Once a job's demand is completely satisfied, the algorithm fixes its allocation and continues to increase the allocations of other jobs. The algorithm terminates when all job demands are satisfied or all available resources are used up.
 
-Each iteration of our algorithm consists of two stages. In stage 1, we define a unified lower bound $T$ and maximize it by increasing the aggregate allocations of all jobs in set $\mathcal{J}$ simultaneously, where $\mathcal{J}$ is the set of jobs whose aggregate allocations have not been fixed yet. Initially, $\mathcal{J}$ contains all jobs (line 3). The maximum $T$ value is derived by solving a linear program which models the constraints of resource allocation introduced in Section \ref{sec:model} (lines 5-12), where $t_i$ is the aggregate allocation of a job $J_i$ that has been fixed. 
+Each iteration of our algorithm consists of two stages. In stage 1, we define a unified lower bound $T$ and maximize it by increasing the aggregate allocations of all jobs in set $\mathcal{J}$ simultaneously, where $\mathcal{J}$ is the set of jobs whose aggregate allocations have not been fixed yet. Initially, $\mathcal{J}$ contains all jobs (line 3). The maximum $T$ value is derived by solving a linear program which models the constraints of resource allocation introduced in Section \ref{sec:model_1} (lines 5-12), where $t_i$ is the aggregate allocation of a job $J_i$ that has been fixed. 
 
 Let $T_{max}$ denote the maximum $T$ value obtained in stage~1. In stage 2, we identify jobs whose aggregate allocations are to be fixed. If a job $J_l$'s total demand is equal to $T_{max}$ amount of resources, it is fully satisfied. Thus, the algorithm fixes its aggregate allocation to be $T_{max}$ and removes it from $\mathcal{J}$ (lines 15-17). Otherwise, the algorithm checks whether it is possible to increase $J_l$'s aggregate allocation beyond $T_{max}$ without violating other jobs' allocations. If $J_l$'s aggregate allocation from stage 1 is already larger than $T_{max}$, or there exists a site on which $J_l$'s demand is not fully satisfied and the site has spare capacity (i.e., the condition in line 18 is not satisfied), clearly $J_l$'s aggregate allocation can be further increased. Otherwise, we change the aggregate allocation constraints for $J_l$ and other jobs by replacing "$\geq$" with "$>$" (line 20) and "$=$" (line 21) respectively, and then check whether the new linear program has any feasible solution (lines 19-26). If so, it implies that $J_l$'s allocation can be increased and $J_l$ will be kept in set $\mathcal{J}$. Otherwise, $J_l$'s aggregate allocation is fixed at $T_{max}$ and $J_l$ is removed from set $\mathcal{J}$ (lines 27-29). Note that this $T_{max}$ value is the aggregate resource amount, which means that $J_l$'s allocations on individual sites could vary in subsequent iterations as long as the aggregate amount is kept. The algorithm terminates when $\mathcal{J}$ becomes empty (line 4).
 
@@ -401,44 +462,102 @@ The linear program in Algorithm \ref{alg:basic} has $2mn$ variables and $2m+2n+m
 Algorithm 1 computes an exact DAMF allocation. However, its complexity could raise concern since solving large-scale linear programs can
 be computationally expensive \cite{complexity_lip}. In this section, we propose a heuristic algorithm to derive a near-DAMF allocation with significantly reduced time complexity to enhance the practicality.
 
+% 请确保在 LaTeX 文件的导言区（Preamble）引入了该宏包：
+% \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
 \begin{algorithm}[htbp]
 \caption{Heuristic to Approximate DAMF Allocation}\label{alg:approx}
-\begin{algorithmic}[1]
 
-\STATE \textbf{Input}: A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities and transfer limits; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$;
-\STATE \textbf{Output}: An allocation matrix $A$; a transmission matrix $\Delta D$;
-\STATE \textbf{Initialization}: $A = \textbf{0}$; $\Delta D = \textbf{0}$; $\vec{p} = \textbf{0}$; sort all sites in increasing order of the number of jobs with demands on each site (i.e., the cardinality of $\{J_i: a_{ij} > 0\}$); 
-\FOR{each site $S_j$ in the sorted order}
-\STATE Compute max-min fair allocation $\langle a_{1j}, a_{2j}, ..., a_{nj}\rangle$
-on $S_j$ based on job demands $\{d_{1j}, d_{2j}, ..., d_{nj}\}$, capacity $u_j$ of $S_j$, and current aggregate allocation vector $\vec{p} = \langle p_{1}, p_{2}, ..., p_{n}\rangle$ as described in the main text;
-\FOR {$i \in [n]$}
-\STATE $p_i = p_i + a_{ij}$;
-\ENDFOR
-\ENDFOR
-\STATE $\mathcal{S}_{spare} = \{ S_j~|~ \sum_{i=1}^n a_{ij} < u_j\}$;
-\STATE $\mathcal{S}_{full} = \{ S_j~|~ \sum_{i=1}^n d_{ij} > u_j\}$;
-\STATE $\mathcal{J} = \{ J_i~|~ \sum_{j=1}^m d_{ij} > \sum_{j=1}^m a_{ij}\}$;
-\WHILE{$\mathcal{S}_{spare} \neq \emptyset \land \mathcal{S}_{full} \neq \emptyset \land \mathcal{J} \neq \emptyset$}
-    \STATE Remove all $S_l$'s from $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ that $c_l = 0$ or $\sum_{i=1}^n (d_{il} + \Delta d_{il}) = u_l$;
-\WHILE{$\mathcal{J} \neq \emptyset$}
-\STATE Select job $J_x \in \mathcal{J}$ with the least aggregate allocation;
-\IF{$\forall S_j \in \mathcal{S}_{full}, d_{xj} + \Delta d_{xj} \leq a_{xj}$}
-\STATE Remove $J_x$ from $\mathcal{J}$;
-\ELSE
-\STATE Select a site $S_y \in \mathcal{S}_{full}$ where $d_{xy} + \Delta d_{xy}> a_{xy}$; 
-\STATE Select a site $S_z \in \mathcal{S}_{spare}$;
-\STATE $\Delta d_{xy} = \Delta d_{xy} - 1$;
-\STATE $\Delta d_{xz} = \Delta d_{xz} + 1$;
-\STATE $a_{xz} = a_{xz} + 1$;
-\STATE $c_y = c_y - 1$;
-\STATE $c_z = c_z - 1$;
-\STATE Break;
-\ENDIF
-\ENDWHILE
-\ENDWHILE
-\STATE \textbf{return} $A_{n*m}, \Delta D_{n*m}$
-\end{algorithmic}
+    % 1. 输入输出与初始化
+    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities and transfer limits; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$;}
+    \KwOut{An allocation matrix $A$; a transmission matrix $\Delta D$;}
+    
+    \BlankLine
+    $A = \textbf{0}$\;
+    $\Delta D = \textbf{0}$\;
+    $\vec{p} = \textbf{0}$\;
+    Sort all sites in increasing order of the number of jobs with demands on each site (i.e., the cardinality of $\{J_i: a_{ij} > 0\}$)\; 
+    \BlankLine
+
+    % 2. 第一层嵌套 For 循环
+    \For{each site $S_j$ in the sorted order}{
+        Compute max-min fair allocation $\langle a_{1j}, a_{2j}, ..., a_{nj}\rangle$ on $S_j$ based on job demands $\{d_{1j}, d_{2j}, ..., d_{nj}\}$, capacity $u_j$ of $S_j$, and current aggregate allocation vector $\vec{p} = \langle p_{1}, p_{2}, ..., p_{n}\rangle$ as described in the main text\;
+        
+        \For{$i \in [n]$}{
+            $p_i = p_i + a_{ij}$\;
+        }
+    }
+    \BlankLine
+    
+    % 3. 集合赋值
+    $\mathcal{S}_{spare} = \{ S_j~|~ \sum_{i=1}^n a_{ij} < u_j\}$\;
+    $\mathcal{S}_{full} = \{ S_j~|~ \sum_{i=1}^n d_{ij} > u_j\}$\;
+    $\mathcal{J} = \{ J_i~|~ \sum_{j=1}^m d_{ij} > \sum_{j=1}^m a_{ij}\}$\;
+    \BlankLine
+
+    % 4. 双层嵌套 While 循环
+    \While{$\mathcal{S}_{spare} \neq \emptyset \land \mathcal{S}_{full} \neq \emptyset \land \mathcal{J} \neq \emptyset$}{
+        Remove all $S_l$'s from $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ that $c_l = 0$ or $\sum_{i=1}^n (d_{il} + \Delta d_{il}) = u_l$\;
+        
+        \While{$\mathcal{J} \neq \emptyset$}{
+            Select job $J_x \in \mathcal{J}$ with the least aggregate allocation\;
+            
+            \eIf{$\forall S_j \in \mathcal{S}_{full}, d_{xj} + \Delta d_{xj} \leq a_{xj}$}{
+                Remove $J_x$ from $\mathcal{J}$\;
+            }{
+                Select a site $S_y \in \mathcal{S}_{full}$ where $d_{xy} + \Delta d_{xy}> a_{xy}$\; 
+                Select a site $S_z \in \mathcal{S}_{spare}$\;
+                $\Delta d_{xy} = \Delta d_{xy} - 1$\;
+                $\Delta d_{xz} = \Delta d_{xz} + 1$\;
+                $a_{xz} = a_{xz} + 1$\;
+                $c_y = c_y - 1$\;
+                $c_z = c_z - 1$\;
+                \break
+            }
+        }
+    }
+    \BlankLine
+    \Return $A_{n*m}, \Delta D_{n*m}$\;
 \end{algorithm}
+
+% \begin{algorithm}[htbp]
+% \caption{Heuristic to Approximate DAMF Allocation}\label{alg:approx}
+% \begin{algorithmic}[1]
+
+% \STATE \textbf{Input}: A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities and transfer limits; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$;
+% \STATE \textbf{Output}: An allocation matrix $A$; a transmission matrix $\Delta D$;
+% \STATE \textbf{Initialization}: $A = \textbf{0}$; $\Delta D = \textbf{0}$; $\vec{p} = \textbf{0}$; sort all sites in increasing order of the number of jobs with demands on each site (i.e., the cardinality of $\{J_i: a_{ij} > 0\}$); 
+% \FOR{each site $S_j$ in the sorted order}
+% \STATE Compute max-min fair allocation $\langle a_{1j}, a_{2j}, ..., a_{nj}\rangle$
+% on $S_j$ based on job demands $\{d_{1j}, d_{2j}, ..., d_{nj}\}$, capacity $u_j$ of $S_j$, and current aggregate allocation vector $\vec{p} = \langle p_{1}, p_{2}, ..., p_{n}\rangle$ as described in the main text;
+% \FOR {$i \in [n]$}
+% \STATE $p_i = p_i + a_{ij}$;
+% \ENDFOR
+% \ENDFOR
+% \STATE $\mathcal{S}_{spare} = \{ S_j~|~ \sum_{i=1}^n a_{ij} < u_j\}$;
+% \STATE $\mathcal{S}_{full} = \{ S_j~|~ \sum_{i=1}^n d_{ij} > u_j\}$;
+% \STATE $\mathcal{J} = \{ J_i~|~ \sum_{j=1}^m d_{ij} > \sum_{j=1}^m a_{ij}\}$;
+% \WHILE{$\mathcal{S}_{spare} \neq \emptyset \land \mathcal{S}_{full} \neq \emptyset \land \mathcal{J} \neq \emptyset$}
+%     \STATE Remove all $S_l$'s from $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ that $c_l = 0$ or $\sum_{i=1}^n (d_{il} + \Delta d_{il}) = u_l$;
+% \WHILE{$\mathcal{J} \neq \emptyset$}
+% \STATE Select job $J_x \in \mathcal{J}$ with the least aggregate allocation;
+% \IF{$\forall S_j \in \mathcal{S}_{full}, d_{xj} + \Delta d_{xj} \leq a_{xj}$}
+% \STATE Remove $J_x$ from $\mathcal{J}$;
+% \ELSE
+% \STATE Select a site $S_y \in \mathcal{S}_{full}$ where $d_{xy} + \Delta d_{xy}> a_{xy}$; 
+% \STATE Select a site $S_z \in \mathcal{S}_{spare}$;
+% \STATE $\Delta d_{xy} = \Delta d_{xy} - 1$;
+% \STATE $\Delta d_{xz} = \Delta d_{xz} + 1$;
+% \STATE $a_{xz} = a_{xz} + 1$;
+% \STATE $c_y = c_y - 1$;
+% \STATE $c_z = c_z - 1$;
+% \STATE Break;
+% \ENDIF
+% \ENDWHILE
+% \ENDWHILE
+% \STATE \textbf{return} $A_{n*m}, \Delta D_{n*m}$
+% \end{algorithmic}
+% \end{algorithm}
 
 The heuristic algorithm (Algorithm \ref{alg:approx}) proceeds in two steps. In step 1 (lines 4-9), we find a fast approximation to AMF (i.e., without transferring job demands between sites) in an iterative manner. Each iteration calculates the compute resource allocation for one site $S_j$, given the job demands and compute capacity on this site as well as the aggregate allocation vector $\vec p$ over the sites that have been processed in previous iterations (line 5). Suppose there are $n$ jobs running in the system. Let $\vec p = \langle p_{1}, p_{2}, ..., p_{n}\rangle$ be the current aggregate allocation vector and $\langle d_{1j}, d_{2j}, ..., d_{nj}\rangle$ be the job demands on site $S_j$. We would like to compute an allocation $\langle a_{1j}, a_{2j}, ..., a_{nj}\rangle$ on $S_j$ so that $\langle p_{1}+a_{1j}, p_{2}+a_{2j}, ..., p_{n}+a_{nj}\rangle$ is max-min fair among all possible allocations for the given $\vec p$. If the total demand of all jobs on site $S_j$ is no larger than its capacity, i.e., $\sum_{i=1}^n d_{ij} \leq u_j$, we can simply satisfy the demands of all jobs by setting $a_{ij} = d_{ij}$ for all $i$'s. Otherwise, we sort the jobs in increasing order of $p_{i}$, i.e., $p_{1} \leq p_{2} \leq ... \leq p_{n}$, and the resources on site $S_j$ will be allocated to a prefix of this job sequence by the definition of max-min fairness. If resources are allocated to the first $k$ jobs, the total resources allocated must be no more than 
 \begin{equation}
@@ -457,29 +576,60 @@ Thus, each unit of demand transfer takes $O(m+\log n)$ time. If a source site fo
 \subsection{Optimizing Job Completion Times}
 In addition to providing fair resource allocation from the global perspective, we can further optimize the job completion times. The key idea is that DAMF fixes only the aggregate resource allocation for each job, while the particular allocations at individual sites can still be adjusted. In this case, the completion time of a job can be optimized by assigning the allocation proportionally to its demand at each site. For example, if a job has $2$ and $4$ tasks at two sites respectively and its aggregate allocation by DAMF is $3$ computing slots, then its allocations at the two sites can be set to $1$ and $2$ computing slots, so that the two sites can finish processing their tasks at the same time (to minimize job completion time) if all tasks have the same processing time. Meanwhile, we need to ensure that other jobs can also achieve their DAMF aggregate allocations. The details of our algorithm are shown in Algorithm \ref{alg:qos}.
 
+% 请确保在 LaTeX 文件的导言区（Preamble）引入了该宏包：
+% \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
 \begin{algorithm}[htbp]
-\caption{Optimizing Job Completion Times}
-\label{alg:qos}
-\begin{algorithmic}[1]
+\caption{Optimizing Job Completion Times}\label{alg:qos}
 
-\STATE \textbf{Input}: A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$; the aggregate allocation $e_i$ of each job $J_i$ in a DAMF allocation with corresponding transmission matrix $\Delta D$;
-\STATE \textbf{Output}: An optimized allocation matrix $A'$;
+    % 1. 输入输出
+    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$; the aggregate allocation $e_i$ of each job $J_i$ in a DAMF allocation with corresponding transmission matrix $\Delta D$;}
+    \KwOut{An optimized allocation matrix $A'$;}
+    \BlankLine
 
-\FOR{$k = 1, 2, \dots, n$}
-\STATE Solve the following linear program:
-\STATE Maximize $y_k$, subject to:
-\STATE \quad $\forall j \in [m], \sum_{i=1}^n a_{ij} \leq u_j$;
-\STATE \quad $\forall i < k, j \in [m]: a_{ij} = a'_{ij}$;
-\STATE \quad $\forall i \ge k, j \in [m]: 0 \le a_{ij} \le d_{ij}+\Delta d_{ij}$;
-\STATE \quad $\forall i\ge k: \sum_{j=1}^m a_{ij} = e_i$;
-\STATE \quad $\forall j \in [m]: a_{kj} = d_{kj}*y_k+z_{kj}$, \;$ y_k \ge 0$, $z_{kj} \ge 0$;
-\FOR{each $j\in[m]$}
-\STATE $a'_{kj} \leftarrow a_{kj}$;
-\ENDFOR
-\ENDFOR
-\STATE \textbf{return} $A'_{n*m}$.
-\end{algorithmic}
+    % 2. 外层 For 循环
+    \For{$k = 1, 2, \dots, n$}{
+        Solve the following linear program:\;
+        Maximize $y_k$, subject to:\;
+        \quad $\forall j \in [m], \sum_{i=1}^n a_{ij} \leq u_j$;\;
+        \quad $\forall i < k, j \in [m]: a_{ij} = a'_{ij}$;\;
+        \quad $\forall i \ge k, j \in [m]: 0 \le a_{ij} \le d_{ij}+\Delta d_{ij}$;\;
+        \quad $\forall i\ge k: \sum_{j=1}^m a_{ij} = e_i$;\;
+        \quad $\forall j \in [m]: a_{kj} = d_{kj}*y_k+z_{kj}$, $y_k \ge 0$, $z_{kj} \ge 0$;\;
+        \BlankLine
+        
+        % 3. 内层 For 循环
+        \For{each $j\in[m]$}{
+            $a'_{kj} \leftarrow a_{kj}$\;
+        }
+    }
+    \BlankLine
+    \Return $A'_{n*m}$\;
 \end{algorithm}
+
+% \begin{algorithm}[htbp]
+% \caption{Optimizing Job Completion Times}
+% \label{alg:qos}
+% \begin{algorithmic}[1]
+
+% \STATE \textbf{Input}: A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$; the aggregate allocation $e_i$ of each job $J_i$ in a DAMF allocation with corresponding transmission matrix $\Delta D$;
+% \STATE \textbf{Output}: An optimized allocation matrix $A'$;
+
+% \FOR{$k = 1, 2, \dots, n$}
+% \STATE Solve the following linear program:
+% \STATE Maximize $y_k$, subject to:
+% \STATE \quad $\forall j \in [m], \sum_{i=1}^n a_{ij} \leq u_j$;
+% \STATE \quad $\forall i < k, j \in [m]: a_{ij} = a'_{ij}$;
+% \STATE \quad $\forall i \ge k, j \in [m]: 0 \le a_{ij} \le d_{ij}+\Delta d_{ij}$;
+% \STATE \quad $\forall i\ge k: \sum_{j=1}^m a_{ij} = e_i$;
+% \STATE \quad $\forall j \in [m]: a_{kj} = d_{kj}*y_k+z_{kj}$, \;$ y_k \ge 0$, $z_{kj} \ge 0$;
+% \FOR{each $j\in[m]$}
+% \STATE $a'_{kj} \leftarrow a_{kj}$;
+% \ENDFOR
+% \ENDFOR
+% \STATE \textbf{return} $A'_{n*m}$.
+% \end{algorithmic}
+% \end{algorithm}
 
 Algorithm \ref{alg:qos} optimizes the completion times of jobs iteratively from $J_1$ to $J_n$. In each iteration, the algorithm solves a linear program (lines 4-10) to optimize the completion time of a job $J_k$. The first constraint of the linear program (line 6) ensures that the allocations are feasible. The second constraint (line 7) retains the allocations of jobs already optimized. The third constraint (line 8) ensures that the allocations of remaining jobs are rational given the input transmission matrix. The fourth constraint (line 9) guarantees that the aggregate allocations of these jobs comply with DAMF. The last constraint (line 10) expresses $J_k$'s allocation $a_{kj}$ at each site $S_j$ as a linear combination $d_{kj}*y_k +z_{kj}$, where $y_k$ is a shared proportional coefficient for all sites and $z_{kj}$ is an auxiliary variable. Thus, by maximizing $y_k$, the resource allocation $a_{kj}$ across sites can be made as close to proportional as possible to the resource demand $d_{kj} + \Delta d_{kj}$ at each site, thereby minimizing job $J_k$'s completion time. After solving the linear program, $J_k$'s allocation at each site is decided and recorded in $A'$ (lines 11-13). Finally, the algorithm returns the optimized allocation $A'$ after all iterations. The set of jobs $\{J_1, J_2, ..., J_n\}$ input to the algorithm can be arranged in different orders based on job arrival times, job priorities, job demands, etc. In this paper, we sort the jobs based on their total demands from low to high so that jobs with smaller numbers of tasks are optimized earlier.
 
@@ -542,7 +692,7 @@ We simulate a distributed system of $m$ sites, each with 32 computing slots. Eac
 \label{resource_policy}
 Besides Algorithms \ref{alg:basic} and \ref{alg:approx} (called DAMF and DAMF\_a for short), we also implement three baseline policies: IMF, AMF (both introduced in Section \ref{sec:prelim}) and Dynamic Independent Max-min Fairness (DIMF). DIMF utilizes network resources on top of IMF: it first applies the IMF policy for resource allocation on each site, then transfers unsatisfied job demands to the sites with spare compute capacities to maximize the system utility (subject to the transfer limits), where jobs with lower aggregate allocations in the first step are assigned higher transmission priority in order to promote fairness. All the policies recompute the allocation matrix only when a new job arrives or an existing job completes all of its tasks on some site. We use CPLEX \cite{Cplex} as the program solver in the experiments. Since a task cannot be transferred fractionally, the transmission matrix $\Delta D$ derived to achieve the DAMF allocation may not be workable. To make DAMF applicable in practice, we enforce the elements of the transmission matrix $\Delta D$ in Algorithm \ref{alg:basic} to be integers, i.e., replacing the linear program with a mixed-integer program. This would incur extra but acceptable computation time. We shall demonstrate the computation times of DAMF and DAMF\_a later. Note that DAMF\_a does not need to apply a similar modification because the transmission matrix $\Delta D$ derived from its heuristic is always integral.
 
-As introduced in Section \ref{sec:model}, transmission count limit $c$ is computed based on the data partition size $S$, available bandwidth $B$ and time threshold $T$: $c = BT/S$. In the experiments, we set $T$ = 50 seconds (which is small compared to the average task duration shown in Table \ref{tab:data_characteristics}), $S$ = 1GB and $B$ = 160Mbps or 480Mbps for all sites, thus $c = (160\; \text{or}\;480)*50/(1*1024*8) \approx 1\; \text{or}\; 3$. Under these settings, a task transmission takes $50/ (1\;\text{or}\;3)=50\;\text{or}\;16.67$ seconds to arrive at its destination. To emulate the bandwidth bottleneck being the connection between each site and the backbone network, task transmissions (potentially originating from different source sites) are received sequentially at each destination site. In recomputing the allocation and transmission matrices, the scheduler discards all pending transmissions (but retains the ongoing one) to release more bandwidth for the reallocation. For example, suppose $c=3$ for all sites and a recomputation is triggered $30$ seconds after the previous one. Suppose in the previous computation, it was decided that a site $S_j$ would receive $3$ tasks. In this case, the first task transmission would have arrived at site $S_j$ $16.67$ seconds after the previous computation, while the second task transmission is ongoing and the third one is pending. Then, in the recomputation, the third task transmission will be rescinded and the transmission count limit $c_j$ available for $S_j$ will be set to $2$.
+As introduced in Section \ref{sec:model_1}, transmission count limit $c$ is computed based on the data partition size $S$, available bandwidth $B$ and time threshold $T$: $c = BT/S$. In the experiments, we set $T$ = 50 seconds (which is small compared to the average task duration shown in Table \ref{tab:data_characteristics}), $S$ = 1GB and $B$ = 160Mbps or 480Mbps for all sites, thus $c = (160\; \text{or}\;480)*50/(1*1024*8) \approx 1\; \text{or}\; 3$. Under these settings, a task transmission takes $50/ (1\;\text{or}\;3)=50\;\text{or}\;16.67$ seconds to arrive at its destination. To emulate the bandwidth bottleneck being the connection between each site and the backbone network, task transmissions (potentially originating from different source sites) are received sequentially at each destination site. In recomputing the allocation and transmission matrices, the scheduler discards all pending transmissions (but retains the ongoing one) to release more bandwidth for the reallocation. For example, suppose $c=3$ for all sites and a recomputation is triggered $30$ seconds after the previous one. Suppose in the previous computation, it was decided that a site $S_j$ would receive $3$ tasks. In this case, the first task transmission would have arrived at site $S_j$ $16.67$ seconds after the previous computation, while the second task transmission is ongoing and the third one is pending. Then, in the recomputation, the third task transmission will be rescinded and the transmission count limit $c_j$ available for $S_j$ will be set to $2$.
 
 \subsection{Performance Metrics}
 In Sections \ref{sec:DAMF} and \ref{sec:property}, we have proved that DAMF achieves several important fairness properties. Our experiments aim to further evaluate DAMF and DAMF\_a's empirical performance from different perspectives. We study the following  performance metrics: the deviation of the instantaneous resource allocation from ideal DAMF, the standard deviation of the instantaneous resource allocation among jobs, the average Jain's Index of instantaneous resource allocation, and the average job response time. 
@@ -958,16 +1108,43 @@ In addition, we evaluate the scalability of DAMF\_a under larger numbers of site
   \end{minipage}
 \end{figure}
 
+% \begin{table}[!ht]
+%   \caption{Average computation time (s) of $\text{DAMF}_a$}
+%   \label{tab:computation_time_m}
+%   \centering
+%   \small 
+%   \setlength{\tabcolsep}{4pt} 
+%   \begin{tabular}{cc *{6}{S[table-format=1.3e-1]}}
+%     \toprule
+%     & & \multicolumn{3}{c}{Alibaba, workload = 40\%} & \multicolumn{3}{c}{Alibaba, workload = 60\%} \\
+%     \cmidrule(lr){3-5} \cmidrule(lr){6-8} % 画出有间隙的分隔线，更好看
+%     $c$ & $\alpha$ & {$m=20$} & {$m=50$} & {$m=100$} & {$m=20$} & {$m=50$} & {$m=100$} \\
+%     \midrule
+%     \multirow{4}{*}{1} 
+%     & 0.0 & 2.035e-5 & 4.908e-5 & 8.455e-5 & 3.732e-5 & 7.321e-5 & 1.594e-4 \\
+%     & 0.5 & 2.231e-5 & 4.491e-5 & 7.954e-5 & 3.339e-5 & 6.835e-5 & 1.592e-4 \\
+%     & 1.0 & 1.645e-5 & 4.084e-5 & 7.899e-5 & 2.517e-5 & 6.675e-5 & 1.439e-4 \\
+%     & 2.0 & 1.586e-5 & 3.561e-5 & 8.723e-5 & 2.243e-5 & 5.335e-5 & 1.219e-4 \\
+%     \midrule
+%     \multirow{4}{*}{3} 
+%     & 0.0 & 2.169e-5 & 4.678e-5 & 9.114e-5 & 3.644e-5 & 7.452e-5 & 1.639e-4 \\
+%     & 0.5 & 2.195e-5 & 5.027e-5 & 1.062e-4 & 3.089e-5 & 7.945e-5 & 2.174e-4 \\
+%     & 1.0 & 1.836e-5 & 5.408e-5 & 1.137e-4 & 3.035e-5 & 9.177e-5 & 2.428e-4 \\
+%     & 2.0 & 1.935e-5 & 5.155e-5 & 1.443e-4 & 2.786e-5 & 9.714e-5 & 2.868e-4 \\
+%     \bottomrule
+%   \end{tabular}
+% \end{table}
+
 \begin{table}[!ht]
   \caption{Average computation time (s) of $\text{DAMF}_a$}
   \label{tab:computation_time_m}
   \centering
   \small 
   \setlength{\tabcolsep}{4pt} 
-  \begin{tabular}{cc *{6}{S[table-format=1.3e-1]}}
+  \begin{tabular}{cc *{6}{S[table-format=1.3e-2, input-exponent-markers={e}]}}
     \toprule
     & & \multicolumn{3}{c}{Alibaba, workload = 40\%} & \multicolumn{3}{c}{Alibaba, workload = 60\%} \\
-    \cmidrule(lr){3-5} \cmidrule(lr){6-8} % 画出有间隙的分隔线，更好看
+    \cmidrule(lr){3-5} \cmidrule(lr){6-8} 
     $c$ & $\alpha$ & {$m=20$} & {$m=50$} & {$m=100$} & {$m=20$} & {$m=50$} & {$m=100$} \\
     \midrule
     \multirow{4}{*}{1} 

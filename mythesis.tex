@@ -32,7 +32,7 @@
 \let\rem\relax
 \usepackage{adjustbox}
 \usepackage{amsmath}
-\usepackage[amssymb]{SIunits}
+\usepackage{siunitx}
 \usepackage{amssymb}
 \usepackage{multirow}
 \usepackage{wrapfig}
@@ -51,7 +51,14 @@
 \usepackage{color,soul}
 \usepackage{enumerate}
 \usepackage{Styles/mydefs}
-
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usepackage{comment}
+\usetikzlibrary{positioning, positioning,fit,decorations.pathreplacing,arrows.meta}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
 
 \begin{document}
 
@@ -372,6 +379,6 @@ $a.s.$           & almost sure convergence of a random sequence\\
 \label{Bibliography}
 \setstretch{1}
 \bibliographystyle{unsrtnat}
-\bibliography{References/first_paper,References/second_paper}
+\bibliography{References/Reference}
 
 \end{document}
