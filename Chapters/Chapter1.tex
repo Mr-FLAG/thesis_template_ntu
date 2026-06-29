@@ -9,54 +9,27 @@
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{Some useful hints}
+\section{Research Scope}
+\label{sec:scope}
+It is increasingly common for data-processing jobs in geo-distributed systems to spread tasks among multiple sites for data locality: each task will be deployed and processed at some site where their input data are available \cite{hogade2022survey, bergui2021survey, fatemipour2024survey}. Through this framework, the system can effectively save the bandwidth cost and improve the service response time. Geo-distributed processing has been prevalent for data analytics in various domains such as sensor networks \cite{tudoran2013sage}, climate science \cite{tudoran2013sage, tudoran2014bridging} and stock exchange \cite{heintz2014end}. In such systems, providing fair resource allocation to jobs can help with preventing starvation and fulfilling QoS for all jobs, but it is a non-trivial problem. The problem consists of two critical hurdles: how to decide the distributed resource allocation for each job with various amount of resource demand distribution across sites, and how to utilize the limited network resources to transfer tasks of certain jobs between sites to achieve more fair allocation and better overall utility.
 
-My figure citation: \fref{fig:demo1}. (command: fref)
+Existing work on fair resource allocation has primarily focused on a cluster of machines at a single site, where all resources in the system are assumed to be available for processing all jobs. Typical examples include the classical Max-min Fairness \cite{radunovic2007unified} and Proportional Fairness \cite{PF}. As an extension, Constrained Max-min Fairness \cite{choosy} achieves max-min fair allocation given the placement constraints of jobs on the machines. Dominant Resource Fairness \cite{DRF} and Resource Elasticity Fairness \cite{REF} present fair allocations of multiple resources. On the other hand, the study of distributed job execution has mainly focused on improving job scheduling efficiency or saving bandwidth cost \cite{zhao2019optimizing, li2021mapreduce}. Little work has considered fair resource allocation among jobs executing over multiple sites. Recently, Guan et al. \cite{AMF} has explored the conventional max-min fairness in distributed job execution by requiring the aggregate resource allocation across all sites to be max-min fair. However, if the job workloads are distributed unevenly among the sites, the resulting resource allocation could be quite inefficient or unfair with respect to each job's demand. For example, if a high-demand job's entire workload is located at one site with small capacity, its allocation can still be unfair even if it takes up all resources at that site. 
 
-My section citation: \sref{sec:contribution}. (command: sref)
-
-My Chaptere citation: \cref{ch:introduction}. (command: cref)
-
-My Paper citation: \cite{bauschke2011convex}. (notice back reference to page from bibliograph)
-
-My equation citation: \eqref{eq:equ2}. (command: eqref), or cite equation by tag: \eqref{eq:equ1}.
-
-\begin{equation}\label{eq:equ1}
-F(\theta)=\sum_{i=1}^mf_i(\theta) \tag{DOP}
-\end{equation}
-
-\begin{equation}\label{eq:equ2}
-F(\theta)=\sum_{i=1}^mf_i(\theta)
-\end{equation}
-
-\begin{figure}[htbp]
-  \centering
-    \includegraphics[width=0.85\textwidth]{Chapter1/demo1}
-  \caption{An illustration.}
-  \label{fig:demo1}
-\end{figure}
+As different sites in the distributed system are often inter-connected with well-provisioned networks, the spare bandwidth can be utilized to transfer data and hence computation demands among sites to enhance the efficiency and improve the fairness of resource allocation among jobs. Since there is a huge solution space, the choice of moving which job's data from which site to another is a challenge. To the best of our knowledge, achieving fair resource allocation with exploiting the use of idle network resources has not been widely studied.
+In this paper, we apply max-min fairness to distributed job execution with utilization of network resources to transfer job demands between sites. We propose a resource allocation policy called Dynamic Aggregate Max-min Fairness (DAMF), which requires each job's aggregate resource allocation across all sites to be max-min fair among all possible demand transmissions and resource allocations. We prove that DAMF satisfies three important properties of fairness: Pareto efficiency, envy-freeness and strategy-proofness. Given the demand distributions of jobs and the network capacity constraints, we develop algorithms to compute the demand transmission and the DAMF resource allocation to each job at each site. Experimental results demonstrate that compared with existing allocation policies, DAMF can achieve resource allocations with better fairness among jobs and improve the system utility.
 
 
+Meanwhile, this kind of geo-distributed computing systems introduces many new challenges, such as how to improve system efficiency and decrease the volume of data transmission. In a single data center scenario, the strategy for achieving the highest job processing efficiency (i.e., minimize the average job response time -- the response time of a job is defined as the duration between its arrival time and its completion time)
+%the average time span from each job's arrival to completion) 
+is to sort and execute jobs based on their computation loads (i.e., the total processing time of all tasks of each job) from low to high, known as the Shortest Remaining Processing Time (SRPT) strategy. Similar ideas can also be applied to the distributed job execution scenario where jobs are comprised of tasks to be processed at multiple data centers, but this can be far from optimal. In geo-distributed job execution, the completion time of each job is determined by the completion time of its last task across all sites. Therefore, the execution order of jobs within individual sites leaves a huge space for optimization, especially when the task distributions of jobs among different sites are imbalanced. How to achieve optimal job scheduling in distributed job execution is an NP-hard problem.
 
-%----------------------------------------------------------------------------------------
-\section{Major Contributions}\label{sec:contribution}
-Our main contributions can be stated as follows:
-\begin{itemize}
-\item \emph{First part}: My first contributions, several lines
+What makes the problem even more complicated is how to utilize network resources in the system to further enhance job processing efficiency. Since the completion time of the last task decides the response time of a job, transferring the input data of tasks to other sites can potentially bring forward the execution of tasks and thereby improve the job's response time. However, there exists complex interdependency between the execution order of jobs and the transmission of tasks. Even the transmission of a single task may change the optimal execution order of jobs, while different job execution orders may, in turn, require different task transmissions to minimize the average job response time. As a result, it is highly challenging to find the optimal solution. 
 
+In this paper, we focus on developing job scheduling algorithms which utilize network resources to transfer tasks and improve job processing efficiency in geo-distributed systems. We present a novel job scheduling strategy, called Workload-Aware Selection with Transmission (WAST), designed to optimize average job response time. WAST computes the global execution order of jobs and a set of task transmissions between different sites in an integrated manner. %\sout{Different from the existing work, we systematically analyze the synergistic impact of job scheduling and task transmission on job response time.} 
+More specifically, WAST searches for the task transmission strategy to achieve the best possible response time of each job by formulating an optimization problem and transforming it into multiple minimum-cost flow problems that can be efficiently solved by popular solvers (e.g., OR-Tools \cite{ortools}, Cplex \cite{Cplex}, and GUROBI \cite{gurobi}), and iteratively schedules the job with the minimum response time until all jobs are scheduled. We also present a heuristic approximation algorithm that reduces the computational complexity without compromising the quality of scheduling much. We validate the effectiveness of the WAST algorithm and its approximation using publicly available job traces from Alibaba. Experimental results show that both algorithms can efficiently compute near-optimal job execution order and task transmissions, thereby significantly reducing job response times, especially in scenarios where the initial computation load distributions of jobs are highly skewed across sites. 
 
-\item \emph{Second}: Second contributions, several lines
+\section{Thesis Contributions}
 
-
-\item \emph{Third name}: 
-Third contributions, several lines
-
-\end{itemize}
-
-%----------------------------------------------------------------------------------------
-% SECTION 2
-%----------------------------------------------------------------------------------------
-\section{Outline of the Thesis}
 
 \cref{ch:introduction} introduces ...
 
