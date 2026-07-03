@@ -10,70 +10,17 @@
 % SECTION 1
 %-----------------------------------
 
-\section{Part 1}
+\section{Fairness in Resource Allocation in Single-Site Systems}
+Max-Min Fairness (MMF) is a widely used resource allocation policy. Radunovic \textit{et al.} Ghodsi \textit{et al.}  \cite{DRF} proposed Dominant Resource Fairness (DRF) which decides a user's allocation by its dominant share, i.e., the maximum proportional share that the user is allocated among all resource types. Ghodsi \textit{et al.} \cite{choosy} addressed task placement constraints and presented Constrained Max-min Fairness, which tries to meet the fairness target by recursively satisfying the users based on the order of dissatisfaction. Zahedi and Lee \cite{REF} solved the multi-resource allocation problem by proportionally allocating different resources based on the re-scaled Cobb-Douglas Utility, and named it Resource Elasticity Fairness. Gutman and Nisan \cite{gutman2012GDF} further extended DRF with respect to the bundle measure and utility functions. Multi-resource allocation holds applications in cloud servers \cite{wang2014dominant}, heterogeneous GPU clusters \cite{mahajan2020themis}, and 5G networks \cite{fossati2020multi}. Our work also considers multiple types of resources, but we focus on utilizing network resources to enhance the fairness of compute resource allocation.
 
+In geo-distributed systems, a job may have tasks spread over different sites. Hung \textit{et al.} \cite{hung2015scheduling} presented a scheduling algorithm for distributed job execution, which selects the job with the least overall demand to run first in order to minimize the average response time of jobs. This allocation policy is straightforward but apparently unfair, and could cause starvation for large-demand jobs. Huang \textit{et al.} \cite{huang2015cora} and Chen \textit{et al.} \cite{chen2018scheduling} studied the job scheduling problem in distributed cloud services and tried to achieve max-min fairness for jobs in terms of the job response time. Different from the above work, we aim to achieve max-min fairness in the instantaneous resource allocation among jobs across geo-distributed sites given the availability of network resources. Recent studies have also adopted deep reinforcement learning to search for effective resource allocation strategies in fields like wireless networks \cite{wang2021incorporating}, edge computing \cite{li2022drl, mohajer2024dynamic} and satellite networks \cite{liao2020distributed, li2022multi}. However, learning-based approaches have mainly focused on improving the efficiency of resource allocation (such as system utility, revenue and profit) rather than achieving the fairness of resource allocation.
 
+\section{Fairness in Resource Allocation in Distributed Job Execution}
+The task (job) scheduling problem in geo-distributed environments has been widely studied in many aspects. Some research focuses on utilizing the game theory to minimize the system entity cost by assuming that users in the system have different interests, and thus they form a game model \cite{chen2014decentralized, hogade2022energy}. %Some work assumes that the input data of each task is replicated across multiple geo-distributed data centers, and thus the algorithm is required to compute the execution order of jobs together with each task's exact execution location \cite{guan2022task, zhao2025data}. 
+Many efforts aim to minimize the bandwidth usage or the transmission time/cost in the system. For example, \cite{chen2021optimizing} focuses on optimizing the transmission time of data along the given paths, Gaia \cite{hsieh2017gaia} tries to minimize the transmission cost between machine learning clusters while maintaining the model's performance, and ELIS \cite{shi2024adaptive} aims to save the network bandwidth usage on both intra-DC and inter-DC links while ensuring the QoS of microservices. 
+Previous studies have also made progress on developing efficient distributed job scheduling algorithms. However, they typically rely on simplified system assumptions which limit their applicability in real practice \cite{hung2015scheduling, guan2022task, zhao2025data, hu2016flutter, pu2015low, chen2018scheduling, GEODIS}. For example, Hung \textit{et al.} \cite{hung2015scheduling} presents a workload-aware strategy which schedules jobs based on their estimated completion times under given task placements, but it neglects to utilize network resources to move tasks. Guan \textit{et al.} \cite{guan2022task}, Zhao \textit{et al.}  \cite{zhao2025data} study the task assignment problem given that the input data of each task can be replicated across multiple geo-distributed data centers, and they do not consider using network resources either. Hu \textit{et al.} \cite{hu2016flutter} and Pu \textit{et al.} \cite{pu2015low} introduce algorithms considering task transmissions, but they focus on improving the efficiency of a single job and do not study the scheduling strategy across jobs. Chen \textit{et al.} \cite{chen2018scheduling} presents a scheduling algorithm that incorporates transmissions but imposes strict constraints that the number of tasks is no more than the number of computing slots in the system. Convolbo \textit{et al.} \cite{GEODIS} coordinates scheduling with transmission but focuses on minimizing the makespan of job execution instead of the response times of individual jobs.
 
-\section{Part 2}
+\section{Efficient Scheduling in Distributed Job Execution}
+Job scheduling and resource allocation are fundamental problems in system processing, which have been widely studied from a variety of system scenarios and performance objectives \cite{gautam2015survey, ghomi2017load, hedayati2023mapreduce, wu2025task}. In a single-site scenario, the Shortest Remaining Processing Time (SRPT) policy is universally recognized as the optimal policy for maximizing job processing efficiency, whereas a multitude of notions exist for different types of fair resource allocation. Radunovic et al. \cite{radunovic2007unified} proposed a unified framework for max-min fairness, which aims to maximize the utility of the least satisfied users. In addition, Ghodsi \textit{et al.} \cite{DRF} proposed Dominant Resource Fairness (DRF) under the multiple resource scenario, which decides a user's allocation by its dominant share, i.e., the maximum proportional share that the user is allocated among all resource types. Zahedi and Lee \cite{REF} solved the multi-resource allocation problem based on the re-scaled Cobb-Douglas Utility, and proportionally allocates different resources to each user. Fossati \textit{et al.} \cite{fossati2022distributed} presents a distributed slice multi-resource allocation algorithm specialized for 5G systems. In particular, Friedman \textit{et al.} \cite{friedman2003fairness, friedman2003protective} presents the notion of protective scheduling, which sets the criterion of fairness to be that no job would finish later than its completion time under the PS policy. Under this fairness guarantee, they present a series of algorithm to further improve the job processing efficiency. 
 
-
-
-\begin{lemma}[My lemma]
-	A great lemma.
-	\begin{equation}
-		c^2=a^2+b^2
-	\end{equation}
-\end{lemma}
-
-\begin{theorem}[My theorem]
-	A great theorem.
-	\begin{equation}
-		c^2=a^2+b^2
-	\end{equation}
-\end{theorem}
-
-\begin{proof}
-	The proof is intuitive.
-\end{proof}
-
-\begin{corollary}[My corollary]
-	A great corollary.
-	\begin{equation}
-		c^2=a^2+b^2
-	\end{equation}
-\end{corollary}
-
-\begin{proposition}[My proposition]
-	A great proposition.
-	\begin{equation}
-		c^2=a^2+b^2
-	\end{equation}
-\end{proposition}
-
-\begin{example}[My example]
-	A great example.
-	\begin{equation}
-		c^2=a^2+b^2
-	\end{equation}
-\end{example}
-
-\begin{definition}[My definition]
-	A great definition.
-	\begin{equation}
-		c^2=a^2+b^2
-	\end{equation}
-\end{definition}
-
-\begin{assumption}[My assumption]
-	A great assumption.
-	\begin{equation}
-		c^2=a^2+b^2
-	\end{equation}
-\end{assumption}
-
-\begin{remark}[My remark]
-	A great remark.
-	\begin{equation}
-		c^2=a^2+b^2
-	\end{equation}
-\end{remark}
+In distributed job execution case, since the job load and the system capacity are distributed (mostly unevenly) across multiple sites, the problem becomes more complex due to the additional dimension of site-specific resource constraints and inter-site communication overheads. Although the SRPT policy can be extended to such distributed cases, it admits multiple algorithmic variations and they all no longer guarantees optimality. Hung \textit{et al.} \cite{hung2015scheduling} proposed a workload-aware heuristic scheduling algorithm namely SWAG, which iteratively schedules the job with the earliest completion time while taken the scheduled workload in the system into consideration, and their empirical evaluations demonstrated that their proposed algorithm achieves superior performance compared to SRPT extensions. In addition, Guan \textit{et al.} \cite{guan2022task} and Zhao \textit{et al.} \cite{zhao2025data} proposed algorithms to optimize the job completion time in geo-distributed systems under the case that the required data trunk for each task is replicated at multiple sites. Convolbo \textit{et al.} \cite{GEODIS} studied the utilization of network resources, while their objective is to minimize the system makespan within geo-distributed systems, i.e., the total time required to process all jobs. In the context of fairness, Guan \textit{et al.} \cite{AMF} introduced a task assignment algorithm aimed at achieving max-min fairness in aggregate resource allocation among jobs in the distributed job execution. Similarly, Chen \textit{et al.} \cite{chen2018scheduling} investigated achieving max-min fairness in terms of the job response times in geo-distributed systems by task transmission. Different from the works above, we focus on the dual objective of efficiency and long-term fairness in geo-distributed job execution without transmission.
