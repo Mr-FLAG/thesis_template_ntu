@@ -4,37 +4,6 @@
 
 \section{A Motivating Example}
 \label{sec:example}
-% \begin{figure*}[htbp]
-%     \centering
-%     \begin{subfigure}[t]{0.24\textwidth}
-%         \centering        \includegraphics[width=\textwidth]{Image2/Example_1.eps}
-%         \caption{Indexed Scheduling}
-%         \label{fig_first_case}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.24\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{Image2/Example_2.eps}
-%         \caption{Optimal Scheduling without Task Transmission}
-%         \label{fig_second_case}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.24\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{Image2/Example_3.eps}
-%         \caption{Optimal Transmission under Execution Order of Fig. \ref{fig_second_case}}
-%         \label{fig_third_case}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.24\textwidth}
-%         \centering
-%         \includegraphics[width=\textwidth]{Image2/Example_4.eps}
-%         \caption{Optimal Scheduling with Task Transmission}
-%         \label{fig_fourth_case}
-%     \end{subfigure}
-%     \caption{Motivating Example} 
-%     \label{fig:Motivate_example}
-% \end{figure*}
 
 \begin{figure*}[htbp]
     \centering
@@ -1055,8 +1024,8 @@ Tables \ref{tab:computation_time1} and \ref{tab:computation_time2} show the aver
 
 \textbf{Replicated data inputs.} Cloud-based environments often replicate data chunks across multiple geo-distributed servers in order to reduce service response latency and data transfer overhead \cite{guan2022task, zhao2025data}. Our method can be integrated with algorithms that determine task assignments under replicated data inputs. Specifically, we first execute the task assignment algorithm to determine an initial execution site for each task, and then employ our proposed algorithm(s) to derive the job execution order and task transmissions. Notably, if a destination site is found to already host a replica of the required data partition, the corresponding transmission is not needed, and the task can be processed locally at the destination.
 
-\section{Conclusion}
+\section{Summary}
 \label{sec:conclusion2}
-In this paper, we have proposed a WAST algorithm and a fast approximation to improve job scheduling efficiency in geo-distributed systems with the usage of network resources. WAST constructs a near-optimal job execution order with task transmissions progressively. In each round, WAST searches for the job with the minimum completion time among all unsettled jobs given the scheduled workloads and task transmissions of previous rounds. The sub-problem of minimizing a single job's completion time is converted into solving multiple minimum-cost flow problems, which can be computed efficiently. 
+In this chapter, we have proposed a WAST algorithm and a fast approximation to improve job scheduling efficiency in geo-distributed systems with the usage of network resources. WAST constructs a near-optimal job execution order with task transmissions progressively. In each round, WAST searches for the job with the minimum completion time among all unsettled jobs given the scheduled workloads and task transmissions of previous rounds. The sub-problem of minimizing a single job's completion time is converted into solving multiple minimum-cost flow problems, which can be computed efficiently. 
 %Once the job is found, its computation load and transmissions are updated to the system, and the next round starts with the updated system computing and network resource usage conditions. The process repeats until all jobs are scheduled. 
 We also present a fast approximation to WAST, which optimizes each job's completion time by transferring its tasks of the latest completion time to other sites recursively. We have evaluated WAST and its approximation using real job traces from Alibaba. The experimental results show that WAST can effectively reduce the average job response time, especially when the task distributions of jobs are highly skewed.

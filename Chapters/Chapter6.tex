@@ -1,4 +1,12 @@
 \chapter{Conclusion and Future Work} % Main chapter title
 \label{ch:Con}
 
-In this thesis, we have studied three scheduling problems for distributed job execution:
+In this thesis, we have studied three scheduling problems for distributed job execution: max-min fair resource allocation with task transmission for distributed job execution, efficient task scheduling with transmission for distributed job execution, and long-term fairness and efficiency trade-off for distributed job execution. The main contributions of the thesis including defining the fair resource allocation policy DAMF in distributed job execution with task transmission, presenting an algorithm for task assignment and transmission to improve the job processing efficiency in distributed job execution, and an algorithm for improving the job processing efficiency while providing a completion deadline guarantee in distributed job execution.
+
+In Chapter \ref{ch:DAMF}, we have studied the fair resource allocation policies with task transmission for distributed job execution. We present a resource allocation policy named Dynamic Aggregate Max-min Fairness (DAMF), which is achievable and satisfies extensively recognized fairness properties of Pareto Efficiency, envy-freeness and strategy-proofness. We further propose algorithms to implement DAMF as well as a fast approximation to it. Experiments using real-world job traces demonstrate that compared with baseline policies, DAMF and its approximation algorithm significantly reduces the imbalance of resource allocation across jobs and further improves the average job response time, especially when the load distribution of jobs are highly skewed among sites.
+
+In Chapter \ref{ch:WAST}, we have studied improving job processing efficiency via task scheduling with transmission in distributed job execution case. Noticing the mutual effect of job scheduling and task transmission, we begin by optimizing the response time of a single job first and transform the problem into solving multiple minimum-cost flow programs. After that, we develop an algorithm named Workload-aware Selection with Transmission (WAST), which iteratively schedules the job of the earliest completion time while taking task transmission into consideration. In addition, we present a fast approximation to WAST with marginal performance degradation. Experimental results show that WAST and its approximation significantly decreases the average job response time compared with baseline policies.
+
+In Chapter \ref{ch:PFSP}, we have studied the long-term fairness and efficiency trade-off in distributed job execution. We 
+
+Following the work introduced in this thesis, 
