@@ -22,7 +22,7 @@
         \label{fig_second_case}
     \end{subfigure}
     
-    \vspace{1.5em} % 👈 这里是关键：空行代表换行，\vspace 增加上下两行之间的间距
+    \vspace{0.8em} % 👈 这里是关键：空行代表换行，\vspace 增加上下两行之间的间距
     
     % ========== 第二行 ==========
     \begin{subfigure}[t]{0.48\textwidth}
@@ -118,18 +118,49 @@ Recall that we assume each task transmission to arrive at its destination site b
 %\begin{equation*}
 %\forall j \in [u_i], \text{ } w_{ij}^{(0)} = w_{ij},
 %\end{equation*}
-\begin{multline}
-\!\!\!\!\!\!\forall j \in [u_i], \;\;\; 
+
+
+% \begin{multline}
+% \!\!\!\!\!\!\forall j \in [u_i], \;\;\; 
+% w^{(t)}_{ij} =
+% \begin{cases}
+% w_{ij}, \qquad \qquad \, t=0 \\
+% w^{(t-1)}_{ij} + l_k, 
+% \;\;\; j = \argmin_{p \in [u_i]} w^{(t-1)}_{ip}, \\
+% w^{(t-1)}_{ij}, 
+% \qquad \;\;\; j \neq \argmin_{p \in [u_i]} w^{(t-1)}_{ip}, 
+% \end{cases}
+% \nonumber
+% \end{multline}
+
+% \begin{equation}
+% \begin{aligned}
+% w_{ij}^{(t)}=
+% \begin{cases}
+% w_{ij}, & t=0,\\
+% w_{ij}^{(t-1)}+l_k,
+% & j=\arg\min\limits_{p\in[u_i]} w_{ip}^{(t-1)},\\
+% w_{ij}^{(t-1)},
+% & j\neq\arg\min\limits_{p\in[u_i]} w_{ip}^{(t-1)},
+% \end{cases}\\
+% &\forall j\in[u_i].
+% \end{aligned}
+% \end{equation}
+
+\begin{equation}
+\begin{aligned}
+\forall j \in [u_i], \;\;
 w^{(t)}_{ij} =
 \begin{cases}
 w_{ij}, \qquad \qquad \, t=0 \\
-w^{(t-1)}_{ij} + l_k, 
+w^{(t-1)}_{ij} + l_k,
 \;\;\; j = \argmin_{p \in [u_i]} w^{(t-1)}_{ip}, \\
-w^{(t-1)}_{ij}, 
-\qquad \;\;\; j \neq \argmin_{p \in [u_i]} w^{(t-1)}_{ip}, 
+w^{(t-1)}_{ij},
+\qquad \;\;\; j \neq \argmin_{p \in [u_i]} w^{(t-1)}_{ip},
 \end{cases}
-\nonumber
-\end{multline}
+\end{aligned}
+\end{equation}
+
 where in each iteration, a task is assigned to the slot of the lowest workload ($\argmin_{p \in [u_i]} w_{ip}^{(t-1)}$) and its workload then increases by $l_k$, while other slots are kept unchanged. Ties are broken arbitrarily if multiple slots have the same lowest workload.
 Based on this, the time when all $y_i$ tasks complete execution at site $S_i$ can be estimated as a function $f(W_i, y_i)$:
 \[
@@ -155,11 +186,12 @@ It is essential to determine the bounds of $X$ before starting the search.
 An excessively tight bound can limit the potential benefit of task transmissions in reducing the job completion time, whereas an excessively loose bound may give rise to task transmissions that fail to reach the destination sites in time, thereby introducing additional delays in the job completion time. %As discussed, we \textcolor{red}{hope} each task to arrive at its destination site when no computing slot of that site has started processing the subsequent jobs. \sout{, and we require it to be no later than the lowest workload among all slots after $d_{kj}+x_{ij}-1$ tasks are assigned to $S_j$. Such modeling of the task transmission requirement assumes that at least $d_{kj}$ tasks are present at the destination site $S_j$ when the first transmission from site $S_i$ arrives, and does not account for potential task transmissions out of site $S_j$ as well as transmissions to site $S_j$ from sites other than $S_i$}
 %the arrival time of the last transmission is $t_{ij} + x_{ij}\cdot r_k/b_{ij}$, and 
 Suppose $x_{ij}$ tasks are to be transferred from site $S_i$ to site $S_j$. Then, the completion time of the last task will be at least $t_{ij} + x_{ij}\cdot r_k/b_{ij} + l_k$ (when it is processed immediately after arrival), and we require this last task to finish before the job completion time:
-\begin{multline}
+\begin{equation}
 \forall i \in [m], \; j \in [m], \;
-t_{ij} + \frac{x_{ij} \cdot r_k}{b_{ij}} + l_k \le \max_{i \in [m]} f(W_i,y_i).
+t_{ij} + \frac{x_{ij} \cdot r_k}{b_{ij}} + l_k
+\le \max_{i \in [m]} f(W_i,y_i).
 \label{eq:constraint_t}
-\end{multline}
+\end{equation}
 
 In addition, the number of tasks transferred out of a site cannot exceed the number of tasks it holds initially, which imposes another upper bound on $\sum_{j=1}^m x_{ij}$ at each site $S_i$:
 \begin{equation}
@@ -279,7 +311,7 @@ Note that these $f(W_i, y_i)$ values include all possible completion times at ea
   %\resizebox{\linewidth}{!}{
 \begin{tikzpicture}
 [
-    scale=0.65, 
+    scale=0.8, 
     transform shape,
     %transform shape=false,
     % node distance=10mm and 22mm,
@@ -776,26 +808,26 @@ Figs. \ref{fig:JRT_CDF} and \ref{fig:JRT_CDF2} show the $30$th, $60$th, $90$th p
 \begin{figure*}[t]
 \centering
 \subfloat[utilization = 50\%]
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2018_4_50_GEODIS.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2018_4_50_GEODIS.eps}%
 %\label{fig_second_case}
 %\label{Fg:eg1}
 }
 \hfil
 \subfloat[utilization = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2018_4_60_GEODIS.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2018_4_60_GEODIS.eps}%
 %\label{Fg:eg2}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[utilization = 70\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2018_4_70_GEODIS.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2018_4_70_GEODIS.eps}%
 %\label{Fg:eg2}
 }
 \hfil
 \subfloat[utilization = 80\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2018_4_80_GEODIS.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2018_4_80_GEODIS.eps}%
 %\label{Fg:eg2}
 }
 \caption{Average Job Response Time Compared with GEODIS, Alibaba 2018}
@@ -805,26 +837,26 @@ Figs. \ref{fig:JRT_CDF} and \ref{fig:JRT_CDF2} show the $30$th, $60$th, $90$th p
 \begin{figure*}[t]
 \centering
 \subfloat[utilization = 50\%]
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2017_50.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2017_50.eps}%
 %\label{fig_second_case}
 %\label{Fg:eg1}
 }
 \hfil
 \subfloat[utilization = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2017_60.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2017_60.eps}%
 %\label{Fg:eg2}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[utilization = 70\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2017_70.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2017_70.eps}%
 %\label{Fg:eg2}
 }
 \hfil
 \subfloat[utilization = 80\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2017_80.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2017_80.eps}%
 %\label{Fg:eg2}
 }
 \caption{Average Job Response Time, Alibaba 2017}
@@ -834,26 +866,26 @@ Figs. \ref{fig:JRT_CDF} and \ref{fig:JRT_CDF2} show the $30$th, $60$th, $90$th p
 \begin{figure*}[t]
 \centering
 \subfloat[utilization = 50\%]
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2018_4_50.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2018_4_50.eps}%
 %\label{fig_second_case}
 %\label{Fg:eg1}
 }
 \hfil
 \subfloat[utilization = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2018_4_60.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2018_4_60.eps}%
 %\label{Fg:eg2}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[utilization = 70\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2018_4_70.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2018_4_70.eps}%
 %\label{Fg:eg2}
 }
 \hfil
 \subfloat[utilization = 80\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/Workload_Ali2018_4_80.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/Workload_Ali2018_4_80.eps}%
 %\label{Fg:eg2}
 }
 \caption{Average Job Response Time, Alibaba 2018}
@@ -863,23 +895,23 @@ Figs. \ref{fig:JRT_CDF} and \ref{fig:JRT_CDF2} show the $30$th, $60$th, $90$th p
 \begin{figure*}[t]
 \centering
 \subfloat[utilization = 50\%]
-{\includegraphics[width=0.24\textwidth]{Image2/CDFpercentile_Ali2017_50.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2017_50.eps}%
 \label{fig:JRT_CDF_a}
 }
 \hfil
 \subfloat[utilization = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/CDFpercentile_Ali2017_60.eps}
+{\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2017_60.eps}
 \label{fig:JRT_CDF_b}
 }%
-\hfil
+\vspace{0.8em}
 \subfloat[utilization = 70\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/CDFpercentile_Ali2017_70.eps}}%
+{\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2017_70.eps}}%
 \hfil
 \subfloat[utilization = 80\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/CDFpercentile_Ali2017_80.eps}
+{\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2017_80.eps}
 %\label{Fg:eg2}
 }
 \caption{Job Response Time at Different Percentiles, Zipf Distribution $\alpha=1$, Alibaba 2017}
@@ -889,23 +921,23 @@ Figs. \ref{fig:JRT_CDF} and \ref{fig:JRT_CDF2} show the $30$th, $60$th, $90$th p
 \begin{figure*}[t]
 \centering
 \subfloat[utilization = 50\%]
-{\includegraphics[width=0.24\textwidth]{Image2/CDFpercentile_Ali2018_4_50.eps}%
+{\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2018_4_50.eps}%
 \label{fig:JRT_CDF_a}
 }
 \hfil
 \subfloat[utilization = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/CDFpercentile_Ali2018_4_60.eps}
+{\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2018_4_60.eps}
 \label{fig:JRT_CDF_b}
 }%
-\hfil
+\vspace{0.8em}
 \subfloat[utilization = 70\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/CDFpercentile_Ali2018_4_70.eps}}%
+{\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2018_4_70.eps}}%
 \hfil
 \subfloat[utilization = 80\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image2/CDFpercentile_Ali2018_4_80.eps}
+{\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2018_4_80.eps}
 %\label{Fg:eg2}
 }
 \caption{Job Response Time at Different Percentiles, Zipf Distribution $\alpha=1$, Alibaba 2018}

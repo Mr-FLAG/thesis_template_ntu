@@ -709,96 +709,84 @@ The Jain's Index is a quantitative measure used to assess the fairness or equity
 \end{equation*}
 We compute the Jain's Index from the records of the actual aggregate allocation vectors of jobs, and calculate the average Jain's Index over the simulated time span for comparison.
 
-\begin{figure*}[t]
-\centering
-\subfloat[Alibaba, workload = 40\%]
-{\includegraphics[width=0.24\textwidth]{Image/AD_Ali2017test_Alpha=2.0_40.eps}%
-%\label{fig_second_case}
-\label{Fg:AD_Ali_40}
-}
-\hfil
-\subfloat[Alibaba, workload = 60\%]
-%
-{\includegraphics[width=0.24\textwidth]{Image/AD_Ali2017test_Alpha=2.0_60.eps}%
-\label{Fg:AD_Ali_60}
-}
-\hfil
-\subfloat[Google, workload = 40\%]
-%\label{Fg:eg3}
-{\includegraphics[width=0.24\textwidth]{Image/AD_Gg2019_11_Alpha=2.0_40.eps}%
-\label{Fg:AD_Gg_40}
-}
-\hfil
-\subfloat[Google, workload = 60\%]
-%\label{Fg:eg3}
-{\includegraphics[width=0.24\textwidth]{Image/AD_Gg2019_11_Alpha=2.0_60.eps}%
-\label{Fg:AD_Gg_60}
-}
-\caption{Cumulative distribution of allocation deviation, Zipf parameter $\alpha = 2$}
-\label{fig:AD_instant}
-\end{figure*}
-
 % \begin{figure*}[t]
 % \centering
-% % 子图 1
-% \begin{subfigure}[b]{0.23\linewidth}
-%   \centering
-%   \includegraphics[width=\linewidth]{Image/AD_Ali2017test_Alpha=2.0_40.eps}
-%   \caption{Alibaba, workload = 40\%}
-%   \label{Fg:AD_Ali_40}
-% \end{subfigure}
-% \hfill
-% % 子图 2
-% \begin{subfigure}[b]{0.23\linewidth}
-%   \centering
-%   \includegraphics[width=\linewidth]{Image/AD_Ali2017test_Alpha=2.0_60.eps}
-%   \caption{Alibaba, workload = 60\%}
-%   \label{Fg:AD_Ali_60}
-% \end{subfigure}
-% \hfill
-% % 子图 3
-% \begin{subfigure}[b]{0.23\linewidth}
-%   \centering
-%   \includegraphics[width=\linewidth]{Image/AD_Gg2019_11_Alpha=2.0_40.eps}
-%   \caption{Google, workload = 40\%}
-%   \label{Fg:AD_Gg_40}
-% \end{subfigure}
-% \hfill
-% % 子图 4
-% \begin{subfigure}[b]{0.23\linewidth}
-%   \centering
-%   \includegraphics[width=\linewidth]{Image/AD_Gg2019_11_Alpha=2.0_60.eps}
-%   \caption{Google, workload = 60\%}
-%   \label{Fg:AD_Gg_60}
-% \end{subfigure}
-
+% \subfloat[Alibaba, workload = 40\%]
+% {\includegraphics[width=0.24\textwidth]{Image/AD_Ali2017test_Alpha=2.0_40.eps}%
+% %\label{fig_second_case}
+% \label{Fg:AD_Ali_40}
+% }
+% \hfil
+% \subfloat[Alibaba, workload = 60\%]
+% %
+% {\includegraphics[width=0.24\textwidth]{Image/AD_Ali2017test_Alpha=2.0_60.eps}%
+% \label{Fg:AD_Ali_60}
+% }
+% \hfil
+% \subfloat[Google, workload = 40\%]
+% %\label{Fg:eg3}
+% {\includegraphics[width=0.24\textwidth]{Image/AD_Gg2019_11_Alpha=2.0_40.eps}%
+% \label{Fg:AD_Gg_40}
+% }
+% \hfil
+% \subfloat[Google, workload = 60\%]
+% %\label{Fg:eg3}
+% {\includegraphics[width=0.24\textwidth]{Image/AD_Gg2019_11_Alpha=2.0_60.eps}%
+% \label{Fg:AD_Gg_60}
+% }
 % \caption{Cumulative distribution of allocation deviation, Zipf parameter $\alpha = 2$}
 % \label{fig:AD_instant}
 % \end{figure*}
 
 \begin{figure*}[t]
 \centering
+\subfloat[Alibaba, workload = 40\%]{
+    \includegraphics[width=0.47\textwidth]{Image/AD_Ali2017test_Alpha=2.0_40.eps}
+    \label{Fg:AD_Ali_40}
+}
+\hfill
+\subfloat[Alibaba, workload = 60\%]{
+    \includegraphics[width=0.47\textwidth]{Image/AD_Ali2017test_Alpha=2.0_60.eps}
+    \label{Fg:AD_Ali_60}
+}
+\vspace{0.8em}
+\subfloat[Google, workload = 40\%]{
+    \includegraphics[width=0.47\textwidth]{Image/AD_Gg2019_11_Alpha=2.0_40.eps}
+    \label{Fg:AD_Gg_40}
+}
+\hfill
+\subfloat[Google, workload = 60\%]{
+    \includegraphics[width=0.47\textwidth]{Image/AD_Gg2019_11_Alpha=2.0_60.eps}
+    \label{Fg:AD_Gg_60}
+}
+\caption{Cumulative distribution of allocation deviation, Zipf parameter $\alpha = 2$.}
+\label{fig:AD_instant}
+\end{figure*}
+
+
+\begin{figure*}[t]
+\centering
 \subfloat[Alibaba, workload = 40\%]
-{\includegraphics[width=0.24\textwidth]{Image/SD_Ali2017test_Alpha=2.0_40.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/SD_Ali2017test_Alpha=2.0_40.eps}%
 %\label{fig_second_case}
 \label{Fg:SD_Ali_40}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[Alibaba, workload = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/SD_Ali2017test_Alpha=2.0_60.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/SD_Ali2017test_Alpha=2.0_60.eps}%
 \label{Fg:SD_Ali_60}
 }
 \hfil
 \subfloat[Google, workload = 40\%]
 %\label{Fg:eg3}
-{\includegraphics[width=0.24\textwidth]{Image/SD_Gg2019_11_Alpha=2.0_40.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/SD_Gg2019_11_Alpha=2.0_40.eps}%
 \label{Fg:SD_Gg_40}
 }
 \hfil
 \subfloat[Google, workload = 60\%]
 %\label{Fg:eg3}
-{\includegraphics[width=0.24\textwidth]{Image/SD_Gg2019_11_Alpha=2.0_60.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/SD_Gg2019_11_Alpha=2.0_60.eps}%
 \label{Fg:SD_Gg_60}
 }
 \caption{Cumulative distribution of standard deviation, Zipf parameter $\alpha = 2$}
@@ -808,26 +796,26 @@ We compute the Jain's Index from the records of the actual aggregate allocation 
 \begin{figure*}[htbp]
 \centering
 \subfloat[Alibaba, workload = 40\%]
-{\includegraphics[width=0.24\textwidth]{Image/Jains_Ali2017test_40.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Jains_Ali2017test_40.eps}%
 %\label{fig_second_case}
 \label{Fg:Jains_Ali_40}
 }
 \hfil
 \subfloat[Alibaba, workload = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/Jains_Ali2017test_60.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Jains_Ali2017test_60.eps}%
 \label{Fg:Jains_Ali_60}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[Google, workload = 40\%]
 %\label{Fg:eg3}
-{\includegraphics[width=0.24\textwidth]{Image/Jains_Gg2019_11_40.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Jains_Gg2019_11_40.eps}%
 \label{Fg:Jains_Gg_40}
 }
 \hfil
 \subfloat[Google, workload = 60\%]
 %\label{Fg:eg3}
-{\includegraphics[width=0.24\textwidth]{Image/Jains_Gg2019_11_60.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Jains_Gg2019_11_60.eps}%
 \label{Fg:Jains_Gg_60}
 }
 \caption{Average Jain's Index}
@@ -837,26 +825,26 @@ We compute the Jain's Index from the records of the actual aggregate allocation 
 \begin{figure*}[t]
 \centering
 \subfloat[Alibaba, workload = 40\%]
-{\includegraphics[width=0.24\textwidth]{Image/Workload_Ali2017test_40.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Workload_Ali2017test_40.eps}%
 %\label{fig_second_case}
 \label{Fg:JRT_Ali_40}
 }
 \hfil
 \subfloat[Alibaba, workload = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/Workload_Ali2017test_60.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Workload_Ali2017test_60.eps}%
 \label{Fg:JRT_Ali_60}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[Google, workload = 40\%]
 %\label{Fg:eg3}
-{\includegraphics[width=0.24\textwidth]{Image/Workload_Gg2019_11_40.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Workload_Gg2019_11_40.eps}%
 \label{Fg:JRT_Gg_40}
 }
 \hfil
 \subfloat[Google, workload = 60\%]
 %\label{Fg:eg3}
-{\includegraphics[width=0.24\textwidth]{Image/Workload_Gg2019_11_60.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Workload_Gg2019_11_60.eps}%
 \label{Fg:JRT_Gg_60}
 }
 \caption{Average job response time}
@@ -932,25 +920,25 @@ Figure \ref{fig:Average Response Time} shows the average job response time for d
 \begin{figure*}[t]
 \centering
 \subfloat[Alibaba, workload = 40\%]
-{\includegraphics[width=0.23\textwidth]{Image/SD_Ali2017test_Alpha=2.0_40f.eps}
+{\includegraphics[width=0.48\textwidth]{Image/SD_Ali2017test_Alpha=2.0_40f.eps}
 \label{Fg:SD_Ali_40f}
 }
 \hfil
 \subfloat[Alibaba, workload = 60\%]
 %
-{\includegraphics[width=0.23\textwidth]{Image/SD_Ali2017test_Alpha=2.0_60f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/SD_Ali2017test_Alpha=2.0_60f.eps}%
 \label{Fg:SD_Ali_60f}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[Google, workload = 40\%]
 %
-{\includegraphics[width=0.23\textwidth]{Image/SD_Gg2019_11_Alpha=2.0_40f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/SD_Gg2019_11_Alpha=2.0_40f.eps}%
 \label{Fg:SD_Gg_40f}
 }
 \hfil
 \subfloat[Google, workload = 60\%]
 %
-{\includegraphics[width=0.23\textwidth]{Image/SD_Gg2019_11_Alpha=2.0_60f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/SD_Gg2019_11_Alpha=2.0_60f.eps}%
 \label{Fg:SD_Gg_60f}
 }
 \caption{Cumulative distribution of standard deviation under fluctuating bandwidth, Zipf parameter $\alpha = 2$}
@@ -960,25 +948,25 @@ Figure \ref{fig:Average Response Time} shows the average job response time for d
 \begin{figure*}[t]
 \centering
 \subfloat[Alibaba, workload = 40\%]
-{\includegraphics[width=0.24\textwidth]{Image/Jains_Ali2017test_40f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Jains_Ali2017test_40f.eps}%
 \label{Fg:Jains_Ali_40f}
 }
 \hfil
 \subfloat[Alibaba, workload = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/Jains_Ali2017test_60f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Jains_Ali2017test_60f.eps}%
 \label{Fg:Jains_Ali_60f}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[Google, workload = 40\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/Jains_Gg2019_11_40f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Jains_Gg2019_11_40f.eps}%
 \label{Fg:Jains_Gg_40f}
 }
 \hfil
 \subfloat[Google, workload = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/Jains_Gg2019_11_60f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Jains_Gg2019_11_60f.eps}%
 \label{Fg:Jains_Gg_60f}
 }
 \caption{Average Jain's Index under fluctuating bandwidth}
@@ -988,25 +976,25 @@ Figure \ref{fig:Average Response Time} shows the average job response time for d
 \begin{figure*}[t]
 \centering
 \subfloat[Alibaba, workload = 40\%]
-{\includegraphics[width=0.24\textwidth]{Image/Workload_Ali2017test_40f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Workload_Ali2017test_40f.eps}%
 \label{Fg:JRT_Ali_40f}
 }
 \hfil
 \subfloat[Alibaba, workload = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/Workload_Ali2017test_60f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Workload_Ali2017test_60f.eps}%
 \label{Fg:JRT_Ali_60f}
 }
-\hfil
+\vspace{0.8em}
 \subfloat[Google, workload = 40\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/Workload_Gg2019_11_40f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Workload_Gg2019_11_40f.eps}%
 \label{Fg:JRT_Gg_40f}
 }
 \hfil
 \subfloat[Google, workload = 60\%]
 %
-{\includegraphics[width=0.24\textwidth]{Image/Workload_Gg2019_11_60f.eps}%
+{\includegraphics[width=0.48\textwidth]{Image/Workload_Gg2019_11_60f.eps}%
 \label{Fg:JRT_Gg_60f}
 }
 \caption{Average job response time under fluctuating bandwidth}
@@ -1077,37 +1065,65 @@ In addition, we evaluate the scalability of DAMF\_a under larger numbers of site
 \label{fig:SD_sites2}
 \end{figure*}
 
+% \begin{figure}[t]
+%   \centering
+%   \begin{minipage}[b]{0.48\textwidth}
+%     \centering
+%     \subfloat[Alibaba, workload = 40\%]
+%     {\includegraphics[width=0.48\linewidth]{Image/Workload_Ali2017test_40_site.eps}%
+%     \label{Fg:JRT_Ali_40_m}
+%     }
+%     \hfil
+%     \subfloat[Alibaba, workload = 60\%]
+%     {\includegraphics[width=0.48\linewidth]{Image/Workload_Ali2017test_60_site.eps}%
+%     \label{Fg:JRT_Ali_60_m}
+%     }
+%     \caption{Average job response time, Zipf parameter $\alpha=1$}
+%     \label{fig:Average Response Time_sites}
+%   \end{minipage}
+%   \hfill 
+%   \begin{minipage}[b]{0.48\textwidth}
+%     \centering
+%     \subfloat[Alibaba, workload = 40\%]
+%     {\includegraphics[width=0.48\linewidth]{Image/Jains_Ali2017test_40_site.eps}%
+%     \label{Fg:Jains_Ali_40_m} % 
+%     }
+%     \hfil
+%     \subfloat[Alibaba, workload = 60\%]
+%     {\includegraphics[width=0.48\linewidth]{Image/Jains_Ali2017test_60_site.eps}%
+%     \label{Fg:Jains_Ali_60_m} % 
+%     }
+%     \caption{Average Jain's Index, Zipf parameter $\alpha=1$}
+%     \label{fig:Jains_sites}
+%   \end{minipage}
+% \end{figure}
+
 \begin{figure}[t]
-  \centering
-  \begin{minipage}[b]{0.48\textwidth}
     \centering
     \subfloat[Alibaba, workload = 40\%]
-    {\includegraphics[width=0.48\linewidth]{Image/Workload_Ali2017test_40_site.eps}%
-    \label{Fg:JRT_Ali_40_m}
-    }
-    \hfil
+    {\includegraphics[width=0.48\linewidth]{Image/Workload_Ali2017test_40_site.eps}
+    \label{Fg:JRT_Ali_40_m}}
+    \hfill
     \subfloat[Alibaba, workload = 60\%]
-    {\includegraphics[width=0.48\linewidth]{Image/Workload_Ali2017test_60_site.eps}%
-    \label{Fg:JRT_Ali_60_m}
-    }
-    \caption{Average job response time, Zipf parameter $\alpha=1$}
-    \label{fig:Average Response Time_sites}
-  \end{minipage}
-  \hfill 
-  \begin{minipage}[b]{0.48\textwidth}
+    {\includegraphics[width=0.48\linewidth]{Image/Workload_Ali2017test_60_site.eps}
+    \label{Fg:JRT_Ali_60_m}}
+
+    \caption{Average job response time, Zipf parameter $\alpha=1$.}
+    \label{fig:Average_Response_Time_sites}
+\end{figure}
+
+\begin{figure}[t]
     \centering
     \subfloat[Alibaba, workload = 40\%]
-    {\includegraphics[width=0.48\linewidth]{Image/Jains_Ali2017test_40_site.eps}%
-    \label{Fg:Jains_Ali_40_m} % 
-    }
-    \hfil
+    {\includegraphics[width=0.48\linewidth]{Image/Jains_Ali2017test_40_site.eps}
+    \label{Fg:Jains_Ali_40_m}}
+    \hfill
     \subfloat[Alibaba, workload = 60\%]
-    {\includegraphics[width=0.48\linewidth]{Image/Jains_Ali2017test_60_site.eps}%
-    \label{Fg:Jains_Ali_60_m} % 
-    }
-    \caption{Average Jain's Index, Zipf parameter $\alpha=1$}
+    {\includegraphics[width=0.48\linewidth]{Image/Jains_Ali2017test_60_site.eps}
+    \label{Fg:Jains_Ali_60_m}}
+
+    \caption{Average Jain's Index, Zipf parameter $\alpha=1$.}
     \label{fig:Jains_sites}
-  \end{minipage}
 \end{figure}
 
 % \begin{table}[!ht]
