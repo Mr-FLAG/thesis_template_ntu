@@ -22,7 +22,7 @@ Second, any job's allocation on any site should not exceed its demand on that si
 \end{equation}
 Allocations satisfying (\ref{eq:allocrati}) are said {\em rational}. 
 
-Suppose there are networks connecting the sites and they can be used to transfer data and hence demand for compute resources from one site to another. We use an $n*m$ transmission matrix $\Delta D_{n*m}$ to represent the demand transmissions. Each element $\Delta d_{ij}$ can be positive or negative: A positive $\Delta d_{ij}$ describes how much demand of job $J_i$ is transferred into site $S_j$, while a negative $\Delta d_{ij}$ means some demand is transferred out of (removed from) site $S_j$, and $\Delta d_{ij} = 0$ represents no transmission. Apparently, we cannot transfer more demand out of a site than what a given job has at that site:
+Suppose there are networks connecting the sites so that they can be used to transfer data and hence demand for compute resources from one site to another. We use an $n*m$ transmission matrix $\Delta D_{n*m}$ to represent the demand transmissions. Each element $\Delta d_{ij}$ can be positive or negative: A positive $\Delta d_{ij}$ describes how much demand of job $J_i$ is transferred into site $S_j$, while a negative $\Delta d_{ij}$ means some demand is transferred out of (removed from) site $S_j$, and $\Delta d_{ij} = 0$ represents no transmission. Apparently, we cannot transfer more demand out of a site than what a given job has at that site:
 \begin{equation}
     \forall i\in[n], j\in[m], \quad d_{ij} + \Delta d_{ij} \geq 0,
 \label{eq:trx1}
@@ -32,9 +32,9 @@ and the overall demand of each job $J_i$ should be kept unchanged after the tran
     \forall i\in[n], \quad \sum_{j=1}^m \Delta d_{ij}=0.
 \label{eq:trx2}
 \end{equation}
-We assume that the primary bandwidth bottleneck of the system lies in the link through which each site connects to the backbone network. Thus, to model the available network capacity, we use a count limit $c_j$ for each site $S_j$ to describe an upper bound on the total demand that can be transferred into and out of site $S_j$ within a predefined short period of time $T$:
+We assume that the primary bandwidth bottleneck of the system lies in the link through which each site connects to the backbone network. Thus, to model the available network capacity, we use a count limit $c_j$ for each site $S_j$ to describe an upper bound on the total demand that can be transferred into and out of site $S_j$ within a predefined short period of time $T$: %(note that the data trunk required by tasks of different jobs can be different, we add a weight $w_i$ to each job denoting the relative data amount requirement ratio between tasks of different jobs):
 \begin{equation}
-    \forall j\in[m], \quad \sum_{i=1}^n |\Delta d_{ij}| \leq c_j.
+    \forall j\in[m], \quad \sum_{i=1}^n |\Delta d_{ij}| \leq c_j. %w_i 
 \label{eq:trx3}
 \end{equation}
 In big data processing frameworks, each task typically processes a data partition/split of the same size \cite{copart}. The transmission count limit $c_j$ can be computed based on the data partition size, the amount of bandwidth currently available, and $T$. 
@@ -45,7 +45,28 @@ Upon the transmissions, each job $J_i$'s demand on site $S_j$ becomes $d_{ij} + 
 \label{eq:new_rational}
 \end{equation}
 
-We shall start with defining and deriving a fair resource allocation $A_{n*m}$ among jobs satisfying constraints (\ref{eq:allocfeas}), (\ref{eq:trx1}), (\ref{eq:trx2}), (\ref{eq:trx3}) and (\ref{eq:new_rational}), given the demands $D_{n*m}$, site capacities $u_j$'s and transfer limits $c_j$'s. Later, we shall discuss how to apply the solution to this static problem to online scenarios where jobs arrive dynamically. The key notations used in this paper are summarized in Table \ref{tab:Notation_1}.
+We shall start with defining and deriving a fair resource allocation $A_{n*m}$ among jobs satisfying constraints (\ref{eq:allocfeas}), (\ref{eq:trx1}), (\ref{eq:trx2}), (\ref{eq:trx3}) and (\ref{eq:new_rational}), given the demands $D_{n*m}$, site capacities $u_j$'s and transfer limits $c_j$'s. Later, we shall discuss how to apply the solution to this static problem to online scenarios where jobs arrive dynamically. The key notations used in this paper are summarized in Table \ref{tab:Notation_1}. 
+
+\begin{table}[htb]
+\centering 
+\caption{Notation Table}
+\label{tab:Notation_1}
+\begin{tabular}{l l} 
+ \hline
+ Notation & Definition \\
+ \hline
+ $\mathcal M = \{S_1, S_2, ..., S_m\}$ & Set of sites \\ 
+ $\mathcal J = \{J_1, J_2, ..., J_n\}$ & Set of jobs\\ 
+ $u_j$ & Site $S_j$'s compute resource capacity\\
+ $c_j$ & Site $S_j$'s transmission count limit\\
+ $D_{n*m}$ & Demand matrix\\
+ $\Delta D_{n*m}$ & Transmission matrix \\
+ $A_{n*m}$ & Allocation matrix \\
+ $\mathcal X$ & Set of all allocation matrices \\
+ $X$ & Set of all aggregate allocation vectors \\
+ \hline
+\end{tabular}
+\end{table}
 
 \begin{figure}[htbp]
   \centering
@@ -71,26 +92,7 @@ We shall start with defining and deriving a fair resource allocation $A_{n*m}$ a
 \end{figure}
 
 Figure \ref{fig:Motivation_eg} provides an example of the static problem to illustrate that transferring job demands can help improve the fairness of resource allocation. Suppose a geo-distributed system has 2 sites $S_1$ and $S_2$ with capacities of $4$ and $5$ computing slots respectively. There are three active jobs $x$, $y$ and $z$ in the system. As shown in Figure \ref{Fg:eg1}, jobs $x$ and $y$ have $3$ tasks each, where the input data is available on site $S_1$; job $z$ has $5$ tasks, where the input data is available on site $S_2$. If no demand can be transferred between sites, the most balanced resource allocation among jobs $x$, $y$ and $z$ is $2$, $2$ and $5$ computing slots as illustrated in Figure \ref{Fg:eg2}, because jobs $x$ and $y$ do not have demands on site $S_2$. With a transfer limit of $2$, we can transfer one task of job $x$ and one task of job $y$ from $S_1$ to $S_2$, and allocate them with computing slots on $S_2$. As a result, all jobs $x$, $y$ and $z$ are allocated $3$ computing slots each as shown in Figure \ref{Fg:eg3}, which is more balanced (fair) from the global perspective.
-\begin{table}[htb]
-\centering 
-\caption{Notation Table}
-\label{tab:Notation_1}
-\begin{tabular}{l l} 
- \hline
- Notation & Definition \\
- \hline
- $\mathcal M = \{S_1, S_2, ..., S_m\}$ & Set of sites \\ 
- $\mathcal J = \{J_1, J_2, ..., J_n\}$ & Set of jobs\\ 
- $u_j$ & Site $S_j$'s compute resource capacity\\
- $c_j$ & Site $S_j$'s transmission count limit\\
- $D_{n*m}$ & Demand matrix\\
- $\Delta D_{n*m}$ & Transmission matrix \\
- $A_{n*m}$ & Allocation matrix \\
- $\mathcal X$ & Set of all allocation matrices \\
- $X$ & Set of all aggregate allocation vectors \\
- \hline
-\end{tabular}
-\end{table}
+
 
 \section{Preliminaries}
 \label{sec:prelim}
