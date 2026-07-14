@@ -32,7 +32,7 @@ and the overall demand of each job $J_i$ should be kept unchanged after the tran
     \forall i\in[n], \quad \sum_{j=1}^m \Delta d_{ij}=0.
 \label{eq:trx2}
 \end{equation}
-We assume that the primary bandwidth bottleneck of the system lies in the link through which each site connects to the backbone network. Thus, to model the available network capacity, we use a count limit $c_j$ for each site $S_j$ to describe an upper bound on the total demand that can be transferred into and out of site $S_j$ within a predefined short period of time $T$: %(note that the data trunk required by tasks of different jobs can be different, we add a weight $w_i$ to each job denoting the relative data amount requirement ratio between tasks of different jobs):
+We assume that the primary bandwidth bottleneck of the system lies in the link through which each site connects to the backbone network. Thus, to model the available network capacity, we use a count limit $c_j$ for each site $S_j$ to describe an upper bound on the total demand that can be transferred into and out of site $S_j$ within a predefined short period of time $T$: %(note that the data chunk required by tasks of different jobs can be different, we add a weight $w_i$ to each job denoting the relative data amount requirement ratio between tasks of different jobs):
 \begin{equation}
     \forall j\in[m], \quad \sum_{i=1}^n |\Delta d_{ij}| \leq c_j. %w_i 
 \label{eq:trx3}
