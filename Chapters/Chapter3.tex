@@ -32,11 +32,13 @@ and the overall demand of each job $J_i$ should be kept unchanged after the tran
     \forall i\in[n], \quad \sum_{j=1}^m \Delta d_{ij}=0.
 \label{eq:trx2}
 \end{equation}
-We assume that the primary bandwidth bottleneck of the system lies in the link through which each site connects to the backbone network. Thus, to model the available network capacity, we use a count limit $c_j$ for each site $S_j$ to describe an upper bound on the total demand that can be transferred into and out of site $S_j$ within a predefined short period of time $T$: %(note that the data chunk required by tasks of different jobs can be different, we add a weight $w_i$ to each job denoting the relative data amount requirement ratio between tasks of different jobs):
+We assume that the primary bandwidth bottleneck of the system lies in the link through which each site connects to the backbone network. Thus, to model the available network capacity, we use a count limit $c_j$ for each site $S_j$ to describe an upper bound on the total demand that can be transferred into and out of site $S_j$ within a predefined short period of time $T$: (note that the data partition required by tasks of different jobs can be different, we add a weight $w_i$ to each job denoting the relative data partition ratio between tasks of different jobs):
 \begin{equation}
-    \forall j\in[m], \quad \sum_{i=1}^n |\Delta d_{ij}| \leq c_j. %w_i 
+    \forall j\in[m], \quad \sum_{i=1}^n |w_i \Delta d_{ij}| \leq c_j. %
 \label{eq:trx3}
 \end{equation}
+More specifically, suppose the average data partition size is $0.5$ GB, the system time threshold $T=10$ and the link bandwidth is $0.2$ GB/s, then the count limit $c_j$ at a site $S_j$ is $0.2*10/0.5 = 4$. Furthermore, suppose three jobs $J_1$, $J_2$ and $J_3$ has data partition size $0.25$ GB, $0.5$ GB and $1$ GB, respectively; Then, the data partition weight for each job is $w_1 = 0.25/0.5 = 0.5$, $w_2 = 0.5/0.5=1$, $w_3 = 1/0.5=2$, and the constraint is $0.5 d_{1j} + d_{2j} + 2 d_{3j} < 4$.
+
 In big data processing frameworks, each task typically processes a data partition/split of the same size \cite{copart}. The transmission count limit $c_j$ can be computed based on the data partition size, the amount of bandwidth currently available, and $T$. 
 
 Upon the transmissions, each job $J_i$'s demand on site $S_j$ becomes $d_{ij} + \Delta d_{ij}$, i.e., the demand matrix becomes $D + \Delta D$. Hence, constraint (\ref{eq:allocrati}) is rewritten as:
@@ -57,6 +59,7 @@ We shall start with defining and deriving a fair resource allocation $A_{n*m}$ a
  \hline
  $\mathcal M = \{S_1, S_2, ..., S_m\}$ & Set of sites \\ 
  $\mathcal J = \{J_1, J_2, ..., J_n\}$ & Set of jobs\\ 
+ $w_j$ & Job $J_i$'s data partition weight \\
  $u_j$ & Site $S_j$'s compute resource capacity\\
  $c_j$ & Site $S_j$'s transmission count limit\\
  $D_{n*m}$ & Demand matrix\\
@@ -350,7 +353,7 @@ By repeating the above process continuously, we can obtain an infinite sequence 
 \caption{Computing DAMF Allocation}\label{alg:basic}
 
     % 1. 输入输出与初始化 (不再使用 \STATE)
-    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities and transfer limits $\{c_1, c_2, \dots, c_j\}$; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$;}
+    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities $\{u_1, u_2, \dots, u_m\}$ and transfer limits $\{c_1, c_2, \dots, c_m\}$; a set of jobs $\{J_1, J_2, \dots, J_n\}$ with data partition weights $\{w_1, w_2, \dots, w_n\}$ and demand matrix $D$;}
     \KwOut{A DAMF allocation matrix $A$; a transmission matrix $\Delta D$;}
     
     \BlankLine % 插入一个空行隔开初始化
@@ -367,7 +370,7 @@ By repeating the above process continuously, we can obtain an infinite sequence 
         \quad\quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij} = t_i$;\;
         \quad\quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;\;
         \quad\quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;\;
-        \quad\quad $\forall j \in [m]: \sum_{i=1}^n |\Delta d_{ij}| \leq c_j$;\;
+        \quad\quad $\forall j \in [m]: \sum_{i=1}^n |w_i\Delta d_{ij}| \leq c_j$;\;
         \quad\quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;\;
         
         Let $T_{max}$ be the outcome of the above linear program;\;
@@ -387,7 +390,7 @@ By repeating the above process continuously, we can obtain an infinite sequence 
                     \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij}=t_i$;\;
                     \quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;\;
                     \quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;\;
-                    \quad $\forall j \in [m]: \sum_{i=1}^n |\Delta d_{ij}| \leq c_j$;\;
+                    \quad $\forall j \in [m]: \sum_{i=1}^n |w_i\Delta d_{ij}| \leq c_j$;\;
                     \quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;\;
                     \BlankLine
                     
@@ -471,7 +474,7 @@ be computationally expensive \cite{complexity_lip}. In this section, we propose 
 \caption{Heuristic to Approximate DAMF Allocation}\label{alg:approx}
 
     % 1. 输入输出与初始化
-    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities and transfer limits; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$;}
+    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities $\{u_1, u_2, \dots, u_m\}$ and transfer limits $\{c_1, c_2, \dots, c_m\}$; a set of jobs $\{J_1, J_2, \dots, J_n\}$ with data partition weights $\{w_1, w_2, \dots, w_n\}$ and demand matrix $D$;}
     \KwOut{An allocation matrix $A$; a transmission matrix $\Delta D$;}
     
     \BlankLine
@@ -499,7 +502,7 @@ be computationally expensive \cite{complexity_lip}. In this section, we propose 
 
     % 4. 双层嵌套 While 循环
     \While{$\mathcal{S}_{spare} \neq \emptyset \land \mathcal{S}_{full} \neq \emptyset \land \mathcal{J} \neq \emptyset$}{
-        Remove all $S_l$'s from $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ that $c_l = 0$ or $\sum_{i=1}^n (d_{il} + \Delta d_{il}) = u_l$\;
+        Remove all $S_l$'s from $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ that $c_l \le \min_{1\le i \le n}{w_i}$ or $\sum_{i=1}^n (d_{il} + \Delta d_{il}) = u_l$\;
         
         \While{$\mathcal{J} \neq \emptyset$}{
             Select job $J_x \in \mathcal{J}$ with the least aggregate allocation\;
@@ -512,8 +515,8 @@ be computationally expensive \cite{complexity_lip}. In this section, we propose 
                 $\Delta d_{xy} = \Delta d_{xy} - 1$\;
                 $\Delta d_{xz} = \Delta d_{xz} + 1$\;
                 $a_{xz} = a_{xz} + 1$\;
-                $c_y = c_y - 1$\;
-                $c_z = c_z - 1$\;
+                $c_y = c_y - w_x$\;
+                $c_z = c_z - w_x$\;
                 \break
             }
         }
@@ -694,7 +697,7 @@ We simulate a distributed system of $m$ sites, each with 32 computing slots. Eac
 \label{resource_policy}
 Besides Algorithms \ref{alg:basic} and \ref{alg:approx} (called DAMF and DAMF\_a for short), we also implement three baseline policies: IMF, AMF (both introduced in Section \ref{sec:prelim}) and Dynamic Independent Max-min Fairness (DIMF). DIMF utilizes network resources on top of IMF: it first applies the IMF policy for resource allocation on each site, then transfers unsatisfied job demands to the sites with spare compute capacities to maximize the system utility (subject to the transfer limits), where jobs with lower aggregate allocations in the first step are assigned higher transmission priority in order to promote fairness. All the policies recompute the allocation matrix only when a new job arrives or an existing job completes all of its tasks on some site. We use CPLEX \cite{Cplex} as the program solver in the experiments. Since a task cannot be transferred fractionally, the transmission matrix $\Delta D$ derived to achieve the DAMF allocation may not be workable. To make DAMF applicable in practice, we enforce the elements of the transmission matrix $\Delta D$ in Algorithm \ref{alg:basic} to be integers, i.e., replacing the linear program with a mixed-integer program. This would incur extra but acceptable computation time. We shall demonstrate the computation times of DAMF and DAMF\_a later. Note that DAMF\_a does not need to apply a similar modification because the transmission matrix $\Delta D$ derived from its heuristic is always integral.
 
-As introduced in Section \ref{sec:model_1}, transmission count limit $c$ is computed based on the data partition size $S$, available bandwidth $B$ and time threshold $T$: $c = BT/S$. In the experiments, we set $T$ = 50 seconds (which is small compared to the average task duration shown in Table \ref{tab:data_characteristics}), $S$ = 1GB and $B$ = 160Mbps or 480Mbps for all sites, thus $c = (160\; \text{or}\;480)*50/(1*1024*8) \approx 1\; \text{or}\; 3$. Under these settings, a task transmission takes $50/ (1\;\text{or}\;3)=50\;\text{or}\;16.67$ seconds to arrive at its destination. To emulate the bandwidth bottleneck being the connection between each site and the backbone network, task transmissions (potentially originating from different source sites) are received sequentially at each destination site. In recomputing the allocation and transmission matrices, the scheduler discards all pending transmissions (but retains the ongoing one) to release more bandwidth for the reallocation. For example, suppose $c=3$ for all sites and a recomputation is triggered $30$ seconds after the previous one. Suppose in the previous computation, it was decided that a site $S_j$ would receive $3$ tasks. In this case, the first task transmission would have arrived at site $S_j$ $16.67$ seconds after the previous computation, while the second task transmission is ongoing and the third one is pending. Then, in the recomputation, the third task transmission will be rescinded and the transmission count limit $c_j$ available for $S_j$ will be set to $2$.
+As introduced in Section \ref{sec:model_1}, transmission count limit $c$ is computed based on the average data partition size $S$, available bandwidth $B$ and time threshold $T$: $c = BT/S$. In the experiments, we set $T$ = 50 seconds (which is small compared to the average task duration shown in Table \ref{tab:data_characteristics}), $S$ = 1GB and $B$ = 160Mbps or 480Mbps for all sites, thus $c = (160\; \text{or}\;480)*50/(1*1024*8) \approx 1\; \text{or}\; 3$. Under these settings, a task transmission generally takes $50/ (1\;\text{or}\;3)=50\;\text{or}\;16.67$ seconds to arrive at its destination. To emulate the bandwidth bottleneck being the connection between each site and the backbone network, task transmissions (potentially originating from different source sites) are received sequentially at each destination site. In recomputing the allocation and transmission matrices, the scheduler discards all pending transmissions (but retains the ongoing one) to release more bandwidth for the reallocation. For example, suppose $c=3$ for all sites and a recomputation is triggered $30$ seconds after the previous one. Suppose in the previous computation, it was decided that a site $S_j$ would receive $3$ tasks. In this case, the first task transmission would have arrived at site $S_j$ $16.67$ seconds after the previous computation, while the second task transmission is ongoing and the third one is pending. Then, in the recomputation, the third task transmission will be rescinded and the transmission count limit $c_j$ available for $S_j$ will be set to $2$.
 
 \subsection{Performance Metrics}
 In Sections \ref{sec:DAMF} and \ref{sec:property}, we have proved that DAMF achieves several important fairness properties. Our experiments aim to further evaluate DAMF and DAMF\_a's empirical performance from different perspectives. We study the following  performance metrics: the deviation of the instantaneous resource allocation from ideal DAMF, the standard deviation of the instantaneous resource allocation among jobs, the average Jain's Index of instantaneous resource allocation, and the average job response time. 
