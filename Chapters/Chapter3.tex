@@ -353,8 +353,8 @@ By repeating the above process continuously, we can obtain an infinite sequence 
 \caption{Computing DAMF Allocation}\label{alg:basic}
 
     % 1. 输入输出与初始化 (不再使用 \STATE)
-    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities $\{u_1, u_2, \dots, u_m\}$ and transfer limits $\{c_1, c_2, \dots, c_m\}$; a set of jobs $\{J_1, J_2, \dots, J_n\}$ with data partition weights $\{w_1, w_2, \dots, w_n\}$ and demand matrix $D$;}
-    \KwOut{A DAMF allocation matrix $A$; a transmission matrix $\Delta D$;}
+    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities $\{u_1, u_2, \dots, u_m\}$ and transfer limits $\{c_1, c_2, \dots, c_m\}$; a set of jobs $\{J_1, J_2, \dots, J_n\}$ with data partition weights $\{w_1, w_2, \dots, w_n\}$ and demand matrix $D$}
+    \KwOut{A DAMF allocation matrix $A$; a transmission matrix $\Delta D$}
     
     \BlankLine % 插入一个空行隔开初始化
     $A \leftarrow \textbf{0}$\;
@@ -366,14 +366,14 @@ By repeating the above process continuously, we can obtain an infinite sequence 
     \While{$\mathcal{J} \neq \emptyset$}{
         Solve the following linear program:\;
         \quad Maximize $T$, subject to:\;
-        \quad\quad $\forall J_i \in \mathcal{J} : \sum^m_{j=1}a_{ij} \geq T$;\;
-        \quad\quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij} = t_i$;\;
-        \quad\quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;\;
-        \quad\quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;\;
-        \quad\quad $\forall j \in [m]: \sum_{i=1}^n |w_i\Delta d_{ij}| \leq c_j$;\;
-        \quad\quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;\;
+        \quad\quad $\forall J_i \in \mathcal{J} : \sum^m_{j=1}a_{ij} \geq T$\;
+        \quad\quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij} = t_i$\;
+        \quad\quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$\;
+        \quad\quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$\;
+        \quad\quad $\forall j \in [m]: \sum_{i=1}^n |w_i\Delta d_{ij}| \leq c_j$\;
+        \quad\quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$\;
         
-        Let $T_{max}$ be the outcome of the above linear program;\;
+        Let $T_{max}$ be the outcome of the above linear program\;
         \BlankLine
         
         % For 循环 (删除了 \ENDFOR)
@@ -385,13 +385,13 @@ By repeating the above process continuously, we can obtain an infinite sequence 
             }{
                 \If{$\sum^m_{j=1} a_{lj}= T_{max} \text{ and } (\forall j \in [m], a_{lj} = d_{lj} \lor \sum^n_{i=1}a_{ij}=u_j)$}{
                     Check the feasibility of the following program:\;
-                    \quad $\sum_{j=1}^n a_{lj} > T_{max}$;\;
-                    \quad $\forall J_i \in \mathcal{J} \land i \neq l: \sum^m_{j=1}a_{ij}=T_{max}$;\;
-                    \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij}=t_i$;\;
-                    \quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$;\;
-                    \quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$;\;
-                    \quad $\forall j \in [m]: \sum_{i=1}^n |w_i\Delta d_{ij}| \leq c_j$;\;
-                    \quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$;\;
+                    \quad $\sum_{j=1}^n a_{lj} > T_{max}$\;
+                    \quad $\forall J_i \in \mathcal{J} \land i \neq l: \sum^m_{j=1}a_{ij}=T_{max}$\;
+                    \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij}=t_i$\;
+                    \quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$\;
+                    \quad $\forall i \in [n], j \in [m]: 0 \leq a_{ij} \leq d_{ij}+\Delta d_{ij}$\;
+                    \quad $\forall j \in [m]: \sum_{i=1}^n |w_i\Delta d_{ij}| \leq c_j$\;
+                    \quad $\forall i \in [n]: \space \sum_{j=1}^m \Delta d_{ij}=0$\;
                     \BlankLine
                     
                     \If{the above program is infeasible}{
@@ -588,19 +588,19 @@ In addition to providing fair resource allocation from the global perspective, w
 \caption{Optimizing Job Completion Times}\label{alg:qos}
 
     % 1. 输入输出
-    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$; the aggregate allocation $e_i$ of each job $J_i$ in a DAMF allocation with corresponding transmission matrix $\Delta D$;}
-    \KwOut{An optimized allocation matrix $A'$;}
+    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities; a set of jobs $\{J_1, J_2, ..., J_n\}$ with demand matrix $D$; the aggregate allocation $e_i$ of each job $J_i$ in a DAMF allocation with corresponding transmission matrix $\Delta D$}
+    \KwOut{An optimized allocation matrix $A'$}
     \BlankLine
 
     % 2. 外层 For 循环
     \For{$k = 1, 2, \dots, n$}{
         Solve the following linear program:\;
         Maximize $y_k$, subject to:\;
-        \quad $\forall j \in [m], \sum_{i=1}^n a_{ij} \leq u_j$;\;
-        \quad $\forall i < k, j \in [m]: a_{ij} = a'_{ij}$;\;
-        \quad $\forall i \ge k, j \in [m]: 0 \le a_{ij} \le d_{ij}+\Delta d_{ij}$;\;
-        \quad $\forall i\ge k: \sum_{j=1}^m a_{ij} = e_i$;\;
-        \quad $\forall j \in [m]: a_{kj} = d_{kj}*y_k+z_{kj}$, $y_k \ge 0$, $z_{kj} \ge 0$;\;
+        \quad $\forall j \in [m], \sum_{i=1}^n a_{ij} \leq u_j$\;
+        \quad $\forall i < k, j \in [m]: a_{ij} = a'_{ij}$\;
+        \quad $\forall i \ge k, j \in [m]: 0 \le a_{ij} \le d_{ij}+\Delta d_{ij}$\;
+        \quad $\forall i\ge k: \sum_{j=1}^m a_{ij} = e_i$\;
+        \quad $\forall j \in [m]: a_{kj} = d_{kj}*y_k+z_{kj}$, $y_k \ge 0$, $z_{kj} \ge 0$\;
         \BlankLine
         
         % 3. 内层 For 循环
