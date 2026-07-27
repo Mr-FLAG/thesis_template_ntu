@@ -515,9 +515,40 @@ Figures \ref{fig:JRT_Ali2017} and \ref{fig:JRT_Ali2018} present the average JRT 
 
 Tables \ref{tab:count_PS_violation_Ali2017} and \ref{tab:count_PS_violation_Ali2018} present the number of violations to the PS deadline under different scheduling policies. Because all policies under the $IS$ scheme strictly preserve protectiveness and their number of violations are zeros, we only present the results of efficiency-targeted policies (SWAG and SRPT) and policies under the $GS$ scheme (PFSP\_g and FSP\_g). The results show that both SWAG and SRPT have tens of violations in general, indicating that efficiency-targeted policies do not guarantee protectiveness in the distributed job execution case. In contrast, policies under the $GS$ scheme have much fewer violations (zero violations in most cases), while $IS$ scheme policies strictly preserve protectiveness. Particularly, PFSP\_g significantly decreases the number of violations while keeping a close average JRT to SWAG and SRPT at all system settings, demonstrating that it achieves a good trade-off between efficiency and long-term fairness. Meanwhile, PFSP\_SWAG guarantees zero violations while effectively decreasing the average JRT compared to other $IS$ scheme policies. These empirical results suggest that the two policies can be selectively applied to different scenarios depending on the system's specific trade-offs between fairness and efficiency.
 
-% \subsection{Robustness on Imprecise Job Load Information}
+\subsection{On inaccurate job load estimation}
 
-%Convolbo \textit{et al.} \cite{GEODIS} studied the utilization of network resources within geo-distributed systems to minimize the system makespan, i.e., the total time required to process all jobs. Conversely, from a fairness perspective, Guan \textit{et al.} \cite{AMF} introduced a task assignment algorithm aimed at achieving max-min fairness in instantaneous resource allocation among jobs. Similarly, Chen \textit{et al.} \cite{chen2018scheduling} investigated achieving max-min fairness across jobs regarding their response times in geo-distributed systems. Few of the existing work considers a trade-off between efficiency and long-term fairness in distributed job execution.%Various strategies have been proposed to address these challenges, such as load balancing algorithms \cite{xu2013load}, geo-distributed scheduling policies \cite{zhang2019geo}, and hierarchical scheduling frameworks \cite{li2020hierarchical}.
+All scheduling policies introduced above rely heavily on accurate estimations of job load distributions across sites. Inaccurate estimations inevitably lead to system performance degradation in both average job response time and PS deadline violations. Based on our evaluation environment with 10,000 jobs, when the estimated job load uniformly deviates within $\pm10\%$ of the ground truth (i.e., ranging from $90\%$ to $110\%$), the average job response time increases by $5\%$ to $12\%$, accompanied by up to hundreds of PS deadline violations across different scheduling policies. Estimation errors manifest in two distinct forms:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Over-estimation} assigns a job a larger estimated load than its actual load, which may deprioritize it in the execution sequence. However, because other concurrent jobs will either have higher priorities or keep the priorities unchanged, their protective scheduling bounds remain generally intact. Consequently, over-estimation predominantly impacts the over-estimated job itself, causing fewer performance degradations.
+    
+    \item \textbf{Under-estimation}, on the contrary, introduces severe systemic risks. When a job is underestimated, it accumulates a substantial amount of hidden workload and enters a "phantom state" once its estimated load is depleted. In the scheduler's logical model, this job is marked as completed and prioritized to clear the queue rapidly. In reality, however, its remaining unfulfilled workload continues to execute, inducing severe, unmodeled head-of-line blocking and starving subsequent jobs, which ultimately triggers a surge in PS deadline violations.
+\end{itemize}
+
+To counteract performance degradation under job load under-estimations, we propose a mitigation mechanism, namely Processor Sharing Fallback (PSF). PSF allocates a fair capacity share to these "phantom state" jobs: Once a job exhausts its estimated load while retaining unfulfilled real workload, it transitions into a fallback PS state. Under this state, the job receives a fixed equal share ($1/N_{\text{active}}$) of the site capacity, where $N_{\text{active}}$ represents the concurrent count of active jobs with remaining real load at current site. The leftover capacity is subsequently allocated to non-fallback jobs following the primary scheduling order.
+
+Table \ref{tab:PSF_comparison} illustrates the impact of the PSF mechanism on PS deadline violations. Due to space limitations, we present representative results using the Alibaba 2018 trace under a 10\% deviation rate and 70\% system utilization here; full experimental results are shown in Appendix \ref{AppendixA}. The results indicate that policies under the $GS$ scheme (FSP\_g, PFSP\_g) inherently yield the lowest violation counts. Crucially, integrating the PSF mechanism significantly reduces violations across all policies, with our proposed protective scheduling policies under both $GS$ and $IS$ consistently outperforming efficiency-targeted baselines.
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 10\% deviation, 70\% utilization, Alibaba 2018}
+\label{tab:PSF_comparison}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 92  & 98 & 188 & 178 & & 44 & 47 & 62 & 76 \\
+SRPT & 108 & 91 & 200 & 183 & & 55 & 52 & 69 & 81 \\
+PFSP\_g & 81 & 40 & 133 & 149 & & 30 & 19 & 27 & 62 \\
+FSP\_g & 53 & 27 & 37 & 30 & & 29 & 20 & 25 & 65 \\
+PFSP\_SWAG & 394 & 247 & 461 & 276 & & 39 & 41 & 31 & 37 \\
+PFSP\_i & 423 & 350 & 513 & 307 & &  41 & 37 & 37 & 42 \\
+FSP\_i & 196 & 102 & 258 & 137 & & 36 & 34 & 31 & 36 \\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \section{Summary}
 \label{sec:conclusion3}

@@ -1,22 +1,112 @@
 %!TEX root=../mythesis.tex
 % Appendix A
 
-\chapter{Proofs for Part I or Chapter 3} % Main appendix title
+\chapter{Number of violations to PS deadline with/without PSF} % Main appendix title
 
 \label{AppendixA} % For referencing this appendix elsewhere, use \ref{AppendixA}
 
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 10\% deviation, 70\% utilization, Alibaba 2018}
+\label{tab:PSF_comparison1}
+\resizebox{\textwidth}{!}{\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 92  & 98 & 188 & 178 & & 44 & 47 & 62 & 76 \\
+SRPT & 108 & 91 & 200 & 183 & & 55 & 52 & 69 & 81 \\
+PFSP\_g & 81 & 40 & 133 & 149 & & 30 & 19 & 27 & 62 \\
+FSP\_g & 53 & 27 & 37 & 30 & & 29 & 20 & 25 & 65 \\
+PFSP\_SWAG & 394 & 247 & 461 & 276 & & 39 & 41 & 31 & 37 \\
+PFSP\_i & 423 & 350 & 513 & 307 & &  41 & 37 & 37 & 42 \\
+FSP\_i & 196 & 102 & 258 & 137 & & 36 & 34 & 31 & 36 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 20\% deviation, 70\% utilization, Alibaba 2018}
+\label{tab:PSF_comparison2}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 145  & 209 & 425 & 398 & & 38 & 63 & 65 & 90 \\
+SRPT & 163 & 209 & 394 & 408 & & 48 & 64 & 67 & 84 \\
+PFSP\_g & 144 & 216 & 315 & 346 & & 34 & 33 & 45 & 70 \\
+FSP\_g & 70 & 52 & 99 & 94 & & 33 & 32 & 44 & 73 \\
+PFSP\_SWAG & 450 & 564 & 745 & 541 & & 45 & 55 & 53 & 51 \\
+PFSP\_i & 498 & 625 & 774 & 536 & &  46 & 58 & 51 & 49 \\
+FSP\_i & 185 & 293 & 355 & 281 & & 44 & 53 & 50 & 48 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 30\% deviation, 70\% utilization, Alibaba 2018}
+\label{tab:PSF_comparison3}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 880  & 386 & 801 & 746 & & 106 & 80 & 161 & 176 \\
+SRPT & 884 & 362 & 761 & 760 & & 113 & 88 & 150 & 180 \\
+PFSP\_g & 947 & 290 & 597 & 638 & & 101 & 59 & 156 & 156 \\
+FSP\_g & 243 & 87 & 89 & 218 & & 99 & 56 & 153 & 165 \\
+PFSP\_SWAG & 1666 & 1078 & 1785 & 946 & & 135 & 75 & 121 & 88 \\
+PFSP\_i & 2009 & 1426 & 2012 & 1103 & &  140 & 80 & 131 & 93 \\
+FSP\_i & 767 & 423 & 935 & 514 & & 143 & 71 & 126 & 88 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 40\% deviation, 70\% utilization, Alibaba 2018}
+\label{tab:PSF_comparison4}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 778  & 369 & 927 & 779 & & 134 & 123 & 199 & 151 \\
+SRPT & 801 & 408 & 964 & 751 & & 142 & 127 & 198 & 152 \\
+PFSP\_g & 727 & 327 & 817 & 624 & & 126 & 95 & 176 & 130 \\
+FSP\_g & 446 & 191 & 386 & 263 & & 123 & 95 & 177 & 139 \\
+PFSP\_SWAG & 1229 & 903 & 2053 & 940 & & 180 & 124 & 167 & 106 \\
+PFSP\_i & 1325 & 1074 & 2085 & 980 & &  173 & 133 & 171 & 107 \\
+FSP\_i & 779 & 507 & 1452 & 419 & & 170 & 129 & 166 & 110 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+
+
+
 %\lhead{Appendix A. \emph{Appendix Title Here}} % This is for the header on each page - perhaps a shortened title
-\section{Proof of Lemma}
-\label{pf:ApprGradSys}
+% \section{Proof of Lemma}
+% \label{pf:ApprGradSys}
 
-$$\psi^{av}(\theta)=\frac{1}{T}\int^{T}_0[\psi(\theta+\mu(\tau))+C]\otimes\frac{\mu(\tau)}{a}d\tau$$ 
+% $$\psi^{av}(\theta)=\frac{1}{T}\int^{T}_0[\psi(\theta+\mu(\tau))+C]\otimes\frac{\mu(\tau)}{a}d\tau$$ 
 
 
 
-\section{Proof of another Lemma}
-\begin{equation}
-\begin{aligned}
-\gamma_1(\left\|x\right\|)\leq W(t,x)\leq \gamma_2(\left\|x\right\|)\\
-\frac{\partial{W}}{\partial{t}}+\frac{\partial{W}}{\partial{x}}\phi(t,x,0)\leq-\gamma_3(\left\|x\right\|)
-\end{aligned}
-\end{equation}
+% \section{Proof of another Lemma}
+% \begin{equation}
+% \begin{aligned}
+% \gamma_1(\left\|x\right\|)\leq W(t,x)\leq \gamma_2(\left\|x\right\|)\\
+% \frac{\partial{W}}{\partial{t}}+\frac{\partial{W}}{\partial{x}}\phi(t,x,0)\leq-\gamma_3(\left\|x\right\|)
+% \end{aligned}
+% \end{equation}

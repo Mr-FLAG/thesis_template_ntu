@@ -52,7 +52,7 @@ Suppose that with utilization of network resources, the input data of one task i
 The above example illustrates some interesting phenomena. First, job execution order and task transmission have mutual influence. The optimal execution order of jobs can change after task transmissions are performed: both execution orders in Figs. \ref{fig_second_case} and \ref{fig_fourth_case} achieve the optimal total job response times given the respective task transmissions, but $J_1$ and $J_3$ are swapped in the execution order after a task is transferred in Fig. \ref{fig_fourth_case}. Vice versa, different job execution orders have different optimal task transmissions: the optimal transmission changes after we modify the job execution order from $\langle J_4, J_3, J_1, J_2 \rangle$ (Fig. \ref{fig_third_case}) to $\langle J_4, J_1, J_3, J_2 \rangle$ (Fig. \ref{fig_fourth_case}). Second, the transmission in the optimal solution is from site $S_1$ to $S_3$, while the site with the lowest load is $S_2$. This indicates that the transmissions that minimize the total job response time can differ from the one that focuses on load balancing, so traditional load balancing techniques may not be preferable in this efficiency-targeted scenario.
 
 \section{System Model}
-\label{sec:model}
+\label{sec4:model}
 Consider a system consisting of $m$ separate geo-distributed sites: $\mathcal{S} = \{S_1, S_2, ..., S_m\}$. Each site $S_j$ has compute resources with capacity $u_j$, which can be interpreted as the volume of computing slots available. A set of $n$ jobs $J_1, J_2, ..., J_n$ are submitted to run in the system. Each job $J_i$ consists of tasks that require distinct data partitions and can run in parallel. For simplicity, we assume that each task takes one computing slot to process. In big data processing frameworks, tasks of the same job typically process data partitions of the same size \cite{shvachko2010hadoop, shanahan2015large_spark}, so they would take similar times to process. We denote the processing time of a task in each job $J_i$ as $l_i$, which can be estimated by the historical execution records of the job or sampling-based learning, which proactively samples a small fraction of the tasks in the job to make an estimate~\cite{jajoo2022slearn}.
 A job is completed when all of its tasks are completed.
 
@@ -64,7 +64,7 @@ Suppose the sites in the system are connected by networks, which can be used to 
 %  job $J_k$ from site $S_i$ to $S_j$ is $r_k/b_{ij}$ (if $b_{ij}=0$, this time is defined to be infinite). Note that if there are ongoing transmission(s) on the link, a new transmission has to wait and its arrival time will be delayed.
 \begin{table}[t]
   \caption{Summary of Notations}
-  \label{tab:Notation}
+  \label{tab4:Notation}
   \centering
   \begin{tabularx}{\linewidth}{lX}
     \toprule
@@ -82,7 +82,7 @@ Suppose the sites in the system are connected by networks, which can be used to 
 \end{table}
 
 We study the problem of deriving an execution order of jobs and a set of task transmissions between sites, so that the total job response (completion) time of all jobs is minimized. %\textcolor{red}{Note that the response time of each job is the time span from its arrival (which is a constant) to its completion, so minimizing the total response time is equivalent to minimizing the total completion time.} 
-The key notations used in this paper are summarized in Table \ref{tab:Notation}. For simplicity, we use $[x]$ to represent the set $\{1, 2, \dots, x\}$ for a positive integer $x$. Note that although the above model is formulated in a static setting, it can be easily extended to address online scenarios by dynamically capturing snapshots of job demand distributions and system resources. %Here $\langle J_{1}', J_{2}',...,J_{n}'\rangle$ is a sequence where each element $J_{i}'$ denotes the $i$-th job to be processed. $T$ is a three-dimensional matrix and $t_{ijk}$ refers to the number of tasks of $J_i$ to be transferred from $S_j$ to $S_k$. 
+The key notations used in this paper are summarized in Table \ref{tab4:Notation}. For simplicity, we use $[x]$ to represent the set $\{1, 2, \dots, x\}$ for a positive integer $x$. Note that although the above model is formulated in a static setting, it can be easily extended to address online scenarios by dynamically capturing snapshots of job demand distributions and system resources. %Here $\langle J_{1}', J_{2}',...,J_{n}'\rangle$ is a sequence where each element $J_{i}'$ denotes the $i$-th job to be processed. $T$ is a three-dimensional matrix and $t_{ijk}$ refers to the number of tasks of $J_i$ to be transferred from $S_j$ to $S_k$. 
 
 \section{Workload-Aware Selection with Transmission}
 \label{sec:WAST}
@@ -702,13 +702,13 @@ The outer loop of the approximation algorithm WAST\_a is the same as that of Alg
 %, which takes $\sum_{j=1}^m d_{kj}*m$ searches. Therefore, the worst time complexity of WAST\_a is $n(n+1)/2*G*m$, which is $O(n^2m)$. Because WAST\_a does not solve LPs, its computing efficiency is much higher than the original WAST. We shall empirically evaluate the performance of two algorithms in the experiments.
 
 \subsection{Deployment}
-\label{sec:deploy}
+\label{sec4:deploy}
 In this section, we discuss how to apply the algorithms introduced above to online scenarios where jobs arrive dynamically for execution. The algorithm can be deployed at a central scheduler of the geo-distributed system. The scheduler keeps track of the system's resource capacities (including the compute resources and the network resources) as well as the demand distribution of each job across all sites. Once the job execution order and the task transmissions of each job are derived, the scheduler propagates them to relevant sites. Whenever a computing slot becomes available at a site $S_i$, $S_i$ selects the first job in the job execution order that has pending tasks locally and assigns the slot to one task of this job. For each link from a source site to a destination site, the task input data of jobs are transferred based on the task transmission decisions. The transmissions follow the job execution order, so that the tasks of the jobs to be executed earlier are transferred earlier. The central scheduler recomputes the job execution order and the task transmissions of jobs whenever a new job arrives. To do so, it takes a snapshot of the pending task distributions of all jobs as their computational demand distributions. The recomputation derives a new job execution order and new task transmissions for operation. Existing scheduled transmissions not yet completed are withdrawn, and the network usage $T$ is reset to $\textbf{0}$ for each recomputation.
 
 \section{Experiments}
-\label{sec:experiment2}
+\label{sec4:experiment}
 
-Simulation experiments using read-world job traces are conducted to evaluate the performance of applying our scheduling algorithms to online scenarios as discussed in Section \ref{sec:deploy}.
+Simulation experiments using read-world job traces are conducted to evaluate the performance of applying our scheduling algorithms to online scenarios as discussed in Section \ref{sec4:deploy}.
 
 \subsection{Datasets}
 
@@ -730,9 +730,9 @@ Simulation experiments using read-world job traces are conducted to evaluate the
 \end{figure}
 
 We use cluster job traces sourced from the Alibaba Cluster Trace Program \cite{Ali2017}, which contains cluster traces of different years from real production. We pre-process the raw trace files of years 2017 and 2018, extract the key information including the arrival time, task number, average memory consumption and task processing times of each job. A continuous sequence of 10,000 jobs is randomly selected from each trace to serve as the dataset driving our simulations. The job characteristics of selected sequences are shown in Fig. \ref{fig:distribution} and Fig. \ref{fig:distribution_data}. 
-Both sequences exhibit a heavy-tailed distribution, in which a small subset of jobs accounts for a disproportionately large share of the total computation load. We take the average memory consumption of each job as its data partition size. The average memory consumption records in the data traces are normalized values with respect to the memory capacity of the servers in the cluster. We derive the exact data partition size assuming that each server has 128GB RAM, under which the largest data partition is about 4GB. The average task number per job, average task processing time and average data partition size of all jobs are shown in Table \ref{tab:average_characteristic}.
+Both sequences exhibit a heavy-tailed distribution, in which a small subset of jobs accounts for a disproportionately large share of the total computation load. We take the average memory consumption of each job as its data partition size. The average memory consumption records in the data traces are normalized values with respect to the memory capacity of the servers in the cluster. We derive the exact data partition size assuming that each server has 128GB RAM, under which the largest data partition is about 4GB. The average task number per job, average task processing time and average data partition size of all jobs are shown in Table \ref{tab4:average_characteristic}.
 
-%We use cluster job traces from Alibaba \cite{Ali2017} and Google \cite{Gg2019}. The Alibaba trace is sourced from the Alibaba Cluster Trace Program \cite{Ali2017}, and contains information on approximately 16 million tasks collected from 1300 machines over a period of 12 hours in August 2017. The Google trace is derived from the Borg cluster workload traces\cite{Gg2019}, containing around 30 GB compressed data of task events (e.g., a task is scheduled, completed or aborted) from Google's eight Borg cells over the month of May 2019. We pre-process both raw traces to extract key information, including the arrival time, task count, data partition size and task duration of each job. From each trace, a continuous sequence of 10,000 jobs is randomly selected to serve as the dataset driving our simulations. Characteristics of both datasets are shown in Fig. \ref{fig:distribution} and Fig. \ref{fig:distribution_data}. Both datasets exhibit a heavy-tailed distribution, in which a small subset of jobs accounts for a disproportionately large share of the total workload.  The data partition record in both data traces is a normalized value in homogeneous clusters; We derive the exact partition size with assumption that each cluster has 128GB RAM. The average task duration, average task count and average data partition size is shown in Table \ref{tab:average_characteristic}.
+%We use cluster job traces from Alibaba \cite{Ali2017} and Google \cite{Gg2019}. The Alibaba trace is sourced from the Alibaba Cluster Trace Program \cite{Ali2017}, and contains information on approximately 16 million tasks collected from 1300 machines over a period of 12 hours in August 2017. The Google trace is derived from the Borg cluster workload traces\cite{Gg2019}, containing around 30 GB compressed data of task events (e.g., a task is scheduled, completed or aborted) from Google's eight Borg cells over the month of May 2019. We pre-process both raw traces to extract key information, including the arrival time, task count, data partition size and task duration of each job. From each trace, a continuous sequence of 10,000 jobs is randomly selected to serve as the dataset driving our simulations. Characteristics of both datasets are shown in Fig. \ref{fig:distribution} and Fig. \ref{fig:distribution_data}. Both datasets exhibit a heavy-tailed distribution, in which a small subset of jobs accounts for a disproportionately large share of the total workload.  The data partition record in both data traces is a normalized value in homogeneous clusters; We derive the exact partition size with assumption that each cluster has 128GB RAM. The average task duration, average task count and average data partition size is shown in Table \ref{tab4:average_characteristic}.
 
 
 \begin{figure}[t]
@@ -766,7 +766,7 @@ Average data partition size (MB) & $661.15$ & $453.31$ \\
 \hline
 \end{tabular}
 \caption{Job characteristics of two datasets}
-\label{tab:average_characteristic}
+\label{tab4:average_characteristic}
 \end{table}
 
 
@@ -896,13 +896,13 @@ Figs. \ref{fig:JRT_CDF} and \ref{fig:JRT_CDF2} show the $30$th, $60$th, $90$th p
 \centering
 \subfloat[utilization = 50\%]
 {\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2017_50.eps}%
-\label{fig:JRT_CDF_a}
+% \label{fig:JRT_CDF_a}
 }
 \hfil
 \subfloat[utilization = 60\%]
 %
 {\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2017_60.eps}
-\label{fig:JRT_CDF_b}
+% \label{fig:JRT_CDF_b}
 }%
 \vspace{0.8em}
 \subfloat[utilization = 70\%]
@@ -922,13 +922,13 @@ Figs. \ref{fig:JRT_CDF} and \ref{fig:JRT_CDF2} show the $30$th, $60$th, $90$th p
 \centering
 \subfloat[utilization = 50\%]
 {\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2018_4_50.eps}%
-\label{fig:JRT_CDF_a}
+% \label{fig:JRT_CDF_a}
 }
 \hfil
 \subfloat[utilization = 60\%]
 %
 {\includegraphics[width=0.48\textwidth]{Image2/CDFpercentile_Ali2018_4_60.eps}
-\label{fig:JRT_CDF_b}
+% \label{fig:JRT_CDF_b}
 }%
 \vspace{0.8em}
 \subfloat[utilization = 70\%]

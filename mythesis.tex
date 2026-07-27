@@ -40,6 +40,7 @@
 \usepackage{subcaption}
 \usepackage{mathtools}
 \usepackage{lipsum}
+\usepackage{graphicx}
 \usepackage[ruled,vlined,noresetcount]{algorithm2e}
 %\usepackage{algpseudocode}
 \usepackage[square, numbers, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers'
@@ -127,34 +128,34 @@
 
 I wish to express my greatest gratitude to my advisor, Assoc. Prof. Tang Xueyan. Without his full support in the past years, it would be impossible for me to hold on to my research to graduate. His knowledge, patience and enthusiasm motivated me during my entire PhD career, and words fail to fully capture the depth of my admiration for Prof. Tang. Every time I struggled about the deviations in math deduction or experimental results and almost felt loss, Prof. Tang always guides me with insightful suggestions and directions and enlighten my road. Also, I would like to deliver my genuine thanks to Dr. Liu Kanghuai and Cheng Tong, for academic discussion and other helps in daily life. Last but not the least, many thanks and love to my parents and girlfriend. Although distant, they have been supporting me in various aspects during these years, no matter what difficulties I experienced. 
 
-% \begin{flushright}
-% \emph{Jinming Xu, December 2015}
-% \end{flushright}
+\begin{flushright}
+\emph{Shangyi Shao, July 2026}
+\end{flushright}
 }
 
 %----------------------------------------------------------------------------------------
 %	QUOTATION PAGE
 %----------------------------------------------------------------------------------------
 
-\pagestyle{empty} % No headers or footers for the following pages
-\emph{``If I had one hour to save the world, I would spend 55 minutes defining the problem and only five minutes finding the solution."}
+% \pagestyle{empty} % No headers or footers for the following pages
+% \emph{``If I had one hour to save the world, I would spend 55 minutes defining the problem and only five minutes finding the solution."}
 
-\begin{flushright}
----Einstein, Albert
-\end{flushright}
-\null\vfill % Add some space to move the quote down the page a bit
+% \begin{flushright}
+% ---Einstein, Albert
+% \end{flushright}
+% \null\vfill % Add some space to move the quote down the page a bit
 
-\begin{center}
-\large{To my dear family}
-\end{center}
-\vfill\vfill\null % Add some space at the bottom to position the quote just right
-\cleardoublepage % Start a new page and make the next page a right-hand (odd-numbered) page, producing a blank page if necessary
+% \begin{center}
+% \large{To my dear family}
+% \end{center}
+% \vfill\vfill\null % Add some space at the bottom to position the quote just right
+% \cleardoublepage % Start a new page and make the next page a right-hand (odd-numbered) page, producing a blank page if necessary
 
-\pagestyle{fancy} % Return the page headers back to the "fancy" style
-\fancyhead{}   %clear all fields
-\fancyhead[LO]{\sl{\leftmark}}
-\fancyhead[RE]{\sl{\rightmark}}
-\fancyhead[LE,RO]{\thepage}
+% \pagestyle{fancy} % Return the page headers back to the "fancy" style
+% \fancyhead{}   %clear all fields
+% \fancyhead[LO]{\sl{\leftmark}}
+% \fancyhead[RE]{\sl{\rightmark}}
+% \fancyhead[LE,RO]{\thepage}
 
 %----------------------------------------------------------------------------------------
 %	ABSTRACT PAGE
@@ -321,12 +322,12 @@ The final phase of the dissertation unifies the dual objectives by establishing 
 
 \addtocontents{toc}{\vspace{0.8em}} % Add a gap in the Contents, for aesthetics
 
-% \appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
+\appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
 
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 
-% \input{./Appendices/AppendixA}
+\input{./Appendices/AppendixA}
 %\input{./Appendices/AppendixB}
 
 \cleardoublepage    % start a new page
