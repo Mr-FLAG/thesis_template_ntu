@@ -137,7 +137,7 @@ We prove that DAMF exists by showing the compactness and convexity of set $X$.
 \end{lemma}
 
 \begin{proof}
-Consider any aggregate allocation vector $\vec{A} = \langle\sum_{j=1}^m a_{1j},$ $\sum_{j=1}^m a_{2j}, \dots, \sum_{j=1}^m a_{nj}\rangle$ derived from some allocation matrix $A$ under some demand matrix $D + \Delta D$ after transmission. According to constraints (\ref{eq:allocfeas}), (\ref{eq:new_rational}) and (\ref{eq:trx2}), for the \textit{i}-th component $\sum_{j=1}^m a_{ij}$, we have $0 \leq \sum_{j=1}^m a_{ij} \leq \sum_{j=1}^m \min\{u_j, d_{ij} +\Delta d_{ij}\} \leq \sum_{j=1}^m \min\{u_j, d_{ij} +c_j\}$. Thus, the set $X$ is closed and bounded. Hence, it is compact.
+Consider any aggregate allocation vector $\vec{A} = \langle\sum_{j=1}^m a_{1j}, \allowbreak $ $\sum_{j=1}^m a_{2j},\allowbreak \dots, \allowbreak \sum_{j=1}^m a_{nj}\rangle$ derived from some allocation matrix $A$ under some demand matrix $D + \Delta D$ after transmission. According to constraints (\ref{eq:allocfeas}), (\ref{eq:new_rational}) and (\ref{eq:trx2}), for the \textit{i}-th component $\sum_{j=1}^m a_{ij}$, we have $0 \leq \sum_{j=1}^m a_{ij} \leq \sum_{j=1}^m \min\{u_j, d_{ij} +\Delta d_{ij}\} \leq \sum_{j=1}^m \min\{u_j, d_{ij} +c_j\}$. Thus, the set $X$ is closed and bounded. Hence, it is compact.
 \end{proof}
 
 \begin{lemma}
@@ -1160,7 +1160,7 @@ In addition, we evaluate the scalability of DAMF\_a under larger numbers of site
   \caption{Average computation time (s) of $\text{DAMF}_a$}
   \label{tab:computation_time_m}
   \centering
-  \small 
+  \resizebox{\columnwidth}{!}{
   \setlength{\tabcolsep}{4pt} 
   \begin{tabular}{cc *{6}{S[table-format=1.3e-2, input-exponent-markers={e}]}}
     \toprule
@@ -1180,7 +1180,7 @@ In addition, we evaluate the scalability of DAMF\_a under larger numbers of site
     & 1.0 & 1.836e-5 & 5.408e-5 & 1.137e-4 & 3.035e-5 & 9.177e-5 & 2.428e-4 \\
     & 2.0 & 1.935e-5 & 5.155e-5 & 1.443e-4 & 2.786e-5 & 9.714e-5 & 2.868e-4 \\
     \bottomrule
-  \end{tabular}
+  \end{tabular}}
 \end{table}
 
 \section{Summary}
