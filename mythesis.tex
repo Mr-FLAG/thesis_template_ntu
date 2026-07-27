@@ -41,6 +41,7 @@
 \usepackage{mathtools}
 \usepackage{lipsum}
 \usepackage{graphicx}
+\usepackage{hyperref}
 \usepackage[ruled,vlined,noresetcount]{algorithm2e}
 %\usepackage{algpseudocode}
 \usepackage[square, numbers, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers'
@@ -89,9 +90,9 @@
 % 	DECLARATION PAGE
 % ----------------------------------------------------------------------------------------
 
-\thesisdeclareOriginality{I hereby certify that the work embodied in this thesis is the result of original research, is free of plagiarised materials, and has not been submitted for a higher degree to any other University or Institution.}{July. 2026}{Styles/signature.png}
+\thesisdeclareOriginality{I hereby certify that the work embodied in this thesis is the result of original research, is free of plagiarised materials, and has not been submitted for a higher degree to any other University or Institution.}{3 August, 2026}{Styles/SSY_Signature.png}
 
-\thesisdeclareSupervisor{I have reviewed the content and presentation style of this thesis and declare it is free of plagiarism and of sufficient grammatical clarity to be examined.  To the best of my knowledge, the research and writing are those of the candidate except as acknowledged in the Author Attribution Statement. I confirm that the investigations were conducted in accord with the ethics policies and integrity standards of Nanyang Technological University and that the research data are presented honestly and without prejudice.}{July. 2026}{Styles/signature.png}
+\thesisdeclareSupervisor{I have reviewed the content and presentation style of this thesis and declare it is free of plagiarism and of sufficient grammatical clarity to be examined.  To the best of my knowledge, the research and writing are those of the candidate except as acknowledged in the Author Attribution Statement. I confirm that the investigations were conducted in accord with the ethics policies and integrity standards of Nanyang Technological University and that the research data are presented honestly and without prejudice.}{3 August, 2026}{Styles/signature.png}
 
 \thesisdeclareAuthorship{This thesis contains material from 1 paper accepted at conferences in which I am listed as an author.}
 {
@@ -116,11 +117,11 @@
 	% 	\item IDr U. Hintermair conducted the molecular dynamics simulations.
 	% 	\item IMs. A. Sartbaeva prepared the samples for electron microscopy.
 	% \end{itemize}
-}{July. 2026}{Styles/signature.png}
+}{3 August, 2026}{Styles/SSY_Signature.png}
 
 % ----------------------------------------------------------------------------------------
 % 	ACKNOWLEDGEMENTS
-% ----------------------------------------------------------------------------------------
+% --------------------------------------------------------`--------------------------------
 
 \setstretch{1.3} % Reset the line-spacing to 1.3 for body text (if it has changed)
 
@@ -129,7 +130,7 @@
 I wish to express my greatest gratitude to my advisor, Assoc. Prof. Tang Xueyan. Without his full support in the past years, it would be impossible for me to hold on to my research to graduate. His knowledge, patience and enthusiasm motivated me during my entire PhD career, and words fail to fully capture the depth of my admiration for Prof. Tang. Every time I struggled about the deviations in math deduction or experimental results and almost felt loss, Prof. Tang always guides me with insightful suggestions and directions and enlighten my road. Also, I would like to deliver my genuine thanks to Dr. Liu Kanghuai and Cheng Tong, for academic discussion and other helps in daily life. Last but not the least, many thanks and love to my parents and girlfriend. Although distant, they have been supporting me in various aspects during these years, no matter what difficulties I experienced. 
 
 \begin{flushright}
-\emph{Shangyi Shao, July 2026}
+\emph{Shangyi Shao, 3 August, 2026}
 \end{flushright}
 }
 
@@ -166,7 +167,7 @@ I wish to express my greatest gratitude to my advisor, Assoc. Prof. Tang Xueyan.
 \abstract{\addtocontents{toc}{\vspace{0.8em}}}% Add a gap in the Contents, for aesthetics
 
 % 1. The Problem 2. The Issues 3. The Approach 4. The Results 5. The Experiments 6. The Applications
-The proliferation of computing-intensive workloads has firmly established geo-distributed architectures—spanning cloud platforms, interconnected data centers, and high-performance computing clusters—as the standard paradigm for modern large-scale data processing. To exploit data locality and minimize bandwidth consumption, these systems routinely distribute computing jobs into multiple localized tasks deployed across disparate geographical sites where the requisite input data reside. This framework has become highly prevalent across diverse application domains, such as sensor networks, climate modeling, and large-scale machine learning. However, the distributed and heterogeneous nature of these environments introduces novel challenges in resource allocation and job scheduling. A fundamental dichotomy exists between optimizing system efficiency (e.g., minimizing average job response time) and guaranteeing fair resource allocation among competing jobs. Purely efficiency-targeted algorithms often compromise fairness, while strict fairness-oriented policies inevitably degrade overall throughput. More critically, due to the imbalanced distribution of workloads and varying site capacities, classical single-cluster scheduling mechanisms fail in distributed environments. They often precipitate resource bottlenecks, system inefficiencies, and prolonged job starvation. Furthermore, while geo-distributed sites are typically interconnected via well-provisioned networks, the strategic utilization of these network resources to transfer data and computational demands across sites remains a complex, NP-hard problem. To address these multi-dimensional challenges, this dissertation systematically investigates resource allocation and job scheduling in geo-distributed systems, proposing a series of novel, network-aware scheduling frameworks that leverage inter-site bandwidth to synergistically optimize processing efficiency and rigorous fairness guarantees. 
+The proliferation of computing-intensive workloads has firmly established geo-distributed architectures—spanning cloud platforms, interconnected data centers, and high-performance computing clusters—as the standard paradigm for modern large-scale data processing. To exploit data locality and minimize bandwidth consumption, these systems routinely distribute computing jobs into multiple localized tasks deployed across disparate geographical sites where the requisite input data reside. This framework has become highly prevalent across diverse application domains, such as sensor networks, climate modeling, and large-scale machine learning. However, the distributed and heterogeneous nature of these environments introduces novel challenges in resource allocation and job scheduling. A fundamental dichotomy exists between optimizing system efficiency (e.g., minimizing average job response time) and guaranteeing fair resource allocation among competing jobs. Purely efficiency-targeted algorithms often compromise fairness, while strict fairness-oriented policies inevitably degrade overall throughput. More critically, due to the imbalanced distribution of workloads and varying site capacities, classical single-cluster scheduling mechanisms fail in distributed environments. They often precipitate resource bottlenecks, system inefficiencies, and prolonged job starvation. Furthermore, while geo-distributed sites are typically interconnected via well-provisioned networks, the strategic utilization of these network resources to transfer data and computational demands across sites remains a complex, NP-hard problem. To address these multifaceted challenges, this dissertation systematically investigates resource allocation and job scheduling in geo-distributed systems. We propose a series of novel scheduling frameworks—ranging from network-aware data/demand migration policies to purely allocation-centric scheduling mechanisms—to synergistically optimize processing efficiency and enforce rigorous fairness objectives.
 
 The first phase of this research focuses on redefining fair resource allocation in distributed execution environments by integrating network transmission capabilities. Existing studies on fair resource allocation, such as Max-min Fairness and Dominant Resource Fairness, predominantly operate under single-site assumptions where all systemic resources are homogeneously accessible. In geo-distributed systems, however, evaluating fairness solely at the localized level is inherently flawed; a resource-intensive job constrained to a low-capacity site may suffer from highly unfair allocations despite monopolizing local resources. To resolve this, this dissertation proposes Dynamic Aggregate Max-min Fairness (DAMF), a pioneering resource allocation policy that leverages spare inter-site network bandwidth to dynamically transfer data and computation demands. DAMF mandates that the aggregate resource allocation for each job across all computational sites achieves max-min fairness over the entirety of the system's demand transmission and allocation solution space. Theoretically, this research rigorously proves that the DAMF policy satisfies three critical properties of fair division: Pareto efficiency, envy-freeness, and strategy-proofness. From a practical standpoint, the study develops a comprehensive algorithm and a fast approximation tailored to compute optimal demand transmissions and precise DAMF resource allocations subject to dynamic demand distributions and strict network capacity constraints. Extensive experimental evaluations demonstrate that DAMF significantly outperforms conventional baseline policies, successfully achieving superior fairness metrics among competing jobs while simultaneously enhancing the aggregate utility of the distributed system. 
 
@@ -322,12 +323,12 @@ The final phase of the dissertation unifies the dual objectives by establishing 
 
 \addtocontents{toc}{\vspace{0.8em}} % Add a gap in the Contents, for aesthetics
 
-\appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
+% \appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
 
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 
-\input{./Appendices/AppendixA}
+% \input{./Appendices/AppendixA}
 %\input{./Appendices/AppendixB}
 
 \cleardoublepage    % start a new page

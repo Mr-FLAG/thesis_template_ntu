@@ -203,7 +203,7 @@
 
 %Your thesis title - this is used in the title and abstract
 %-------------------------------------------------
-\thesistitle{RESOURCE ALLOCATION IN DISTRIBUTED COMPUTING} %
+\thesistitle{FAIRNESS AND EFFICIENCY IN DISTRIBUTED JOB EXECUTION WITH TASK TRANSMISSION} %
 %-------------------------------------------------
 \supervisor{Assoc. Prof. Xueyan Tang} % You supervisor's name - this is used in the title page
 %-------------------------------------------------
@@ -460,7 +460,7 @@
 			\makebox[4cm]{#2}  \hfill
       \tikz[remember picture,overlay] 
       \node[opacity=0.9,inner sep=0pt]at (2.13, 0.5) {\includegraphics[width=4cm,height=1.527cm]{Styles/ntu-watermark.png}};
-      \makebox[4cm]{\includegraphics[height=0.9cm]{#3}}\\
+      \makebox[4cm]{\includegraphics[height=1cm]{#3}}\\
 		\end{center}
 		\vspace{-1.8cm}
 		\begin{center}
@@ -507,7 +507,7 @@
 			\makebox[4cm]{#3}  \hfill
       \tikz[remember picture,overlay] 
       \node[opacity=0.9,inner sep=0pt]at (2.13, 0.5) {\includegraphics[width=4cm,height=1.527cm]{Styles/ntu-watermark.png}};
-			\makebox[4cm]{\includegraphics[height=0.9cm]{#4}}\\
+			\makebox[4cm]{\includegraphics[height=1cm]{#4}}\\
 		\end{center}
 		\vspace{-1.8cm}
 		\begin{center}

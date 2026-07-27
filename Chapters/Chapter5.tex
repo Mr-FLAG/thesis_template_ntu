@@ -61,7 +61,7 @@ Note that the first job in the PS order is always servable and completable becau
 
 The following example illustrates how protective scheduling policies like FSP maintain long-term fairness and prevent job starvation compared to efficiency-targeted policies. Consider a job arrival sequence where two jobs, $J_x$ and $J_1$, arrive simultaneously at $t=0$ with initial loads $w_x=2$ and $w_1=1$, respectively. Thereafter, a new job $J_{a+1}$ with a load of $1$ arrives at each subsequent integer second $a$ (where $a \in \{1, 2, \dots, 100\}$).
 
-Under an efficiency-targeted policy like Shortest Remaining Processing Time (SRPT), the system will serve the jobs in the order of $J_1, J_2, \dots, J_{101}$, and finally $J_x$. This occurs because each $J_a$ has a smaller load than $J_x$ and arrives exactly when the previous $J_{a-1}$ completes. Consequently, $J_x$ will complete at $t=103$, suffering from severe starvation. 
+If the system adpots an efficiency-targeted scheduling policy like Shortest-Remaining-Processing-Time (SRPT), it will serve the jobs in the order of $J_1, \allowbreak J_2, \allowbreak \dots, \allowbreak J_{101}$, and finally $J_x$. This occurs because each $J_a$ has a smaller load than $J_x$ and arrives exactly when the previous $J_{a-1}$ completes. Consequently, $J_x$ will complete at $t=103$, suffering from severe starvation. 
 
 Suppose the system adopts FSP instead. The system execution will proceed as follows:
 
@@ -526,14 +526,100 @@ All scheduling policies introduced above rely heavily on accurate estimations of
 
 To counteract performance degradation under job load under-estimations, we propose a mitigation mechanism, namely Processor Sharing Fallback (PSF). PSF allocates a fair capacity share to these "phantom state" jobs: Once a job exhausts its estimated load while retaining unfulfilled real workload, it transitions into a fallback PS state. Under this state, the job receives a fixed equal share ($1/N_{\text{active}}$) of the site capacity, where $N_{\text{active}}$ represents the concurrent count of active jobs with remaining real load at current site. The leftover capacity is subsequently allocated to non-fallback jobs following the primary scheduling order.
 
-Table \ref{tab:PSF_comparison} illustrates the impact of the PSF mechanism on PS deadline violations. Due to space limitations, we present representative results using the Alibaba 2018 trace under a 10\% deviation rate and 70\% system utilization here; full experimental results are shown in Appendix \ref{AppendixA}. The results indicate that policies under the $GS$ scheme (FSP\_g, PFSP\_g) inherently yield the lowest violation counts. Crucially, integrating the PSF mechanism significantly reduces violations across all policies, where our proposed protective scheduling policies under both $GS$ and $IS$ outperform efficiency-targeted baselines in most cases, especially when the job load distributions are highly skewed.
+Table \ref{tab:PSF_ali17_1} to Table \ref{tab:PSF_ali18_4} illustrate the impact of the PSF mechanism on PS deadline violations under different deviation rates $10\%, \allowbreak 20\%, \allowbreak 30\%$ and $40\%$ under both data traces. Due to space limitations, we present representative results using 70\% system utilization only. The results indicate that policies under the $GS$ scheme (FSP\_g, PFSP\_g) inherently yield the lowest violation counts. Crucially, integrating the PSF mechanism significantly reduces violations across all policies, where our proposed protective scheduling policies under both $GS$ and $IS$ outperform efficiency-targeted baselines in most cases, especially when the job load distributions are highly skewed.
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 10\% deviation, 70\% utilization, Alibaba 2017}
+\label{tab:PSF_ali17_1}
+\resizebox{\textwidth}{!}{\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 173  & 300 & 357 & 732 & & 69 & 91 & 97 & 160 \\
+SRPT & 182 & 322 & 369 & 768 & & 82 & 102 & 102 & 164 \\
+PFSP\_g & 217 & 195 & 363 & 577 & & 48 & 52 & 57 & 109 \\
+FSP\_g & 104 & 83 & 79 & 52 & & 29 & 48 & 53 & 110 \\
+PFSP\_SWAG & 543 & 973 & 909 & 888 & & 70 & 74 & 65 & 72 \\
+PFSP\_i & 774 & 1232 & 978 & 981 & &  79 & 80 & 62 & 72 \\
+FSP\_i & 285 & 547 & 513 & 480 & & 71 & 71 & 58 & 67 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 20\% deviation, 70\% utilization, Alibaba 2017}
+\label{tab:PSF_ali17_2}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 443  & 366 & 556 & 1185 & & 97 & 135 & 136 & 214 \\
+SRPT & 451 & 372 & 552 & 1149 & & 108 & 133 & 135 & 226 \\
+PFSP\_g & 395 & 371 & 521 & 791 & & 80 & 113 & 110 & 172 \\
+FSP\_g & 245 & 167 & 197 & 184 & & 78 & 106 & 105 & 167 \\
+PFSP\_SWAG & 970 & 1509 & 1606 & 1519 & & 97 & 143 & 98 & 107 \\
+PFSP\_i & 1314 & 1976 & 1623 & 1662 & & 109 & 147 & 102 & 106 \\
+FSP\_i & 439 & 920 & 1039 & 1000 & & 98 & 147 & 98 & 94 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 30\% deviation, 70\% utilization, Alibaba 2017}
+\label{tab:PSF_ali17_3}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 369  & 607 & 896 & 1495 & & 106 & 146 & 178 & 184 \\
+SRPT & 363 & 666 & 889 & 1526 & & 108 & 143 & 780 & 182 \\
+PFSP\_g & 317 & 561 & 580 & 1476 & & 84 & 105 & 118 & 162 \\
+FSP\_g & 132 & 191 & 169 & 547 & & 84 & 98 & 112 & 161 \\
+PFSP\_SWAG & 632 & 1499 & 1486 & 2157 & & 114 & 130 & 134 & 154 \\
+PFSP\_i & 697 & 1721 & 1466 & 2421 & &  125 & 136 & 126 & 146 \\
+FSP\_i & 293 & 872 & 740 & 1465 & & 116 & 131 & 120 & 142 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 40\% deviation, 70\% utilization, Alibaba 2017}
+\label{tab:PSF_ali17_4}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 1143  & 1351 & 1925 & 2826 & & 140 & 282 & 306 & 352 \\
+SRPT & 1147 & 1518 & 1920 & 2819 & & 141 & 260 & 327 & 326 \\
+PFSP\_g & 1060 & 1304 & 1488 & 2631 & & 120 & 245 & 215 & 296 \\
+FSP\_g & 354 & 548 & 597 & 1572 & & 111 & 248 & 205 & 301 \\
+PFSP\_SWAG & 1640 & 2353 & 3338 & 3375 & & 149 & 199 & 215 & 247 \\
+PFSP\_i & 1903 & 2911 & 3648 & 3765 & &  159 & 205 & 237 & 248 \\
+FSP\_i & 748 & 1438 & 2391 & 2582 & & 144 & 199 & 222 & 249 \\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \begin{table}[t]
 \centering
 \caption{Number of violations to PS deadline with/without PSF, 10\% deviation, 70\% utilization, Alibaba 2018}
-\label{tab:PSF_comparison}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{l cccc c cccc}
+\label{tab:PSF_ali18_1}
+\resizebox{\textwidth}{!}{\begin{tabular}{l cccc c cccc}
 \toprule
 & \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
 \cmidrule{2-5} \cmidrule{7-10}
@@ -549,6 +635,73 @@ FSP\_i & 196 & 102 & 258 & 137 & & 36 & 34 & 31 & 36 \\
 \bottomrule
 \end{tabular}}
 \end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 20\% deviation, 70\% utilization, Alibaba 2018}
+\label{tab:PSF_ali18_2}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 145  & 209 & 425 & 398 & & 38 & 63 & 65 & 90 \\
+SRPT & 163 & 209 & 394 & 408 & & 48 & 64 & 67 & 84 \\
+PFSP\_g & 144 & 216 & 315 & 346 & & 34 & 33 & 45 & 70 \\
+FSP\_g & 70 & 52 & 99 & 94 & & 33 & 32 & 44 & 73 \\
+PFSP\_SWAG & 450 & 564 & 745 & 541 & & 45 & 55 & 53 & 51 \\
+PFSP\_i & 498 & 625 & 774 & 536 & &  46 & 58 & 51 & 49 \\
+FSP\_i & 185 & 293 & 355 & 281 & & 44 & 53 & 50 & 48 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 30\% deviation, 70\% utilization, Alibaba 2018}
+\label{tab:PSF_ali18_3}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 880  & 386 & 801 & 746 & & 106 & 80 & 161 & 176 \\
+SRPT & 884 & 362 & 761 & 760 & & 113 & 88 & 150 & 180 \\
+PFSP\_g & 947 & 290 & 597 & 638 & & 101 & 59 & 156 & 156 \\
+FSP\_g & 243 & 87 & 89 & 218 & & 99 & 56 & 153 & 165 \\
+PFSP\_SWAG & 1666 & 1078 & 1785 & 946 & & 135 & 75 & 121 & 88 \\
+PFSP\_i & 2009 & 1426 & 2012 & 1103 & &  140 & 80 & 131 & 93 \\
+FSP\_i & 767 & 423 & 935 & 514 & & 143 & 71 & 126 & 88 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Number of violations to PS deadline with/without PSF, 40\% deviation, 70\% utilization, Alibaba 2018}
+\label{tab:PSF_ali18_4}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l cccc c cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Without PSF}} & & \multicolumn{4}{c}{\textbf{With PSF}} \\
+\cmidrule{2-5} \cmidrule{7-10}
+\textbf{Policy} & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ & & $\alpha=0.0$ & $\alpha=0.5$ & $\alpha=1.0$ & $\alpha=2.0$ \\
+\midrule
+SWAG & 778  & 369 & 927 & 779 & & 134 & 123 & 199 & 151 \\
+SRPT & 801 & 408 & 964 & 751 & & 142 & 127 & 198 & 152 \\
+PFSP\_g & 727 & 327 & 817 & 624 & & 126 & 95 & 176 & 130 \\
+FSP\_g & 446 & 191 & 386 & 263 & & 123 & 95 & 177 & 139 \\
+PFSP\_SWAG & 1229 & 903 & 2053 & 940 & & 178 & 124 & 167 & 106 \\
+PFSP\_i & 1325 & 1074 & 2085 & 980 & &  173 & 133 & 171 & 107 \\
+FSP\_i & 779 & 507 & 1452 & 419 & & 170 & 129 & 166 & 110 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
 
 \section{Summary}
 \label{sec:conclusion3}
