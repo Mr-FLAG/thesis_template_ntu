@@ -203,7 +203,7 @@
 
 %Your thesis title - this is used in the title and abstract
 %-------------------------------------------------
-\thesistitle{FAIRNESS AND EFFICIENCY IN DISTRIBUTED JOB EXECUTION WITH TASK TRANSMISSION} %
+\thesistitle{ON FAIRNESS AND EFFICIENCY FOR DISTRIBUTED JOB EXECUTION} %
 %-------------------------------------------------
 \supervisor{Assoc. Prof. Xueyan Tang} % You supervisor's name - this is used in the title page
 %-------------------------------------------------
