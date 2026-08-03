@@ -7,6 +7,7 @@ In this chapter, we focus on developing scheduling policies that improve job pro
 \section{Preliminaries}
 \label{sec:prelim}
 \subsection{Slack System in Single-Site Case}
+\label{sec:pre_slack}
 
 We introduce a slack system that provides an intuitive protectiveness assessment of the current system state, identifying whether any jobs are projected to exceed their completion times under the Processor Sharing (PS) policy. It is defined as follows \cite{friedman2003protective}:
 
@@ -157,34 +158,63 @@ which is the difference between $J_i$'s global PS completion time and the time r
 %Note that if a job has its real load completed at some site, this does not affect its global servability and completability. 
 \subsection{Conflict of Global Order-based Scheduling to Protectiveness}
 \label{sec:conflict}
-An ideal job schedule naturally desires a global order that is consistent across all sites, which is intuitive, simple and guarantees efficiency (obviously policies that prioritize different jobs for processing at different sites will lead to poor job completion times). In protective scheduling, this necessitates an algorithm that generates a global job order wherein every job is globally completable when scheduled for processing. However, we prove that under the $GS$ scheme the protectiveness cannot be guaranteed if the system schedules jobs using a global job order. The primary reason is that during the execution, while the $GS$ scheme ensures that the deadline derived from the global PS completion time of each job is maintained, the PS completion time of some job $J_i$ at some site $S_j$ can be violated. Since job arrivals are online, it is possible that after a set of new jobs' arrival this violated site $S_j$ now decides the global PS completion time of job $J_i$, thus causing the negative site-specific slack $s_{ji}$ to be the global slack and consequently violates the protectiveness. The example below further illustrates this point. %the $IS$ scheme does not guarantee that such a globally completable job exists (so the system may not be able to find a valid schedule), and
+An ideal job schedule naturally desires a global order that is consistent across all sites, which is intuitive, simple and guarantees efficiency (obviously policies that prioritize different jobs for processing at different sites will lead to worse job completion times). In protective scheduling, this necessitates an algorithm that generates a global job order in which every job is globally completable when scheduled for processing. However, we discover that under the $GS$ scheme, the protectiveness cannot be guaranteed if the system schedules jobs using a global job order. The primary reason is that during the execution, while the $GS$ scheme ensures that the deadline derived from the global PS completion time of each job can be satisfied, the site-specific PS completion time of some particular job $J_i$ at some particular site $S_j$ can be violated. Recall that the global PS completion time of a job is given by the maximum of its site-specific PS completion times across all sites. Since new jobs may arrive and new job arrivals can extend the site-specific PS completion times of jobs, it is possible that after some new jobs arrivals, this violated site $S_j$ decides the global PS completion time of job $J_i$, thereby making the slack $s_{ji}$ negative and violating protectiveness. We construct a concrete example below to illustrate the above.%The example below further illustrates this point. %the $IS$ scheme does not guarantee that such a globally completable job exists (so the system may not be able to find a valid schedule), and
 
-Consider a distributed system of two sites, where capacities of both sites are set to $1$ for simplicity. Suppose two jobs $J_1$, $J_2$ are submitted to the system with initial load distribution $W = \begin{bmatrix} 2a & 2a+2e \\ 2a+e & 2a-e \end{bmatrix}$, where $a \gg e > 0$. The site-specific PS completion time can be computed as $\begin{bmatrix} 4a & 4a+2e \\ 4a & 4a-2e \end{bmatrix}$, thus the global PS completion time of the two jobs are $4a, 4a+2e$, respectively, which introduces the global PS order $J_1 \prec J_2$.
+Consider a distributed system of two sites, where the capacities of both sites are assumed to be $1$ for simplicity. Suppose two jobs $J_1$, $J_2$ are submitted to the system with initial load distribution:
+\begin{equation}
+    W = \begin{bmatrix} 2a & 2a+2e \\ 2a+e & 2a-e \end{bmatrix},
+\end{equation}
+where $a \gg e > 0$, $J_1$ has loads $2a$ and $2a+2e$ on sites $S_1$ and $S_2$ respectively, and $J_2$ has loads $2a+e$ and $2a-e$ on sites $S_1$ and $S_2$ respectively. The site-specific PS completion time can be computed as:
+\begin{equation}
+    \begin{bmatrix} 4a & 4a+2e \\ 4a & 4a-2e \end{bmatrix}.
+\end{equation}
+Therefore, the global PS completion time of the two jobs are $4a, 4a+2e$, respectively, which introduces the global PS order $J_1 \prec J_2$.
 
-We compute the slack system based on the $GS$ scheme: $J_1$ is the first job in the global PS order, so its global slack is $[4a - 2a=2a, 4a-(2a+e)=2a-e]$; $J_2$ is the second and its global slack is $[4a+2e-2a - (2a+2e) =0, 4a+2e-(2a+e)-(2a-e)=2e]$, resulting in $S = \begin{bmatrix} 2a & 0 \\ 2a-e & 2e \end{bmatrix}$. In this case, $J_1$ is the first job in the global PS order and is globally servable and completable, while $J_2$ is not completable because $s_{11} = 2a < w_{12} = 2a+2e$. Therefore, any scheduling policy that wants to derive a global job order while keeping the system protective will serve $J_1$ to completion first. Meanwhile, if we treat $S_2$ as an independent single site, another type of slack can be calculated (we define it as "local slack" temporarily to differentiate it from the slack under the $GS$ scheme): the site-specific PS completion times of the two jobs are $[4a(J_1), 4a-2e(J_2)]$ and the local PS load order is $J_2 \prec J_1$; Based on this local PS loads and order, the local slack at site $S_2$ is $[4a-(2a-e)-(2a+e)=0(J_1), 4a-2e-(2a-e)=2a-e(J_2)]$, which indicates that $J_2$ is locally completable at site $S_2$ while $J_1$ is not, and serving $J_1$ will deteriorate $J_2$'s local slack.
+We compute the slack system based on the $GS$ scheme: $J_1$ is the first job in the global PS order, so its $GS$ slacks are $[4a - 2a=2a, 4a-(2a+e)=2a-e]$; $J_2$ is the second job in the global PS order, so its $GS$ slacks are $[4a+2e-2a - (2a+2e) =0, 4a+2e-(2a+e)-(2a-e)=2e]$. Therefore, the slack matrix is
+\begin{equation}
+    S = \begin{bmatrix} 2a & 0 \\ 2a-e & 2e \end{bmatrix}.
+\end{equation}
+In this case, the first job $J_1$ in the global PS order is globally servable and completable, while the second job $J_2$ is not completable because $s_{11} = 2a < w_{12} = 2a+2e$. Therefore, any scheduling policy that wants to derive a global job order while keeping the system protective will serve $J_1$ to completion first. Meanwhile, if we treat $S_2$ as an independent single site, another type of slacks can be calculated based on the discussion in Section \ref{sec:pre_slack} (we define it as "local slack" temporarily to differentiate it from the $GS$ slack): the site-specific PS completion times of $J_1$ and $J_2$ at $S_2$ are $4a$ and $4a-2e$, respectively. Thus, the local PS load order at $S_2$ is $J_2 \prec J_1$ and the local slacks of $J_1$ and $J_2$ at $S_2$ are $4a-(2a-e)-(2a+e)=0$, and $4a-2e-(2a-e)=2a-e$, respectively. This indicates that $J_2$ is locally completable at site $S_2$ while $J_1$ is not, and serving $J_1$ will make $J_2$'s local slack negative.
 
-Suppose the system adopts the order $J_1 \prec J_2$. At $t=2a$, the real load and PS load distribution are $W = \begin{bmatrix} 0 & 2a+2e \\ e & 2a-e \end{bmatrix}$ and $V = \begin{bmatrix} a & a+2e \\ a+e & a-e \end{bmatrix}$, respectively. The $GS$ slack does not change because the system serves the first job in the global PS order, and it is still protective. Meanwhile, in the local slack at site $S_2$, serving $J_1$ continuously decreases the slack of $J_2$ and its local slack becomes negative ($2a-e-2a=-e$) already.
+Suppose the system adopts the global PS order $J_1 \prec J_2$ to execute jobs. At time $t=2a$, the real load distribution and PS load distribution will be
+\begin{equation}
+    W = \begin{bmatrix} 0 & 2a+2e \\ e & 2a-e \end{bmatrix}, \quad V = \begin{bmatrix} a & a+2e \\ a+e & a-e \end{bmatrix},
+\end{equation}
+respectively. The $GS$ slacks of jobs do not change because the system serves the first job in the global PS order, and it is still protective. Meanwhile, serving $J_1$ continuously decreases the local slack of $J_2$ at $S_2$ and it becomes negative ($2a-e-2a=-e$) already.
 
-Suppose at $t=2a$ a new job $J_3$ arrives with the load distribution $[0, a-2e]$. At this time, the real load and PS load distribution becomes $W = \begin{bmatrix} 0 & 2a+2e & 0 \\ e & 2a-e & a-2e \end{bmatrix}$ and $V = \begin{bmatrix} a & a+2e & 0 \\ a+e & a-e & a-2e \end{bmatrix}$, respectively. Therefore, the PS completion time is $\begin{bmatrix} 2a & 2a+2e & 0 \\ 3a-2e & 3a-4e & 3a-6e \end{bmatrix}$. In addition, since $a \gg e$, the global PS completion time of all three jobs are decided at site $S_2$, and the global PS order becomes $J_3 \prec J_2 \prec J_1$, and the $GS$ slack is $S = \begin{bmatrix} a-4e & a-6e & 3a-6e \\ 0 & -e & 2a-4e \end{bmatrix}$, i.e., the protectiveness is violated at the arrival of $J_3$. %Here $J_3$ and $J_2$ have the same global PS completion time, but exchanging them in the global PS order derives the same conclusion.
+Suppose at time $t=2a$, a new job $J_3$ arrives with initial loads $0$ and $a-2e$ on sites $S_1$ and $S_2$ respectively. Then, the real load distribution and PS load distribution become 
+\begin{equation}
+    W = \begin{bmatrix} 0 & 2a+2e & 0 \\ e & 2a-e & a-2e \end{bmatrix}, \quad V = \begin{bmatrix} a & a+2e & 0 \\ a+e & a-e & a-2e \end{bmatrix},
+\end{equation}
+respectively. Therefore, the site-specific PS completion time is 
+\begin{equation}
+    \begin{bmatrix} 2a & 2a+2e & 0 \\ 3a-2e & 3a-4e & 3a-6e \end{bmatrix}. 
+\end{equation}
 
-As demonstrated by the preceding example, globally order-based scheduling policies fail to preserve the protectiveness in distributed environments under the $GS$ scheme. Furthermore, if the site-specific slack of any job $J_i$ at a site $S_j$ becomes negative, one can systematically construct a worst-case scenario involving the simultaneous arrival of a job set $\{J_{(1)}, J_{(2)}, \dots, J_{(z)}\}$, each containing a load $x \le v_{ji}$ at $S_j$ and zero load at all other sites. Under such conditions, the PS completion time of $J_i$ at $S_j$ can be arbitrarily delayed while its site-specific slack keeps negative (i.e., event type $2$ in Section \ref{sec:Pre_TwoEvents}). For a sufficiently large $z$, this prolonged site-specific completion time will become the global PS completion time of $J_i$, thereby rendering its $GS$ slack at $S_j$ negative. This fundamental limitation highlights two prospective paradigms for the design of protective policies: (i) adopting order-independent strategies—such as proportional capacity allocation among a designated job subset or time-slicing execution—which inevitably introduces implementation overhead and may compromise aggregate processing efficiency; or (ii) formulating an alternative slack scheme that facilitates the robust design of protective scheduling mechanisms. %\textcolor{blue}{This fundamental limitation indicates a stronger constraint requirement on the slack system in order to preserve protectiveness, which we will introduce next.}
+Since $a \gg e$, the global PS completion times of all three jobs are decided by site $S_2$, and the global PS order becomes $J_3 \prec J_2 \prec J_1$, and the $GS$ slacks of jobs are 
+\begin{equation}
+    S = \begin{bmatrix} a-4e & a-6e & 3a-6e \\ 0 & -e & 2a-4e \end{bmatrix},
+\end{equation}
+where $s_{22}$ is negative. This implies that $J_2$ will never be able to complete its load at site $S_2$ before its global PS completion time. Therefore, the protectiveness is violated at the arrival of $J_3$. %Here $J_3$ and $J_2$ have the same global PS completion time, but exchanging them in the global PS order derives the same conclusion.
 
-\subsection{Slack System in the Multiple-Site Case: An Independent View}
-Another natural approach of extending the slack system to the distributed environment is to compute the slack at each site independently, which we refer to as the Independent Slack ($IS$) scheme. Under the $IS$ scheme, there is no global PS order, and each site performs slack calculations independently. Retaining the notation $P_j(i)$ for the set of jobs preceding (and including) $J_i$ based on their site-specific PS loads at $S_j$, the slack of $J_i$ at site $S_j$ under the $IS$ scheme is given by:
+As demonstrated by the above example, global order-based scheduling policies fail to preserve the protectiveness in distributed environments under the $GS$ scheme. Furthermore, if the local slack of any job $J_i$ at a site $S_j$ becomes negative, one can systematically construct a worst-case scenario involving the simultaneous arrival of a job set $\{J_{(1)}, J_{(2)}, \dots, J_{(z)}\}$, each containing a load $x \le v_{ji}$ at $S_j$ ($v_ji$ is the PS load of $J_i$ at $S_j$) and zero load at all other sites. Under such conditions, the site-specific PS completion time of $J_i$ at $S_j$ can be arbitrarily delayed while its local slack keeps negative (i.e., the second type of events $2$ in Section \ref{sec:Pre_TwoEvents}). For a sufficiently large $z$, this prolonged site-specific PS completion time will become the global PS completion time of $J_i$, thereby rendering its $GS$ slack at $S_j$ negative. This fundamental limitation highlights strciter constraints on the slack system to maintain protectiveness, which we will introduce next.
+%two prospective paradigms for the design of protective policies: (i) adopting order-independent strategies—such as proportional capacity allocation among a designated job subset or time-slicing execution—which inevitably introduces implementation overhead and may compromise aggregate processing efficiency; or (ii) formulating an alternative slack scheme that facilitates the robust design of protective scheduling mechanisms. %\textcolor{blue}{This fundamental limitation indicates a stronger constraint requirement on the slack system in order to preserve protectiveness, which we will introduce next.}
+
+\subsection{Slack System in the Distributed Job Execution Case: An Independent View}
+Another natural approach to extend the slack system to distributed environments is to compute the slack at each site independently, which we refer to as the Independent Slack ($IS$) scheme. Under the $IS$ scheme, we do not derive the global PS order, and each site performs slack calculations independently. Using the notation $P_j(i)$ defined in equation \ref{eq:P_j(i)} for the set of jobs preceding (and including) $J_i$ based on their PS loads at $S_j$, the slack of job $J_i$ at site $S_j$ under the $IS$ scheme is defined as:
 \begin{equation}
     \label{eq:slack_IS}
     s_{ji} = \frac{1}{u_j}\left(\sum_{J_l \in P_j(i)}v_{jl} + (n - |P_j(i)|)v_{ji} - \sum_{J_l \in P_j(i)}w_{jl}\right).
 \end{equation}
-
-Similar to the $GS$ scheme, a protective algorithm in the $IS$ scheme requires that every $s_{ji}$ to be non-negative during system execution, i.e., the actual completion time of each site-specific job at its site does not exceed its site-specific PS completion time. Compared with the $GS$ scheme, $IS$ scheme appears to be a stricter constraint since the completion deadline is set at each site rather than a single global one. Consequently, the global completion time of each job is also bounded by its global PS completion time, and protectiveness is guaranteed. The main drawback of the $IS$ scheme is that scheduling policies following it may prioritize different jobs at different sites (i.e., a global scheduling order may not exist), leading to poor efficiency in terms of overall job response time. 
+We refer to this slack as the $IS$ slack. Similar to the $GS$ scheme, a protective scheduling algorithm in the $IS$ scheme requires that every $s_{ji}$ to be non-negative during the system execution, i.e., the actual completion time of each job at every site does not exceed its site-specific PS completion time. Compared with the $GS$ scheme, the $IS$ scheme appears to be a stricter constraint since the completion deadline is set for each site rather than for the system as a whole. Consequently, the global completion time of each job is also bounded by its global PS completion time, and protectiveness is guaranteed. The potential drawback of the $IS$ scheme is that scheduling policies following it may prioritize different jobs for processing at different sites (i.e., a global order of job execution may not exist), leading to poor efficiency in terms of average job response time. 
 
 
 \section{PFSP\_x: A Trade-off Algorithm Framework}
 \label{sec:PFSP_x}
-Through the above analysis, we have shown the dilemma in distributed protective scheduling: adopting the $GS$ scheme can achieve higher efficiency by deriving global job scheduling orders, but it may violate the protectiveness. Meanwhile, using the $IS$ scheme can guarantee the protectiveness, but may lead to poor efficiency because it may prioritize different jobs at different sites. The key to solving this dilemma is to keep the $IS$ slack of each job at each site non-negative while adjusting the schedule to approximate the global job order that is ideal for efficiency.% Based on this insight, we propose a novel heuristic algorithm framework PFSP\_x which combines the independent slack system with any globally order-based scheduling policy to enhance efficiency while maintaining protectiveness.
+Through the above analysis, we have shown a dilemma in distributed protective scheduling: adopting the $GS$ scheme can achieve higher efficiency by deriving global job processing orders, but it may violate the protectiveness. On the other hand, using the $IS$ scheme can guarantee the protectiveness, but may lead to poor efficiency because it may prioritize different jobs for processing at different sites. The key to solving this dilemma is to use the $IS$ scheme and keep the $IS$ slack of each job at each site non-negative while adjusting the schedule to approximate the global job processing order that is optimized for efficiency.% Based on this insight, we propose a novel heuristic algorithm framework PFSP\_x which combines the independent slack system with any globally order-based scheduling policy to enhance efficiency while maintaining protectiveness.
 
 \subsection{PFSP\_x}
-We propose a novel heuristic algorithm framework PFSP\_x which combines the independent slack system with any globally order-based scheduling policy to enhance efficiency while maintaining protectiveness. Specifically, PFSP\_x takes as input a job processing order derived by any efficiency-targeted scheduling policy like SRPT or Workload-Aware Greedy Selection (SWAG) \cite{hung2015scheduling}, which is treated as the hint order for job processing and tries to approximate to it in the schedule. Specifically, PFSP\_x computes the $IS$ slack at each site $S_j$ independently, in which it iteratively calculates the set of locally completable jobs and schedules the job with the highest priority in the hint order, updates the $IS$ slack until all jobs at site $S_j$ are scheduled and move to the next site. Algorithm \ref{alg:PFSP_x} illustrates the details of the procedure at one site. The algorithm repeats at each site based on the site-specific information, i.e., capacity, real loads and PS loads.
+We propose a novel heuristic algorithm framework PFSP\_x which combines the Independent Slack scheme with any global order-based scheduling policy to enhance efficiency while maintaining protectiveness. Specifically, PFSP\_x takes as input a global job processing order derived by any efficiency-targeted scheduling policy like SRPT or Workload-Aware Greedy Selection (SWAG) \cite{hung2015scheduling}, which is treated as the hint order for job processing and tries to approximate to it in the schedule. PFSP\_x computes the $IS$ slack of each job at each site $S_j$ independently, from which it calculates the set of locally completable jobs and schedules the job with the highest priority in the hint order for processing, updates the $IS$ slacks until all jobs at site $S_j$ are scheduled. Algorithm \ref{alg:PFSP_x} illustrates the details of the procedure at one site. The algorithm runs at each site based on the site-specific information, i.e., capacity, real loads and PS loads.
 
 % \begin{algorithm}[t]
 %   \caption{PFSP\_x Algorithm}
@@ -252,38 +282,77 @@ We propose a novel heuristic algorithm framework PFSP\_x which combines the inde
 % \end{algorithm}
 
 
+% \begin{algorithm}[t]
+%   \caption{PFSP\_x Algorithm at Individual Sites}\label{alg:PFSP_x}
+  
+%   \KwIn{A set of jobs $\mathcal{J} = \{J_1, J_2, \ldots, J_n\}$ with real loads $w_1, w_2, \dots, w_n$ and PS loads $v_1, v_2, \dots, v_n$, hint order $\mathbf{h}$.}
+%   \KwOut{Job execution order.}
+%   \BlankLine
+  
+%   Let jobs be sorted in ascending order of PS load, i.e., $v_1 \le v_2 \le \dots \le v_n$\;
+%   $\sigma=0$\;
+%   \BlankLine
+  
+%   \For{$i = 1$ to $n$}{
+%       $\sigma \leftarrow \sigma + v_i - w_i$\;
+%       $s_i \leftarrow \sigma + (n-i)v_i$\;
+%       $r_i \leftarrow \begin{cases} \infty, & \text{if } i = 1; \\ \min(r_{i-1}, s_{i-1}), & \text{otherwise}. \end{cases}$
+%   }
+%   \BlankLine
+
+%   \While{$\mathcal{J} \neq \emptyset$}{
+%       $\mathcal{C} \leftarrow \{J_i \in \mathcal{J} \mid r_i \ge w_{i} \}$\;
+%       $J_y \leftarrow \argmin_{J_i \in \mathcal{C}} \text{pos}(J_i, \mathbf{h})$\;
+%       Append $J_y$ to the job execution order\;
+%       $\mathcal{J} \leftarrow \mathcal{J} \setminus \{J_y\}$\;
+%       \BlankLine
+
+%       \For{$i = 1$ to $y-1$}{
+%           $s_i \leftarrow s_i - w_{y}$\;
+%       }
+%       $s_{y} \leftarrow \infty$\;
+%       \BlankLine
+
+%       \For{$i = 1$ to $n$}{
+%           $r_i \leftarrow \min(r_{i-1}, s_{i-1})$\;
+%       }
+%   }
+%   \BlankLine
+%   \Return Job execution order\;
+% \end{algorithm}
+
 \begin{algorithm}[t]
   \caption{PFSP\_x Algorithm at Individual Sites}\label{alg:PFSP_x}
   
-  \KwIn{A site with capacity $u$, a set of jobs $\mathcal{J} = \{J_1, J_2, \ldots, J_n\}$ with real load $w_1, w_2, \dots, w_n$ and PS load $v_1, v_2, \dots, v_n$, hint order $\mathbf{h}$.}
+  \KwIn{A set of jobs $\mathcal{J} = \{J_1, J_2, \ldots, J_n\}$ with real loads $w_1, w_2, \dots, w_n$ and PS loads $v_1, v_2, \dots, v_n$, hint order $\mathbf{h}$.}
   \KwOut{Job execution order.}
   \BlankLine
   
   Let jobs be sorted in ascending order of PS load, i.e., $v_1 \le v_2 \le \dots \le v_n$\;
-  $\sigma=0$\;
+  $\sigma \leftarrow 0$\;
   \BlankLine
   
-  \For{$i = 1$ to $n$}{
+  \For{$i = 1$ \KwTo $n$}{
       $\sigma \leftarrow \sigma + v_i - w_i$\;
       $s_i \leftarrow \sigma + (n-i)v_i$\;
-      $r_i \leftarrow \begin{cases} \infty, & \text{if } i = 1; \\ \min(r_{i-1}, s_{i-1}), & \text{otherwise}. \end{cases}$\;
+      $r_i \leftarrow \begin{cases} \infty, & \text{if } i = 1; \\ \min(r_{i-1}, s_{i-1}), & \text{otherwise}; \end{cases}$
   }
   \BlankLine
 
   \While{$\mathcal{J} \neq \emptyset$}{
-      $\mathcal{C} \leftarrow \{J_k \in \mathcal{J} \mid r_k \ge w_{k} \}$\;
-      $J_y \leftarrow \argmin_{J_k \in \mathcal{C}} \text{pos}(J_k, \mathbf{h})$\;
+      $\mathcal{C} \leftarrow \{J_i \in \mathcal{J} \mid r_i \ge w_{i} \}$\;
+      $J_y \leftarrow \operatorname*{argmin}_{J_i \in \mathcal{C}} \text{pos}(J_i, \mathbf{h})$\;
       Append $J_y$ to the job execution order\;
       $\mathcal{J} \leftarrow \mathcal{J} \setminus \{J_y\}$\;
       \BlankLine
 
-      \For{$i = 1$ to $y-1$}{
+      \For{$i = 1$ \KwTo $y-1$}{
           $s_i \leftarrow s_i - w_{y}$\;
       }
       $s_{y} \leftarrow \infty$\;
       \BlankLine
 
-      \For{$i = 1$ to $n$}{
+      \For{$i = 1$ \KwTo $n$}{
           $r_i \leftarrow \min(r_{i-1}, s_{i-1})$\;
       }
   }
@@ -291,7 +360,7 @@ We propose a novel heuristic algorithm framework PFSP\_x which combines the inde
   \Return Job execution order\;
 \end{algorithm}
 
-At a single site, PFSP\_x computes each job's slack under the $IS$ scheme $s_i$ and the minimum slack of preceding jobs of each job $r_i$ (lines 3-6), respectively. Because computing the slack requires the cumulative sum of preceding jobs' PS load and real load, a running variable $\sigma$ is used to record the sum and optimize computing complexity. Note that a job $J_i$ is completable if and only if its real load $w_i$ is smaller or equal to the slack of all its preceding jobs, which is identical to $r_i \ge w_i$. Next, the algorithm iteratively calculates the set of completable jobs $\mathcal{C}$ (line 8) by judging whether $r_k \ge w_k$ for each unscheduled job. Then, it schedules the job with the highest priority in the hint order (line 9). Here, we define $\text{pos}(J_i, \mathbf{h})$ as the position (index) of job $J_i$ within $\mathbf{h}$, where $\mathbf{h}$ is the permutation (hint order) of jobs in $\mathcal{J}$ given as input. A lower index indicates a higher priority. Then, the algorithm appends the selected job $J_y$ to the schedule of site $S_j$ (line 10) and removes $J_y$ from consideration (line 11). After scheduling $J_y$, the algorithm updates all $s_i$'s and $r_i$'s, respectively (line 12-16). For each job before $J_y$ in the PS load order, its slack decreases by $w_y$; for $J_y$, $s_y$ becomes infinity as specified; for each job after $J_y$, its slack remains unchanged and requires no operation. After updating all the slacks, the algorithm updates $r_i$'s as well. The iteration repeats until all jobs are scheduled at site $S_j$, then it moves to the next site and continues the same process until all sites are processed. Finally, the algorithm returns $m$ job execution orders corresponding to each site. In this way, PFSP\_x achieves both the protectiveness guarantee by following the $IS$ scheme and the efficiency improvement by approximating the hint order derived from any efficiency-targeted scheduling policy.
+At every single site, PFSP\_x sorts jobs in ascending order of their PS loads, computes each job's $IS$ slack $s_i$ and the minimum slack $r_i$ of jobs preceding each job (lines 3-6). Because computing the $IS$ slack requires the cumulative PS load and real load of preceding jobs, a running variable $\sigma$ is used to record the sum and optimize computing complexity. Note that a job $J_i$ is completable if and only if its real load $w_i$ is smaller or equal to the $IS$ slacks of all its preceding jobs, which is equivalent to $r_i \ge w_i$. Next, the algorithm calculates the set of completable jobs $\mathcal{C}$ (line 8) by judging whether $r_i \ge w_i$ for each unscheduled job $J_i$. Then, it schedules the job with the highest priority in the hint order (line 9). Here, we define $\text{pos}(J_i, \mathbf{h})$ as the position (index) of job $J_i$ within $\mathbf{h}$, where $\mathbf{h}$ is the hint order (permutation) of jobs given as input. A lower position index indicates a higher priority. Then, the algorithm appends the selected job $J_y$ to the job processing order of the local site (line 10) and removes $J_y$ from consideration (line 11). After scheduling $J_y$, the algorithm updates all $s_i$'s and $r_i$'s (lines 12-16). For each job before $J_y$ in the PS load order, its $IS$ slack decreases by $w_y$; the $IS$ slakc $s_y$ of job $J_y$ becomes infinity; for each job after $J_y$ in the PS load order, its slack remains unchanged. After updating all the $IS$ slacks, the algorithm updates $r_i$'s. The scheduling repeats iteratively until all jobs are scheduled. Finally, the algorithm returns the job execution order of the local site. In this way, PFSP\_x achieves both the protectiveness guarantee by following the $IS$ scheme and the efficiency improvement by approximating the hint order derived from any efficiency-targeted scheduling policy.
 
 %, where each row $X_{j,*}$ represents the job scheduling order of site $S_j$, and each element $x_{ji}$ denotes the  job index of the $i$-th job in the schedule of $S_j$
 % Note that based on the definition of slack in the single site case, we have $s_i - s_{i-1} = \sum_{l=1}^{i} v_{l} + (n-i)v_i- \sum_{l=1}^i w_l - (\sum_{l=1}^{i-1} v_{l} + (n-i+1)v_{i-1}- \sum_{l=1}^{i-1} w_l) = (v_i-v_{i-1})(n-i+1) - w_i$. Therefore, $s_i = s_{i-1} + (v_i-v_{i-1})(n-i+1) - w_i$. In addition, a job is completable if its real load is smaller or equal to slacks of its preceding jobs in the PS load order, so it should also be smaller or equal to the minimum $r_i$ among these slacks. 
@@ -299,20 +368,20 @@ At a single site, PFSP\_x computes each job's slack under the $IS$ scheme $s_i$ 
 %, which reduces the computation on the slack of a job to $O(1)$
 
 \subsection{Complexity Analysis}
-The outer loop of the algorithm iterates over $m$ sites. In each iteration, sorting $n$ jobs in ascending order of site-specific PS loads takes $O(n\log n)$ time. To efficiently compute the slack of each job, we maintain and reuse a running cumulative sum, denoted as $\sigma$, which aggregates the PS loads and real loads of the job itself and all its predecessors. Consequently, evaluating all slacks $s_i$ and the minimum preceding slacks $r_i$ can be achieved in $O(n)$ time. This reduces the total time complexity for the initial slack calculation of all $n$ jobs to $O(n \log n)$. Next, the algorithm iterates $n$ times, in which it computes the set of locally completable jobs $\mathcal{C}$ and searches for the completable job with the highest priority in the hint order $\mathbf{h}$. The former operation requires checking whether $r_k \ge w_k$ for each unscheduled job $J_k$, which takes $O(n)$ time. Selecting the job with the highest priority in $\mathbf{h}$ also takes $O(n)$ time. Updating the slack $s_i$ and minimum preceding slack $r_i$ of all jobs both take $O(n)$ time. Therefore, the overall time complexity of PFSP\_x is $O(m(n \log n + n^2)) = O(mn^2)$. Because operations across different sites are entirely independent, they can be parallelized in real-world deployments, effectively reducing the wall-clock computational complexity back to $O(n^2)$.
+In Algorithm \ref{alg:PFSP_x}, sorting $n$ jobs in ascending order of their PS loads takes $O(n\log n)$ time. To efficiently compute the slack of each job, we maintain and reuse a running cumulative sum $\sigma$, which aggregates the differences between the PS loads and real loads of jobs iteratively. Consequently, evaluating all slacks $s_i$ and the minimum preceding slacks $r_i$ can be achieved in $O(n)$ time. Thus, the total time complexity for the initial slack calculation of all $n$ jobs is $O(n \log n)$. Next, the algorithm iterates $n$ times, in which it computes the set of completable jobs $\mathcal{C}$ and searches for the completable job with the highest priority in the hint order $\mathbf{h}$. The former operation requires checking whether $r_i \ge w_i$ for each unscheduled job $J_i$, which takes $O(n)$ time. Selecting the job with the highest priority in $\mathbf{h}$ also takes $O(n)$ time. After scheduling the selected job, updating the slack $s_i$'s and minimum preceding slack $r_i$'s of all jobs takes $O(n)$ time. Therefore, the overall time complexity of Algorithm \ref{alg:PFSP_x} is $O((n \log n + n^2)) = O(n^2)$. The algorithm runs at each site. Since the runs at different sites are entirely independent, they can be parallelized in real-world deployments.%, effectively reducing the wall-clock computational complexity back to $O(n^2)$.
 %Furthermore, since the computation at each site can be executed fully in parallel, the local time complexity at each individual site is reduced to $O(n^2)$.
 %The former operation involves checking each job against its predecessors. \textcolor{blue}{By maintaining the minimum slack of preceding jobs, this takes $O(1)$ time for one job;} 
 
 \subsection{Deployment}
 \label{sec:deploy}
-The PFSP\_x algorithm is highly amenable to deployment in real-world distributed computing environments, either via a centralized scheduler or through distributed execution. Initially, the system requires collecting the real load (and PS load if necessary) distribution information of each job across sites, in which it runs the efficiency-targeted scheduling policy to derive the hint job order $\mathbf{h}$. If the system deploys PFSP\_x at the central scheduler, the scheduler will compute the $IS$ slack and the scheduling order of all sites, then it propagates each derived order $X_{j,*}$ to its corresponding site $S_j$ for execution. Alternatively, in a distributed setup, the central scheduler only broadcasts the lightweight hint order $\mathbf{h}$ to all sites. Each site independently manages its local $IS$ slack calculations and scheduling logic, drastically reducing network communication overhead and allowing for efficient scheduling in large distributed systems. Re-computation is triggered strictly upon the arrival of new jobs, while completed jobs are systematically pruned from the active tracking pools.
+The PFSP\_x algorithm is highly amenable to deployment in real-world distributed computing environments, either via a centralized scheduler or through distributed execution. Initially, the system requires collecting the real load and PS load distributions of each job across sites, and running an efficiency-targeted scheduling policy to derive the hint job order $\mathbf{h}$. If the system deploys PFSP\_x at the central scheduler, the scheduler will compute the job processing orders of all sites by running Algorithm \ref{alg:PFSP_x} for each site separately and then propagate the job processing orders to respective sites .Alternatively, in a distributed setup, the central scheduler only broadcasts the hint order $\mathbf{h}$ to all sites. Each site independently performs its local $IS$ slack calculations and the scheduling logic, reducing network communication overhead and allowing for efficient scheduling in large distributed systems. Re-computation only needs to be triggered upon new job arrivals, while completed jobs are excluded from computation.
 
 
 \section{Experiments}
 \label{sec:experiment}
 
 %Simulation experiments using read-world job traces are conducted to evaluate the performance of applying our scheduling algorithms to online scenarios as discussed in Section \ref{sec:deploy}.
-This section evaluates the online performance of our proposed protective scheduling algorithms through comprehensive simulations using real-world job traces, aligning with the deployment framework outlined in Section \ref{sec:deploy}.
+This section evaluates the performance of our proposed protective scheduling algorithms in online scenarios through comprehensive simulations using real-world job traces, aligning with the deployment framework outlined in Section \ref{sec:deploy}.
 
 \subsection{Datasets}
 \begin{figure}[b]
@@ -328,14 +397,14 @@ This section evaluates the online performance of our proposed protective schedul
 {\includegraphics[width=0.48\linewidth]{Image3/JobDistribution_Ali2018_4_start=15000_2D.pdf}%
 %\label{Fg:eg2}
 }
-\caption{Job characteristic distribution of two datasets}
+\caption{Job characteristic distribution of segments sampled from two datasets}
 \label{fig:distribution}
 \end{figure}
-To validate our approach under realistic production conditions, we utilize industrial cluster data from the Alibaba Cluster Trace Program \cite{Ali2017}. We extract essential scheduling telemetry from the raw log files of the 2017 and 2018 releases, capturing the arrival timestamp, task count, and processing duration of each job. From these pre-processed traces, a contiguous sequence of 10,000 jobs is randomly sampled from each year to serve as the benchmark driving our simulations. As visualized in Fig. \ref{fig:distribution}, both selected workloads feature a distinct heavy-tailed profile, where a tiny fraction of massive workloads dominates the vast majority of the aggregate computational demand. Finally, the macro-level characteristics of the evaluated datasets—including mean task counts and average task processing times—are summarized in Table \ref{tab:average_characteristic}.
+To validate our approach under realistic production conditions, we utilize industrial cluster data from the Alibaba Cluster Trace Program \cite{Ali2017}. We extract essential scheduling telemetry from the raw log files of the 2017 and 2018 releases, capturing the arrival timestamp, task count, and processing duration of each job. From these pre-processed traces, a contiguous segment of 10,000 jobs is randomly sampled from each year to serve as the benchmark driving our simulations. As visualized in Fig. \ref{fig:distribution}, both segments sampled feature a heavy-tailed profile, where a tiny fraction of jobs dominates the vast majority of the total computational demand. Finally, the macro-level characteristics of the segments sampled for experimentation—including mean task counts and average task processing times—are summarized in Table \ref{tab:average_characteristic}.
 
 \begin{table}[t]
     \centering
-    \caption{Job characteristics of two datasets}
+    \caption{Job characteristics of segments sampled from two datasets}
     \label{tab:average_characteristic}
     \begin{tabular}{ccc}
         \toprule
@@ -350,7 +419,7 @@ To validate our approach under realistic production conditions, we utilize indus
 
 
 \subsection{System Configuration}
-We model a distributed environment comprising $m$ identical sites, where each site is provisioned with an equal capacity. To evaluate our algorithms under varying degrees of data locality and skewness, we initialize the initial load distribution of each job by deploying its tasks among the sites based on the Zipf distribution and summing up their task processing times. Specifically, the task allocation across sites follows the proportional weights $1, 2^{-\alpha}, 3^{-\alpha}, \dots, m^{-\alpha}$, where the skewness parameter $\alpha$ controls the load imbalance. A higher $\alpha$ value dictates that tasks are more heavily concentrated on a handful of premium sites, while $\alpha = 0$ refers to a uniform distribution. We evaluate four distinct skew profiles by varying $\alpha \in \{0, 0.5, 1, 2\}$. To prevent global load hotspots and maintain long-term workload balance across the cluster, the site-specific load mapping order is randomly shuffled for each job. Additionally, the baseline arrival timestamps from the trace are linearly scaled to emulate diverse system utilizations. While we examined various combinations of site scales, slot capacities, and load levels—all yielding consistent performance behaviors—we restrict our focus to a representative setup of $m = 10$ sites, $32$ slots per site, and $50\%$, $60\%$, $70\%$, and $80\%$ system utilizations.
+We model a distributed environment comprising $m$ identical sites, where each site is provisioned with an equal capacity. To evaluate our algorithms under varying degrees of skewness in workload distribution, we initialize the initial load distribution of each job by deploying its tasks among the sites based on the Zipf distribution and summing up their task processing times at each site. Specifically, the task allocation across sites follows the proportional weights $1, 2^{-\alpha}, 3^{-\alpha}, \dots, m^{-\alpha}$, where the skewness parameter $\alpha$ controls the load imbalance. A higher $\alpha$ value dictates that tasks are more heavily concentrated on a handful of premium sites, while $\alpha = 0$ refers to a uniform distribution. We evaluate four distinct skew profiles by varying $\alpha \in \{0, 0.5, 1, 2\}$. To prevent global load hotspots and maintain long-term workload balance across the cluster, the site-specific load mapping order is randomly shuffled for each job. Additionally, the baseline arrival timestamps from the trace are linearly scaled to emulate diverse system utilizations. While we examined various combinations of site scales, slot capacities, and load levels—all yielding consistent performance behaviors—we restrict our focus to a representative setup of $m = 10$ sites, $32$ slots per site, and $50\%$, $60\%$, $70\%$, and $80\%$ system utilizations.
 %We simulate a distributed system of $m$ sites, each with the same number of $32$ computing slots. Each task is assumed to take up one computing slot to run and release it after completion. Due to the switching overhead consideration, we assume that the system does not allow preemption during task execution. For each job, the initial load distribution is generated by randomly deploying its tasks among the sites based on the Zipf distribution and summing up their task processing times: the numbers of tasks placed at the $m$ sites are proportional to $1, \frac{1}{2^\alpha}, \frac{1}{3^\alpha}, ..., \frac{1}{m^\alpha}$, where $\alpha$ is a Zipf parameter. A higher $\alpha$ implies a more skewed distribution (a higher proportion of tasks are concentrated at fewer sites), whereas $\alpha$ = $0$ indicates a uniform distribution. In the experiments, we test four Zipf distributions with $\alpha$ set to $0$, $0.5$, $1$ and $2$ to simulate different task distributions of jobs. After the load distribution is generated, we shuffle the order of the sites when deploying each job's load distribution, so that the total workload at each site will be roughly balanced. We scale the arrival times of the jobs in the datasets to simulate different levels of overall system utilization. We experiment with different numbers of sites, different numbers of computing slots per site, and different levels of system utilization, and the results show similar performance trends. Due to space limitations, we focus on presenting the results for $m=10$ sites, 32 computing slots per site, and system utilization = $50\%$, $60\%$, $70\%$ and $80\%$.
 
 
