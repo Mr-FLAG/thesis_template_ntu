@@ -1,7 +1,6 @@
 \chapter{Task Scheduling and Transmission for Distributed Job Execution\protect\footnote{This chapter is based on our paper published in IEEE ICDCS 2026.}}
-
 \label{ch:WAST}
-
+In this chapter, we study the task scheduling and transmission for improving job processing efficiency in distributed job execution. The problem includes two primary hurdles: how to compute the global job execution order so that the jobs in the system are executed efficiently, and how to assign task transmissions across the system based on the bandwidth constraints to further improve performance. We focus on the online setting where jobs arrive dynamically for execution. Our goal is to minimize the average job response time, which is the average time span from every job's arrival to its completion. %We focus on the offline setting where all jobs arrive at the same time for execution. We first present a system model and then define the problem of Workload-Aware Selection with Transmission (WAST). We prove that WAST is NP-hard and propose an algorithm to achieve WAST and analyze its time complexity. Finally, we discuss how to apply WAST to online scenarios where jobs arrive dynamically.
 
 \section{A Motivating Example}
 \label{sec:example}
