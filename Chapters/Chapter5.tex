@@ -469,6 +469,127 @@ All scheduling policies introduced above rely on accurate estimations of job loa
 
 To counteract performance degradation under job load under-estimations, we propose a mitigation mechanism, called Processor Sharing Fallback (PSF). PSF allocates a fair capacity share to these under-estimated jobs: Once a job has its (estimated) real load drop to 0 at a site but has not completed execution at this site, it transitions into a fallback PS state. In this state, the job is assigned a fixed equal share ($1/N_{\text{active}}$) of the site capacity, where $N_{\text{active}}$ represents the concurrent count of active jobs with remaining real load at the site. The leftover capacity of the site is then used to schedule non-fallback jobs following the original scheduling policy.
 
+\begin{figure*}[t]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=0.0_dev=0.1.pdf}
+        \caption{$\alpha = 0.0$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=0.5_dev=0.1.pdf}
+        \caption{$\alpha = 0.5$}
+    \end{subfigure}
+    \vspace{0.8em}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=1.0_dev=0.1.pdf}
+        \caption{$\alpha = 1.0$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=2.0_dev=0.1.pdf}
+        \caption{$\alpha = 2.0$}
+    \end{subfigure}
+
+    \caption{Average job response time, 10\% deviation, 70\% utilization, Alibaba 2018}
+    \label{fig:JRT_Ali2018_err=0.1}
+\end{figure*}
+
+\begin{figure*}[t]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=0.0_dev=0.2.pdf}
+        \caption{$\alpha = 0.0$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=0.5_dev=0.2.pdf}
+        \caption{$\alpha = 0.5$}
+    \end{subfigure}
+    \vspace{0.8em}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=1.0_dev=0.2.pdf}
+        \caption{$\alpha = 1.0$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=2.0_dev=0.2.pdf}
+        \caption{$\alpha = 2.0$}
+    \end{subfigure}
+
+    \caption{Average job response time, 20\% deviation, 70\% utilization, Alibaba 2018}
+    \label{fig:JRT_Ali2018_err=0.2}
+\end{figure*}
+
+\begin{figure*}[t]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=0.0_dev=0.3.pdf}
+        \caption{$\alpha = 0.0$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=0.5_dev=0.3.pdf}
+        \caption{$\alpha = 0.5$}
+    \end{subfigure}
+    \vspace{0.8em}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=1.0_dev=0.3.pdf}
+        \caption{$\alpha = 1.0$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=2.0_dev=0.3.pdf}
+        \caption{$\alpha = 2.0$}
+    \end{subfigure}
+
+    \caption{Average job response time, 30\% deviation, 70\% utilization, Alibaba 2018}
+    \label{fig:JRT_Ali2018_err=0.3}
+\end{figure*}
+
+\begin{figure*}[t]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=0.0_dev=0.4.pdf}
+        \caption{$\alpha = 0.0$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=0.5_dev=0.4.pdf}
+        \caption{$\alpha = 0.5$}
+    \end{subfigure}
+    \vspace{0.8em}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=1.0_dev=0.4.pdf}
+        \caption{$\alpha = 1.0$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Image3/PSF_Bar_Ali2018_4_70_alpha=2.0_dev=0.4.pdf}
+        \caption{$\alpha = 2.0$}
+    \end{subfigure}
+
+    \caption{Average job response time, 40\% deviation, 70\% utilization, Alibaba 2018}
+    \label{fig:JRT_Ali2018_err=0.4}
+\end{figure*}
+
+
 Tables \ref{tab:PSF_ali17_1} through \ref{tab:PSF_ali18_4} illustrate the impact of the PSF mechanism on PS deadline violations under different deviations of job load estimations (maximum deviation = $10\%$, $20\%$, $30\%$ and $40\%$) for both datasets. Since the performance trends for different system utilizations are similar, we present the representative results for $70\%$ system utilization only. As can be seen, integrating the PSF mechanism significantly reduces violations for all policies, where our proposed protective scheduling policies outperform efficiency-targeted baselines in most cases, especially when the job load distributions are highly skewed. It can also be observed that policies based on the GS scheme (FSP\_g, PFSP\_g) yield the lowest violation counts. This is because these policies set the global PS completion time of a job as its deadline at all sites for scheduling purposes. The global PS completion time is given by the maximum of the site-specific PS completion times across all sites. Thus, it is less affected by under-estimation of job loads at individual sites than the site-specific PS completion times. %The results indicate that policies under the $GS$ scheme (FSP\_g, PFSP\_g) inherently yield the lowest violation counts.
 
 \begin{table}[t]
