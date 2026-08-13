@@ -36,14 +36,12 @@ and the overall demand of each job $J_i$ should be kept unchanged after the tran
     \forall i\in[n], \quad \sum_{j=1}^m \Delta d_{ij}=0.
 \label{eq:trx2}
 \end{equation}
-We assume that the primary bandwidth bottleneck of the system lies in the link through which each site connects to the backbone network. Thus, to model the available network capacity, we use a count limit $c_j$ for each site $S_j$ to describe an upper bound on the total demand that can be transferred into and out of site $S_j$ within a predefined short period of time $T$: (note that the data partition required by tasks of different jobs can be different, we add a weight $w_i$ to each job denoting the relative data partition ratio between tasks of different jobs):
+We assume that the primary bandwidth bottleneck of the system lies in the link through which each site connects to the backbone network. Thus, to model the available network capacity, we use a count limit $c_j$ for each site $S_j$ to describe an upper bound on the total demand that can be transferred into and out of site $S_j$ within a predefined short period of time $T$. Note that in data processing frameworks, tasks of the same job typically process a data partition/chunk of the same size \cite{copart}, while the data partition required by different jobs can be different. Therefore, we add a weight $w_i$ to each job $J_i$ denoting the relative data partition ratio between tasks of different jobs:
 \begin{equation}
     \forall j\in[m], \quad \sum_{i=1}^n |w_i \Delta d_{ij}| \leq c_j. %
 \label{eq:trx3}
 \end{equation}
-More specifically, suppose the average data partition size is $0.5$ GB, the system time threshold $T=10$ and the link bandwidth is $0.2$ GB/s, then the count limit $c_j$ at a site $S_j$ is $0.2*10/0.5 = 4$. Furthermore, suppose three jobs $J_1$, $J_2$ and $J_3$ has data partition size $0.25$ GB, $0.5$ GB and $1$ GB, respectively; Then, the data partition weight for each job is $w_1 = 0.25/0.5 = 0.5$, $w_2 = 0.5/0.5=1$, $w_3 = 1/0.5=2$, and the constraint is $0.5 d_{1j} + d_{2j} + 2 d_{3j} < 4$.
-
-In big data processing frameworks, each task typically processes a data partition/split of the same size \cite{copart}. The transmission count limit $c_j$ can be computed based on the data partition size, the amount of bandwidth currently available, and $T$. 
+For example, suppose the average data partition size is $0.5$ GB, the system time threshold $T=10$ seconds and the link bandwidth is $0.2$ GB/s, then the count limit $c_j$ at site $S_j$ is $0.2*10/0.5 = 4$. Furthermore, suppose three jobs $J_1$, $J_2$ and $J_3$ has data partition size $0.25$ GB, $0.5$ GB and $1$ GB, respectively; Then, the data partition weight for each job is $w_1 = 0.25/0.5 = 0.5$, $w_2 = 0.5/0.5=1$, $w_3 = 1/0.5=2$, and the constraint is $0.5 d_{1j} + d_{2j} + 2 d_{3j} < 4$. %The transmission count limit $c_j$ can be computed based on the data partition size, the amount of bandwidth currently available, and $T$. 
 
 Upon the transmissions, each job $J_i$'s demand on site $S_j$ becomes $d_{ij} + \Delta d_{ij}$, i.e., the demand matrix becomes $D + \Delta D$. Hence, constraint (\ref{eq:allocrati}) is rewritten as:
 \begin{equation}
@@ -350,15 +348,16 @@ $$
 By repeating the above process continuously, we can obtain an infinite sequence of jobs $J_{i_1}, J_{i_2}, J_{i_3}, J_{i_4}, J_{i_5}, J_{i_6}, \dots$ with non-increasing aggregate allocations in $A'$ like (\ref{eq:strategy9}), which contradicts that there are a finite number of jobs. Hence, the theorem is proven.
 \end{proof}
 
-% 请确保在 LaTeX 文件的导言区（Preamble）引入了该宏包：
-% \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\section{Achieving DAMF}
+\label{sec:algo}
+\subsection{Algorithm for Computing DAMF Allocation}
 
 \begin{algorithm}[htbp]
 \caption{Computing DAMF Allocation}\label{alg:basic}
 
     % 1. 输入输出与初始化 (不再使用 \STATE)
-    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities $\{u_1, u_2, \dots, u_m\}$ and transfer limits $\{c_1, c_2, \dots, c_m\}$; a set of jobs $\{J_1, J_2, \dots, J_n\}$ with data partition weights $\{w_1, w_2, \dots, w_n\}$ and demand matrix $D$}
-    \KwOut{A DAMF allocation matrix $A$; a transmission matrix $\Delta D$}
+    \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities $\{u_1, u_2, \dots, u_m\}$ and transfer limits $\{c_1, c_2, \dots, c_m\}$; a set of jobs $\{J_1, J_2, \dots, J_n\}$ with data partition weights $\{w_1, w_2, \dots, w_n\}$ and demand matrix $D$;}
+    \KwOut{A DAMF allocation matrix $A$; a transmission matrix $\Delta D$.}
     
     \BlankLine % 插入一个空行隔开初始化
     $A \leftarrow \textbf{0}$\;
@@ -368,8 +367,8 @@ By repeating the above process continuously, we can obtain an infinite sequence 
 
     % 2. 主循环结构 (花括号包裹，删除了 \ENDWHILE)
     \While{$\mathcal{J} \neq \emptyset$}{
-        Solve the following linear program:\;
-        \quad Maximize $T$, subject to:\;
+        Solve the following linear program:\\
+        \quad Maximize $T$, subject to:\\
         \quad\quad $\forall J_i \in \mathcal{J} : \sum^m_{j=1}a_{ij} \geq T$\;
         \quad\quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij} = t_i$\;
         \quad\quad $\forall j \in [m]: \sum^n_{i=1}a_{ij} \leq u_j$\;
@@ -388,7 +387,7 @@ By repeating the above process continuously, we can obtain an infinite sequence 
                 $\mathcal{J} \leftarrow \mathcal{J} \setminus\{J_l\}$\;
             }{
                 \If{$\sum^m_{j=1} a_{lj}= T_{max} \text{ and } (\forall j \in [m], a_{lj} = d_{lj} \lor \sum^n_{i=1}a_{ij}=u_j)$}{
-                    Check the feasibility of the following program:\;
+                    Check the feasibility of the following program:\\
                     \quad $\sum_{j=1}^n a_{lj} > T_{max}$\;
                     \quad $\forall J_i \in \mathcal{J} \land i \neq l: \sum^m_{j=1}a_{ij}=T_{max}$\;
                     \quad $\forall J_i \notin \mathcal{J} : \sum^m_{j=1}a_{ij}=t_i$\;
@@ -407,12 +406,10 @@ By repeating the above process continuously, we can obtain an infinite sequence 
         }
     }
     \BlankLine
-    \Return $A_{n \times m}, \Delta D_{n \times m}$\;
+    \Return $A_{n \times m}, \Delta D_{n \times m}$.
 \end{algorithm}
 
-% \section{Achieving DAMF}
-% \label{sec:algo}
-% \subsection{Algorithm for Computing DAMF Allocation}
+
 
 % \begin{algorithm}[htbp]
 % \caption{Computing DAMF Allocation}\label{alg:basic}
@@ -463,7 +460,7 @@ We now design an iterative algorithm (Algorithm \ref{alg:basic}) to compute the 
 
 Each iteration of our algorithm consists of two stages. In stage 1, we define a unified lower bound $T$ and maximize it by increasing the aggregate allocations of all jobs in set $\mathcal{J}$ simultaneously, where $\mathcal{J}$ is the set of jobs whose aggregate allocations have not been fixed yet. Initially, $\mathcal{J}$ contains all jobs (line 3). The maximum $T$ value is derived by solving a linear program which models the constraints of resource allocation introduced in Section \ref{sec:model_1} (lines 5-12), where $t_i$ is the aggregate allocation of a job $J_i$ that has been fixed. 
 
-Let $T_{max}$ denote the maximum $T$ value obtained in stage~1. In stage 2, we identify jobs whose aggregate allocations are to be fixed. If a job $J_l$'s total demand is equal to $T_{max}$ amount of resources, it is fully satisfied. Thus, the algorithm fixes its aggregate allocation to be $T_{max}$ and removes it from $\mathcal{J}$ (lines 15-17). Otherwise, the algorithm checks whether it is possible to increase $J_l$'s aggregate allocation beyond $T_{max}$ without violating other jobs' allocations. If $J_l$'s aggregate allocation from stage 1 is already larger than $T_{max}$, or there exists a site on which $J_l$'s demand is not fully satisfied and the site has spare capacity (i.e., the condition in line 18 is not satisfied), clearly $J_l$'s aggregate allocation can be further increased. Otherwise, we change the aggregate allocation constraints for $J_l$ and other jobs by replacing "$\geq$" with "$>$" (line 20) and "$=$" (line 21) respectively, and then check whether the new linear program has any feasible solution (lines 19-26). If so, it implies that $J_l$'s allocation can be increased and $J_l$ will be kept in set $\mathcal{J}$. Otherwise, $J_l$'s aggregate allocation is fixed at $T_{max}$ and $J_l$ is removed from set $\mathcal{J}$ (lines 27-29). Note that this $T_{max}$ value is the aggregate resource amount, which means that $J_l$'s allocations on individual sites could vary in subsequent iterations as long as the aggregate amount is kept. The algorithm terminates when $\mathcal{J}$ becomes empty (line 4).
+Let $T_{max}$ denote the maximum $T$ value obtained in stage~1. In stage 2, we identify jobs whose aggregate allocations are to be fixed. If a job $J_l$'s total demand is equal to $T_{max}$ amount of resources, it is fully satisfied. Thus, the algorithm fixes its aggregate allocation to be $T_{max}$ and removes it from $\mathcal{J}$ (lines 15-17). Otherwise, the algorithm checks whether it is possible to increase $J_l$'s aggregate allocation beyond $T_{max}$ without violating other jobs' allocations. If $J_l$'s aggregate allocation from stage 1 is already larger than $T_{max}$, or there exists a site on which $J_l$'s demand is not fully satisfied and the site has spare capacity (i.e., the condition in line 19 is not satisfied), clearly $J_l$'s aggregate allocation can be further increased. Otherwise, we change the aggregate allocation constraints for $J_l$ and other jobs by replacing "$\geq$" with "$>$" (line 21) and "$=$" (line 22) respectively, and then check whether the new linear program has any feasible solution (lines 20-27). If so, it implies that $J_l$'s allocation can be increased and $J_l$ will be kept in set $\mathcal{J}$. Otherwise, $J_l$'s aggregate allocation is fixed at $T_{max}$ and $J_l$ is removed from set $\mathcal{J}$ (lines 28-30). Note that this $T_{max}$ value is the aggregate resource amount, which means that $J_l$'s allocations on individual sites could vary in subsequent iterations as long as the aggregate amount is kept. The algorithm terminates when $\mathcal{J}$ becomes empty (line 4).
 
 The linear program in Algorithm \ref{alg:basic} has $2mn$ variables and $2m+2n+mn$ constraints, where $m$ and $n$ are the numbers of sites and jobs respectively. Since there can be up to $n$ iterations and each iteration needs to solve up to $n$ linear programs in stage 2, the worst-case time complexity of Algorithm \ref{alg:basic} is $O(n^2*LP(2mn,2m+2n+mn))$, where $LP(2mn,2m+2n+mn)$ is the complexity for solving a linear program with $2mn$ variables and $2m+2n+mn$ constraints. 
 
@@ -479,7 +476,7 @@ be computationally expensive \cite{complexity_lip}. In this section, we propose 
 
     % 1. 输入输出与初始化
     \KwIn{A set of sites $\{S_1, S_2, ..., S_m\}$ with capacities $\{u_1, u_2, \dots, u_m\}$ and transfer limits $\{c_1, c_2, \dots, c_m\}$; a set of jobs $\{J_1, J_2, \dots, J_n\}$ with data partition weights $\{w_1, w_2, \dots, w_n\}$ and demand matrix $D$;}
-    \KwOut{An allocation matrix $A$; a transmission matrix $\Delta D$;}
+    \KwOut{An allocation matrix $A$; a transmission matrix $\Delta D$.}
     
     \BlankLine
     $A = \textbf{0}$\;
@@ -526,7 +523,7 @@ be computationally expensive \cite{complexity_lip}. In this section, we propose 
         }
     }
     \BlankLine
-    \Return $A_{n*m}, \Delta D_{n*m}$\;
+    \Return $A_{n*m}, \Delta D_{n*m}$.
 \end{algorithm}
 
 % \begin{algorithm}[htbp]
@@ -568,16 +565,16 @@ be computationally expensive \cite{complexity_lip}. In this section, we propose 
 % \end{algorithmic}
 % \end{algorithm}
 
-The heuristic algorithm (Algorithm \ref{alg:approx}) proceeds in two steps. In step 1 (lines 4-9), we find a fast approximation to AMF (i.e., without transferring job demands between sites) in an iterative manner. Each iteration calculates the compute resource allocation for one site $S_j$, given the job demands and compute capacity on this site as well as the aggregate allocation vector $\vec p$ over the sites that have been processed in previous iterations (line 5). Suppose there are $n$ jobs running in the system. Let $\vec p = \langle p_{1}, p_{2}, ..., p_{n}\rangle$ be the current aggregate allocation vector and $\langle d_{1j}, d_{2j}, ..., d_{nj}\rangle$ be the job demands on site $S_j$. We would like to compute an allocation $\langle a_{1j}, a_{2j}, ..., a_{nj}\rangle$ on $S_j$ so that $\langle p_{1}+a_{1j}, p_{2}+a_{2j}, ..., p_{n}+a_{nj}\rangle$ is max-min fair among all possible allocations for the given $\vec p$. If the total demand of all jobs on site $S_j$ is no larger than its capacity, i.e., $\sum_{i=1}^n d_{ij} \leq u_j$, we can simply satisfy the demands of all jobs by setting $a_{ij} = d_{ij}$ for all $i$'s. Otherwise, we sort the jobs in increasing order of $p_{i}$, i.e., $p_{1} \leq p_{2} \leq ... \leq p_{n}$, and the resources on site $S_j$ will be allocated to a prefix of this job sequence by the definition of max-min fairness. If resources are allocated to the first $k$ jobs, the total resources allocated must be no more than 
+The heuristic algorithm (Algorithm \ref{alg:approx}) proceeds in two steps. In step 1 (lines 4-8), we find a fast approximation to AMF (i.e., without transferring job demands between sites) in an iterative manner. Each iteration calculates the compute resource allocation for one site $S_j$, given the job demands and compute capacity on this site as well as the aggregate allocation vector $\vec p$ over the sites that have been processed in previous iterations (line 6). Suppose there are $n$ jobs running in the system. Let $\vec p = \langle p_{1}, p_{2}, ..., p_{n}\rangle$ be the current aggregate allocation vector and $\langle d_{1j}, d_{2j}, ..., d_{nj}\rangle$ be the job demands on site $S_j$. We would like to compute an allocation $\langle a_{1j}, a_{2j}, ..., a_{nj}\rangle$ on $S_j$ so that $\langle p_{1}+a_{1j}, p_{2}+a_{2j}, ..., p_{n}+a_{nj}\rangle$ is max-min fair among all possible allocations for the given $\vec p$. If the total demand of all jobs on site $S_j$ is no larger than its capacity, i.e., $\sum_{i=1}^n d_{ij} \leq u_j$, we can simply satisfy the demands of all jobs by setting $a_{ij} = d_{ij}$ for all $i$'s. Otherwise, we sort the jobs in increasing order of $p_{i}$, i.e., $p_{1} \leq p_{2} \leq ... \leq p_{n}$, and the resources on site $S_j$ will be allocated to a prefix of this job sequence by the definition of max-min fairness. If resources are allocated to the first $k$ jobs, the total resources allocated must be no more than 
 \begin{equation}
 \sum_{i=1}^k \left(\min\{p_{k+1}, p_i+d_{ij}\} - p_i\right),
 \label{eq:waterfill}
 \end{equation}
-because the aggregate resource allocation of each job cannot exceed the given allocation $p_{k+1}$ of the next job ($(k+1)$-th job). Since (\ref{eq:waterfill}) is non-decreasing with $k$, we can use a binary search to find out which jobs will receive resource allocations on $S_j$ to make full use of its capacity $u_j$. After deciding $k$, we solve the equation $\sum_{i=1}^k \left(\min\{C, p_i+d_{ij}\} - p_i\right) = u_j$ to find out the maximum aggregate resource allocation $C$ among these jobs to achieve max-min fairness. Then, the $i$-th job will be allocated $a_{ij} = \min\{C, p_i+d_{ij}\} - p_i$ amount of resources. Apparently, the iterating order of sites has an impact on the final allocation result. Our idea is to sort all sites in increasing order of the number of jobs with demands on the site (line 3). A site demanded by more jobs is considered to have higher potential in balancing the final aggregate allocation, so we process it in a later iteration.
+because the aggregate resource allocation of each job cannot exceed the given allocation $p_{k+1}$ of the next job ($(k+1)$-th job). Since (\ref{eq:waterfill}) is non-decreasing with $k$, we can use a binary search to find out which jobs will receive resource allocations on $S_j$ to make full use of its capacity $u_j$. After deciding $k$, we solve the equation $\sum_{i=1}^k \left(\min\{C, p_i+d_{ij}\} - p_i\right) = u_j$ to find out the maximum aggregate resource allocation $C$ among these jobs to achieve max-min fairness. Then, the $i$-th job will be allocated $a_{ij} = \min\{C, p_i+d_{ij}\} - p_i$ amount of resources. Apparently, the iterating order of sites has an impact on the final allocation result. Our idea is to sort all sites in increasing order of the number of jobs with demands on the site (line 4). A site demanded by more jobs is considered to have higher potential in balancing the final aggregate allocation, so we process it in a later iteration.
 
-In step 2 (lines 10-30), we utilize the network resources to improve the allocation derived in step 1. It is not difficult to see that there exists a DAMF allocation (represented by a pair of transmission and allocation matrices) such that for every demand unit (one task) transferred, (i) the task involved is allocated compute resources at the destination site; and (ii) the compute resources at the source site are fully allocated. In fact, if a demand unit transferred does not satisfy (i), the transfer can be canceled without affecting the allocation matrix. Similarly, the transfer of a demand unit that violates (ii) can also be canceled and the task can be satisfied by compute resources at the source site. This would increase the compute resource allocation of the job involved without affecting the compute resource allocation of any other job, thereby contradicting that the original allocation is max-min fair.
+In step 2 (lines 9-25), we utilize the network resources to improve the allocation derived in step 1. It is not difficult to see that there exists a DAMF allocation (represented by a pair of transmission and allocation matrices) such that for every demand unit (one task) transferred, (i) the task involved is allocated compute resources at the destination site; and (ii) the compute resources at the source site are fully allocated. In fact, if a demand unit transferred does not satisfy (i), the transfer can be canceled without affecting the allocation matrix. Similarly, the transfer of a demand unit that violates (ii) can also be canceled and the task can be satisfied by compute resources at the source site. This would increase the compute resource allocation of the job involved without affecting the compute resource allocation of any other job, thereby contradicting that the original allocation is max-min fair.
 
-Based on the observation above, we define two sets $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ to record sites with spare capacities and with more job demands than capacities (lines 10-11), and a set $\mathcal{J}$ to record jobs whose demands are not fully satisfied (line 12). Then, we start a loop to transfer job demands from $\mathcal{S}_{full}$ sites to $\mathcal{S}_{spare}$ sites until either $\mathcal{S}_{spare}$, $\mathcal{S}_{full}$ or $\mathcal{J}$ becomes empty (which implies that no further improvement to the allocation can be made). To make effective use of network resources, we would like all job demands transferred to get compute resource allocations at destination sites. Intuitively, a site will not need to participate in transmissions if its bandwidth is used up or its updated local demand equals its capacity. Thus, within the loop, we first remove all such sites from $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ (line 14). As a heuristic to approximate max-min fairness, among all jobs whose demands are not completely satisfied, we pick the job $J_x$ with the least aggregate allocation currently (line 16). If $J_x$'s demands are satisfied on all sites in $\mathcal{S}_{full}$ (implying that $J_x$'s unsatisfied demands locates at the sites that have been removed because no more bandwidth is available), we discard $J_x$ and examine the next job with the least aggregate allocation for demand transmission (lines 17-18). Otherwise, we select the source site and destination site for a transfer of $J_x$: the source site can be any site in $\mathcal{S}_{full}$ where $J_x$'s demand is not fully satisfied (line 20), and the destination site can be any site in $\mathcal{S}_{spare}$ (line 21). After deciding a transmission, we update the related matrices and remaining transfer limits (lines 22-26).
+Based on the observation above, we define two sets $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ to record sites with spare capacities and with more job demands than capacities (lines 9-10), and a set $\mathcal{J}$ to record jobs whose demands are not fully satisfied (line 11). Then, we start a loop to transfer job demands from $\mathcal{S}_{full}$ sites to $\mathcal{S}_{spare}$ sites until either $\mathcal{S}_{spare}$, $\mathcal{S}_{full}$ or $\mathcal{J}$ becomes empty (which implies that no further improvement to the allocation can be made). To make effective use of network resources, we would like all job demands transferred to get compute resource allocations at destination sites. Intuitively, a site will not need to participate in transmissions if its bandwidth is used up or its updated local demand equals its capacity. Thus, within the loop, we first remove all such sites from $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ (line 13). As a heuristic to approximate max-min fairness, among all jobs whose demands are not completely satisfied, we pick the job $J_x$ with the least aggregate allocation currently (line 15). If $J_x$'s demands are satisfied on all sites in $\mathcal{S}_{full}$ (implying that $J_x$'s unsatisfied demands locates at the sites that have been removed because no more bandwidth is available), we discard $J_x$ and examine the next job with the least aggregate allocation for demand transmission (lines 16-17). Otherwise, we select the source site and destination site for a transfer of $J_x$: the source site can be any site in $\mathcal{S}_{full}$ where $J_x$'s demand is not fully satisfied (line 19), and the destination site can be any site in $\mathcal{S}_{spare}$ (line 20). After deciding a transmission, we update the related matrices and remaining transfer limits (lines 21-25).
 
 The heuristic algorithm does not require solving linear programs and has much lower time complexity. In step 1, it solves $m$ allocation problems separately (where $m$ is the number of sites). In the water-filling-like strategy, sorting takes $O(n \log n)$ time (where $n$ is the number of jobs), and the binary search takes $O(n \log n)$ time as computing (\ref{eq:waterfill}) takes $O(n)$ time. So, the time complexity of each iteration is $O(n \log n)$, and the total time complexity of step 1 is $O(m n \log n)$. In step 2, the algorithm transfers at most $cm/2 = O(m)$ units of job demand (assuming the transfer limits of all sites are a constant $c$). Updating $\mathcal{S}_{spare}$ and $\mathcal{S}_{full}$ takes $O(m)$ time. If we arrange all unsatisfied jobs in $\mathcal{J}$ as a min-heap based on their aggregate allocations, selecting the unsatisfied job with the least aggregate allocation takes $O(1)$ time. Selecting the source and destination sites takes $O(m)$ time. After the demand transfer, updating the min-heap of $\mathcal{J}$ takes $O(\log n)$ time.
 Thus, each unit of demand transfer takes $O(m+\log n)$ time. If a source site for the selected job can always be found, the time complexity of step 2 is $O(m(m+\log n))$. If the selected job fails to find a source site for transmission, the job is discarded and updating the min-heap of $\mathcal{J}$ takes $O(\log n)$ time. In the worst case, discarding all such jobs incur a time complexity of $O(n (m + \log n))$. Therefore, the worst-case time complexity of step 2 is $O((m+n) (m+\log n))$. Hence, the overall complexity of the algorithm is $O(m n \log n + m^2)$. In the experiments, we shall empirically evaluate and compare the computation times of Algorithms \ref{alg:basic} and \ref{alg:approx}.
